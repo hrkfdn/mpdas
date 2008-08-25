@@ -62,6 +62,9 @@ CAudioScrobbler::CreateScrobbleMessage(int index, centry_t* entry)
 	msg << "&o[" << index << "]=P&r[" << index << "]=";
 	msg << "&l[" << index << "]=" << entry->time;
 	msg << "&b[" << index << "]=";
+	if(entry->album)
+		msg << entry->album;
+	msg << "&n[" index << "]=&m[" << index "]=";
 
 	return msg.str();
 }
