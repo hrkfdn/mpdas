@@ -89,7 +89,7 @@ bool
 CAudioScrobbler::SendNowPlaying(mpd_Song* song)
 {
 	bool retval = false;
-	if(!song->artist || !song->title) return retval;
+	if(!song || !song->artist || !song->title) return retval;
 	char* artist = curl_easy_escape(_handle, song->artist, 0);
 	char* title = curl_easy_escape(_handle, song->title, 0);
 	char* album = 0;
