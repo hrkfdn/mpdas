@@ -6,6 +6,7 @@ class CAudioScrobbler
 	public:
 		CAudioScrobbler();
 		void Handshake();
+		std::string CreateScrobbleMessage(int index, centry_t* entry);
 		bool Scrobble(centry_t* entry);
 		void ReportResponse(char* buf, size_t size);
 		bool SendNowPlaying(mpd_Song* song);

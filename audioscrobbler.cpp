@@ -52,6 +52,20 @@ CAudioScrobbler::ReportResponse(char* buf, size_t size)
 	_response.append(buf);
 }
 
+std::string
+CAudioScrobbler::CreateScrobbleMessage(int index, centry_t* entry)
+{
+	std::stringstream msg;
+	msg << "&a[" << index << "]=" << entry->artist;
+	msg << "&t[" << index << "]=" << entry->title;
+	msg << "&i[" << index << "]=" << entry->starttime;
+	msg << "&o[" << index << "]=P&r[" << index << "]=";
+	msg << "&l[" << index << "]=" << entry->time;
+	msg << "&b[" << index << "]=";
+
+	return msg.str();
+}
+
 bool
 CAudioScrobbler::Scrobble(centry_t* entry)
 {
