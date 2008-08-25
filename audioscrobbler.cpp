@@ -75,6 +75,7 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 	bool retval = false;
 	std::ostringstream post;
 	iprintf("Scrobbling: %s - %s", entry->artist, entry->title);
+	post << "s=" << _sessionid;
 	post << CreateScrobbleMessage(0, entry);
 
 	OpenURL(_scroburl, post.str().c_str());
