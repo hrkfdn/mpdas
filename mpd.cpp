@@ -7,7 +7,10 @@ void
 CMPD::SetSong(mpd_Song* song)
 {
 	_cached = false;
-	memcpy(&_song, song, sizeof(mpd_Song));
+	if(song)
+		memcpy(&_song, song, sizeof(mpd_Song));
+	else
+		song = 0;
 	_start = mpd_stats_get_playtime(_obj);
 	_starttime = time(NULL);
 	AudioScrobbler->SendNowPlaying(song);
