@@ -17,6 +17,7 @@ writecb(void* ptr, size_t size, size_t nmemb, void *stream)
 
 CAudioScrobbler::CAudioScrobbler()
 {
+	_authed = false;
 	_response = "";
 	_handle = curl_easy_init();
 	if(!_handle) {
@@ -73,6 +74,11 @@ bool
 CAudioScrobbler::Scrobble(centry_t* entry)
 {
 	bool retval = false;
+	if(!_authed) {
+		eprintf("Handshake hasn't been done that.");
+		HandShake();
+		return retval;
+	}
 	std::ostringstream post;
 	iprintf("Scrobbling: %s - %s", entry->artist, entry->title);
 	post << "s=" << _sessionid;
@@ -123,6 +129,7 @@ CAudioScrobbler::Handshake()
 	OpenURL(query.str());
 	if(_response.find("OK") == 0) {
 		iprintf("%s", "AudioScrobbler handshake successful.");
+		_authed = true;
 		_sessionid = _response.substr(3, 32);
 		int found = _response.find("\n", 36);
 		_npurl = _response.substr(36, found-36);
