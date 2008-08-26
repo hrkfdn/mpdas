@@ -1,6 +1,12 @@
 #ifndef _MPD_H
 #define _MPD_H
 
+typedef struct
+{
+	std::string artist, title, album;
+	int time;
+} song_t;
+
 class CMPD
 {
 	public:
@@ -17,7 +23,8 @@ class CMPD
 		static void StatusChanged(MpdObj*, ChangedStatusType);
 
 		MpdObj* _obj;
-		mpd_Song _song;
+		song_t _song;
+		bool _gotsong;
 		int _start;
 		time_t _starttime;
 		bool _connected;

@@ -7,10 +7,17 @@ void
 CMPD::SetSong(mpd_Song* song)
 {
 	_cached = false;
-	if(song)
-		memcpy(&_song, song, sizeof(mpd_Song));
-	else
-		song = 0;
+	if(song) {
+		_song.artist = song->artist;
+		_song.title = song->title;
+		_song.album = song->album;
+		_song.time = song->time;
+		_gotsong = true;
+	}
+	else {
+		_gotsong = false;
+		return;
+	}
 	_start = mpd_stats_get_playtime(_obj);
 	_starttime = time(NULL);
 	AudioScrobbler->SendNowPlaying(song);
@@ -19,11 +26,10 @@ CMPD::SetSong(mpd_Song* song)
 void
 CMPD::CheckSubmit()
 {
-	if(_cached || (!_song.artist || !_song.title)) return;
+	if(!_gotsong || _cached || (!_song.artist.size() || !_song.title.size())) return;
 	int curplaytime = mpd_stats_get_playtime(_obj);
 	if(curplaytime - _start >= 240 || curplaytime - _start >= _song.time/2) {
-		std::string artist = _song.artist, title = _song.title, album = _song.album;
-		Cache->AddToCache(_song.time, artist, title, album, _starttime, false);
+		Cache->AddToCache(_song.time, _song.artist, _song.title, _song.album, _starttime, false);
 		_cached = true;
 	}
 }
@@ -49,6 +55,7 @@ CMPD::StatusChanged(MpdObj* obj, ChangedStatusType what)
 
 CMPD::CMPD()
 {
+	_gotsong = false;
 	_connected = false;
 	_cached = false;
 	_obj = mpd_new((char*)HOSTNAME, PORT, (char*)PASSWORD);
