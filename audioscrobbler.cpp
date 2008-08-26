@@ -17,6 +17,7 @@ writecb(void* ptr, size_t size, size_t nmemb, void *stream)
 
 CAudioScrobbler::CAudioScrobbler()
 {
+	_failcount = 0;
 	_authed = false;
 	_response = "";
 	_handle = curl_easy_init();
@@ -70,6 +71,32 @@ CAudioScrobbler::CreateScrobbleMessage(int index, centry_t* entry)
 	return msg.str();
 }
 
+void
+CAudioScrobbler::Failure()
+{
+	_failcount += 1;
+	if(_failcount >= 3) {
+		_failcount = 0;
+		Handshake();
+	}
+}
+
+bool
+CAudioScrobbler::CheckFailure(std::string response)
+{
+	bool retval = false;
+	if(_response.find("BADSESSION")) {
+		eprintf("%s", "Bad session ID, re-handshaking!");
+		Handshake();
+		retval = false;
+	}
+	else if(_response.find("FAILED"))
+		retval = true;
+	else if(_response.find("OK"))
+		retval = false;
+}
+
+
 bool
 CAudioScrobbler::Scrobble(centry_t* entry)
 {
@@ -87,6 +114,11 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 	OpenURL(_scroburl, post.str().c_str());
 	if(_response.find("OK") == 0)
 		retval = true;
+	else {
+		if(CheckFailure(_response))
+			Failure();
+	}
+
 	CLEANUP();
 	return retval;
 }
@@ -112,6 +144,10 @@ CAudioScrobbler::SendNowPlaying(mpd_Song* song)
 
 	if(_response.find("OK") == 0)
 		retval = true;
+	else {
+		if(CheckFailure(_response))
+			Failure();
+	}
 	CLEANUP();
 	return retval;
 }

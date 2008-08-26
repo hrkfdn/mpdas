@@ -12,6 +12,8 @@ class CAudioScrobbler
 		bool SendNowPlaying(mpd_Song* song);
 	private:
 		void OpenURL(std::string url, const char* postfields, char* errbuf);
+		void Failure();
+		bool CheckFailure(std::string response);
 
 		CURL* _handle;
 
@@ -21,6 +23,9 @@ class CAudioScrobbler
 		std::string _sessionid;
 		std::string _npurl;
 		std::string _scroburl;
+
+		bool _authed;
+		int _failcount;
 };
 
 extern CAudioScrobbler* AudioScrobbler;
