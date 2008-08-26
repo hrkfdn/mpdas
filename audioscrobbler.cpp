@@ -76,7 +76,7 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 	bool retval = false;
 	if(!_authed) {
 		eprintf("Handshake hasn't been done that.");
-		HandShake();
+		Handshake();
 		return retval;
 	}
 	std::ostringstream post;
