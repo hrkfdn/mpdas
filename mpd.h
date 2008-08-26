@@ -17,7 +17,7 @@ class CMPD
 		static void StatusChanged(MpdObj*, ChangedStatusType);
 
 		MpdObj* _obj;
-		mpd_Song* _song;
+		mpd_Song _song;
 		int _start;
 		time_t _starttime;
 		bool _connected;
