@@ -94,6 +94,7 @@ CAudioScrobbler::CheckFailure(std::string response)
 		retval = true;
 	else if(_response.find("OK"))
 		retval = false;
+	return retval;
 }
 
 
