@@ -7,10 +7,13 @@ void
 CMPD::SetSong(mpd_Song* song)
 {
 	_cached = false;
-	if(song) {
+	if(song && song->artist && song->title) {
 		_song.artist = song->artist;
 		_song.title = song->title;
-		_song.album = song->album;
+		if(song->album)
+			_song.album = song->album;
+		else
+			_song.album = "";
 		_song.time = song->time;
 		_gotsong = true;
 	}
