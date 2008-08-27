@@ -37,6 +37,8 @@ timestr()
 	time_t rawtime = time(NULL);
 	struct tm* t = localtime(&rawtime);
 
+	if(t->tm_hour < 10)
+		buf << 0;
 	buf << t->tm_hour << ":";
 	if(t->tm_min < 10)
 		buf << "0";
