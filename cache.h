@@ -15,6 +15,7 @@ centry_s
 class CCache
 {
 	public:
+		CCache() { _failtime = 0; }
 		void AddToCache(int time, std::string artist, std::string title, std::string album, time_t starttime, bool escaped);
 		void WorkCache();
 		void SaveCache();
