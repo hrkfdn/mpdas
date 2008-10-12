@@ -16,6 +16,7 @@ CMPD::SetSong(mpd_Song* song)
 			_song.album = "";
 		_song.time = song->time;
 		_gotsong = true;
+		iprintf("New song: %s - %s", _song.artist.c_str(), _song.title.c_str());
 	}
 	else {
 		_gotsong = false;
