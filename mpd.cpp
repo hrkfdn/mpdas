@@ -62,7 +62,7 @@ CMPD::CMPD()
 	_gotsong = false;
 	_connected = false;
 	_cached = false;
-	_obj = mpd_new((char*)HOSTNAME, PORT, (char*)PASSWORD);
+	_obj = mpd_new((char*)Config->getMHost().c_str(), Config->getMPort(), (char*)Config->getMPassword().c_str());
 	mpd_signal_connect_status_changed(_obj, (StatusChangedCallback)&StatusChanged, NULL);
 	if(Connect())
 		iprintf("%s", "Connected to MPD.");
