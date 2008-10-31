@@ -1,13 +1,11 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-/* MPD data */
-#define HOSTNAME	"localhost"
-#define PORT		6600
-#define PASSWORD	""
+class CConfig
+{
 
-/* Last.fm data */
-#define LUSER		""
-#define	LPASSWORD	""
+};
+
+extern CConfig* Config;
 
 #endif
