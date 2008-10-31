@@ -157,11 +157,10 @@ void
 CAudioScrobbler::Handshake()
 {
 	time_t timestamp = time(NULL);
-	_password = md5sum((char*)"%s", (char*)LPASSWORD);
-	std::string authtoken(md5sum((char*)"%s%i", _password.c_str(), timestamp));
+	std::string authtoken(md5sum((char*)"%s%i", Config->getLPassword().c_str(), timestamp));
 
 	std::ostringstream query;
-	query << HOST << "/?hs=true&p=" << VERSION << "&c=" << CLIENT << "&v=" << CVERSION << "&u=" << LUSER << "&t=" << timestamp << "&a=" << authtoken;
+	query << HOST << "/?hs=true&p=" << VERSION << "&c=" << CLIENT << "&v=" << CVERSION << "&u=" << Config->getLUsername() << "&t=" << timestamp << "&a=" << authtoken;
 	
 	OpenURL(query.str());
 	if(_response.find("OK") == 0) {
