@@ -1,5 +1,5 @@
 CXX	?= g++
-OBJ	= main.o md5.o utils.o mpd.o audioscrobbler.o cache.o
+OBJ	= main.o md5.o utils.o mpd.o audioscrobbler.o cache.o config.o
 OUT	= mpdas
 
 CFLAGS 	= `pkg-config --cflags libmpd libcurl` -s -O2 -pipe -g
