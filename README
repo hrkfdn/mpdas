@@ -4,7 +4,7 @@
 | '_ ` _ \| '_ \ / _` |/ _` / __|
 | | | | | | |_) | (_| | (_| \__ \
 |_| |_| |_| .__/ \__,_|\__,_|___/
-          |_|                    0.1.1
+          |_|                    0.2.0
 ================================================
 
 mpdas is a MPD AudioCcrobbler client
@@ -32,7 +32,7 @@ Configuration options:
 username:		Last.FM username
 password:		Last.FM password (MD5 hashed)
 host:			MPD Host
-mpdpassword:	MPD Password
+mpdpassword:		MPD Password
 port:			MPD Port
 
 ================================================
