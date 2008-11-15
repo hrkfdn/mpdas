@@ -12,7 +12,7 @@ all: $(OUT)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(OUT): $(OBJ)
-	$(CXX) $(LIBS) $(OBJ) -o $(OUT)
+	$(CXX) $(OBJ) $(LIBS) -o $(OUT)
 
 clean:
 	rm -rf $(OBJ) $(OUT)
