@@ -1,0 +1,233 @@
+commit 99be10bffe20701032572d9bd794efd2d7596a6e
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Mon Nov 17 00:30:21 2008 +0100
+
+    update readme
+
+commit fd2164de9d65557e230b1f23cd5d39efd700b463
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Mon Nov 17 00:28:53 2008 +0100
+
+    fix compile error
+
+commit 4bea110bcb5b760d2729f7a5a55f66873bb8009e
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sat Nov 15 22:10:15 2008 +0100
+
+    fix makefile (Andrey Rahmatullin)
+
+commit 7283d6107144c2c2b2b027648a5132bc091ede4b
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sat Nov 15 22:09:06 2008 +0100
+
+    comply to g++ 4.3 (Andrey Rahmatullin)
+
+commit 5862b227ecdfef3b73de832837025fbb28b9d8e3
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 11 19:01:46 2008 +0100
+
+    sanitize makefile for distribution
+
+commit 3a847ac46af9d7f9952710f9658955a32647a149
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 11 18:51:40 2008 +0100
+
+    update to 0.2.0, fix tab
+
+commit 79575aaf2c7293a393fd911fc982c9e2b61776a5
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 23:27:36 2008 +0100
+
+    use config variables instead of preprocessor defines
+
+commit 1d21dfc321127e9c76ba77d98d052c80be2ee214
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 23:27:25 2008 +0100
+
+    initialize config class
+
+commit 3ce63c6b0c4d09c9e9264d1c97bdc12322d86e8b
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 23:27:12 2008 +0100
+
+    add getters and setters
+
+commit 9cd68d61eeeefd41e85ffd664db60a28cf51ab70
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 23:26:42 2008 +0100
+
+    read config, extract settings with tokens
+
+commit 35056a8dea54de8517eb4b18d8ed212ef57ac76f
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 23:26:29 2008 +0100
+
+    explain config syntax
+
+commit ceebeb3e0ce2f4d1484f92eff0540095535a8f1b
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 23:09:12 2008 +0100
+
+    use config data
+
+commit 7d2ad39720fa1cd009f89fcf3106b584a82bdd17
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 22:37:50 2008 +0100
+
+    first draft of CConfig layout
+
+commit 551c89e68acab86c0abdcecbb648922ee21ed02f
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 22:37:40 2008 +0100
+
+    get ready for configs
+
+commit 4a6ca9d8c116e00dd028a654def3e45deb15412a
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 22:33:31 2008 +0100
+
+    add config.cpp to build
+
+commit a26eb024512999a4893d07cc066fb4be78693ff1
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Oct 31 22:33:15 2008 +0100
+
+    create CConfig class
+
+commit c45b30461bea6302d471ffff738f728ba72808a7
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Wed Oct 22 18:04:21 2008 +0200
+
+    update version
+
+commit 8a9a15e87400f9e8253f85e43118941b5e47dd40
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Oct 12 14:22:35 2008 +0200
+
+    log new songs
+
+commit a628186355d5e4b72ebf49f5b88b165e454b21ee
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Oct 12 14:22:20 2008 +0200
+
+    bugfix: initialize _failtime
+
+commit 05fa85c741340c80911fb441099697353013435c
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Sun Sep 21 00:01:17 2008 +0200
+
+    add docs. first release (0.1)
+
+commit 0e3871687c35547538af06d62008098ac2cff8bb
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Thu Aug 28 00:47:54 2008 +0200
+
+    pad hours with zero
+
+commit 92087ab4304a178bafe48620f5270990d3118847
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Thu Aug 28 00:45:58 2008 +0200
+
+    fix a crash bug caused by an empty album string
+
+commit fd9e29caf774f8d73230c6473b042a64738983b0
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Tue Aug 26 16:48:32 2008 +0200
+
+    save song data
+
+commit 252bd370a5c2d221b43ba3e0dda75b2c5a4307f0
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Tue Aug 26 15:38:32 2008 +0200
+
+    return failure indicator
+
+commit e948bab141defbfb3870309cb9bbf88170bf763e
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Tue Aug 26 15:37:32 2008 +0200
+
+    treat failures according to protocol
+
+commit cd7252043ff0884e585af7c4082f29fca04b5fcc
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Tue Aug 26 15:30:06 2008 +0200
+
+    fix typo
+
+commit 3e1ee9325b3c502bee5820707df2ad30e03f2786
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Tue Aug 26 15:29:38 2008 +0200
+
+    check for handshake when scrobbling
+
+commit bcb631f5a0d78446ef5963c55c9e467c84eaf9c0
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Tue Aug 26 15:22:33 2008 +0200
+
+    check for valid song pointer
+
+commit 8dca2e73ab7f477033c0d188e42abaad67a12a92
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Tue Aug 26 14:21:39 2008 +0200
+
+    store song locally
+
+commit ee4d54870aa90a2d813f6c43f49c21a591cdf137
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 23:06:04 2008 +0200
+
+    check for a valid Song in SendNowPlaying
+
+commit 0cb53a400e37a67e9f09d425755e249804984530
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 22:33:21 2008 +0200
+
+    add session key to request in Scrobble()
+
+commit edeac4fe5659b03ec3a7b40d3a3b69885acc2b4d
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 22:29:40 2008 +0200
+
+    fix compile errors
+
+commit 0574f2944943638369169caabaa587269799149f
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 22:28:58 2008 +0200
+
+    use CreateScrobbleMessage in Scrobble()
+
+commit c7b3c47d73593a27ad8029c7c68afa5d341dcc25
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 22:27:44 2008 +0200
+
+    add forgotten keys in CreateScrobbleMessage
+
+commit 094e0a288620fc8cbf4b30c630aa09a9c12624bc
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 22:26:03 2008 +0200
+
+    add CreateScrobbleMessage to CAudioScrobbler
+
+commit f459a6d48c4062a6b8390b8b2097b408e5f80fe2
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 22:01:31 2008 +0200
+
+    remove gitignore
+
+commit afbc86c4de1f7e1459579cef874dfe3dfa91303a
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 21:57:23 2008 +0200
+
+    add gitignore
+
+commit dfbc2bb8524ab0d7bd50b1eab8c71dbe6844120d
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 21:51:45 2008 +0200
+
+    first commit, rewrite in c++
+
+commit b6a1c0ba9924f4edf497c14ef7ba5923efa1f4b3
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 21:51:33 2008 +0200
+
+    enter your login data here
