@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
+#include <pwd.h>
 
 #include <fstream>
 #include <iostream>
