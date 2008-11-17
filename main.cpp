@@ -16,7 +16,7 @@ setid(char* username)
 {
 	passwd* userinfo = 0;
 
-	if(getuid != 0) {
+	if(getuid() != 0) {
 		eprintf("%s", "You are not root.");
 		exit(EXIT_FAILURE);
 	}
@@ -32,7 +32,7 @@ setid(char* username)
 			exit(EXIT_FAILURE);
 	}
 
-	setenv("HOME", userinfo->pw_dir, 0);
+	setenv("HOME", userinfo->pw_dir, 1);
 }
 
 int
@@ -41,7 +41,7 @@ main(int argc, char* argv[])
 	atexit(onclose);
 
 	if(argc >= 2)
-		setid(argv[2]);
+		setid(argv[1]);
 
 	Config = new CConfig();
 
