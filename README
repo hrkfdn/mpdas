@@ -7,7 +7,7 @@
           |_|                    0.2.2
 ================================================
 
-mpdas is a MPD AudioCcrobbler client
+mpdas is a MPD AudioScrobbler client
 supporting the 1.2.1 protocol specs.
 
 It is written in C++ and uses libmpd
@@ -16,7 +16,7 @@ libcurl to post it to Last.fm
 
 ================================================
 
-To configure mpdas, simple create a file called 
+To configure mpdas, simply create a file called 
 .mpdasrc in your home directory.
 
 Syntax is easy. Example:
@@ -42,14 +42,6 @@ Features:
 - Scrobbling (obviously)
 - Caching
 - Config files
-
-================================================
-
-How to use it:
-So far there is no configurgation
-system or install rule. To set the 
-account data, modify the config.h 
-accordingly.
 
 ================================================
 
