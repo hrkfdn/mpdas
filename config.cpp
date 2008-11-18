@@ -18,7 +18,7 @@ CConfig::ParseLine(std::string line)
 	}
 	delete szline;
 
-	for(int i = 0; i < tokens.size(); i++) {
+	if(tokens.size() > 1) {
 		if(tokens[0] == "username")
 			_lusername = tokens[1];
 		else if(tokens[0] == "password")
