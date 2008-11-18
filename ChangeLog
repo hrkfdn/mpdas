@@ -1,3 +1,33 @@
+commit 85bd50748ec641e31484d1278532ffea0a930bd0
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 18 23:38:09 2008 +0100
+
+    fix a crash bug reported by tuqs (thanks!)
+
+commit b04e3041ccd60bf5bb71d31cf3938eb8ccda4e2c
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 18 16:18:00 2008 +0100
+
+    fix typos, soem of tehm reported by tuqs. weow weow, spelilng police!
+
+commit f0d5367b339ece51b747d4fbae231682b079eb8e
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 18 00:00:33 2008 +0100
+
+    fix user switching
+
+commit 1e5bed75fca3640c024f6199d65ee66e6e1f24e5
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 18 00:00:24 2008 +0100
+
+    add headers
+
+commit 76816b506bae83442e8c92678281ac792dcef1f9
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Mon Nov 17 23:53:46 2008 +0100
+
+    allow switching to other usernames when root
+
 commit 99be10bffe20701032572d9bd794efd2d7596a6e
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Mon Nov 17 00:30:21 2008 +0100
@@ -207,18 +237,6 @@ Author: Henrik Friedrichsen <hrkfrd@gmail.com>
 Date:   Mon Aug 25 22:26:03 2008 +0200
 
     add CreateScrobbleMessage to CAudioScrobbler
-
-commit f459a6d48c4062a6b8390b8b2097b408e5f80fe2
-Author: Henrik Friedrichsen <hrkfrd@gmail.com>
-Date:   Mon Aug 25 22:01:31 2008 +0200
-
-    remove gitignore
-
-commit afbc86c4de1f7e1459579cef874dfe3dfa91303a
-Author: Henrik Friedrichsen <hrkfrd@gmail.com>
-Date:   Mon Aug 25 21:57:23 2008 +0200
-
-    add gitignore
 
 commit dfbc2bb8524ab0d7bd50b1eab8c71dbe6844120d
 Author: Henrik Friedrichsen <hrkfrd@gmail.com>
