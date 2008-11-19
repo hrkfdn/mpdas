@@ -89,6 +89,7 @@ CCache::WorkCache()
 		else {
 			eprintf("%s", "Error scrobbling. Trying again in 5 minutes.");
 			_failtime = time(NULL);
+			AudioScrobbler->Failure();
 			break;
 		}
 		sleep(1);
