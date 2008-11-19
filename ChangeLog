@@ -1,3 +1,21 @@
+commit 9d3075c189eebd446678c883c01da3d659cf1aed
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Wed Nov 19 23:06:34 2008 +0100
+
+    Re-implement re-handshaking after 3 scrobble errors
+
+commit 598b614aa7165aea397d9ec0ebaea0a7888c2ccc
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Wed Nov 19 23:06:20 2008 +0100
+
+    Fix error message typos
+
+commit d3d78578ce7c9f272b523f23e2c67846f0acc1c0
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Wed Nov 19 23:06:01 2008 +0100
+
+    make Failure() method public
+
 commit 85bd50748ec641e31484d1278532ffea0a930bd0
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Tue Nov 18 23:38:09 2008 +0100
