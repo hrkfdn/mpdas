@@ -10,9 +10,9 @@ class CAudioScrobbler
 		bool Scrobble(centry_t* entry);
 		void ReportResponse(char* buf, size_t size);
 		bool SendNowPlaying(mpd_Song* song);
+		void Failure();
 	private:
 		void OpenURL(std::string url, const char* postfields, char* errbuf);
-		void Failure();
 		bool CheckFailure(std::string response);
 
 		CURL* _handle;
