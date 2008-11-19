@@ -76,6 +76,7 @@ CAudioScrobbler::Failure()
 {
 	_failcount += 1;
 	if(_failcount >= 3) {
+		eprintf("%s", "Re-Handshaking!");
 		_failcount = 0;
 		Handshake();
 	}
@@ -103,7 +104,7 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 {
 	bool retval = false;
 	if(!_authed) {
-		eprintf("Handshake hasn't been done that.");
+		eprintf("Handshake hasn't been done yet.");
 		Handshake();
 		return retval;
 	}
