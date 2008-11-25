@@ -5,6 +5,15 @@
 #define GREEN "\x1b[32;01m"
 #define YELLOW "\x1b[33;01m"
 
+bool
+fileexists(const char* file)
+{
+	if (access(file, F_OK) == 0)
+		return true;
+	else
+		return false;
+}
+
 std::string
 md5sum(const char* fmt, ...)
 {
