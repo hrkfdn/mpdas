@@ -1,3 +1,51 @@
+commit 11fb3fabd103addea106f2952094e05d52c0eb0d
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:23:50 2008 +0100
+
+    export fileexists()
+
+commit 2b217fd8fda4a237f3fd2a5f4427fe6e204ee862
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:22:57 2008 +0100
+
+    add commandline switches and user switching through commandline. ignore empty usernames
+
+commit 72a53cd945756a6d193426eee8c56208cd166a9b
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:22:48 2008 +0100
+
+    add fileexists() util function
+
+commit ce5c43bff580ab883bd93581bb60c53ae0c21fe2
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:22:35 2008 +0100
+
+    add runas option
+
+commit 682400ee554bfd371d0542f27551f41f33f7e0cc
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:22:27 2008 +0100
+
+    add runas option
+
+commit 6c3e72bfce06173641bc6131a24c01a5f608a40c
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:21:33 2008 +0100
+
+    change preprocessor name to avoid conflicts
+
+commit d85170ed39fee6e3830507e67c25411593b88d8f
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:20:53 2008 +0100
+
+    update readme to explain user switching and new config files
+
+commit 83311b5d2553838be27c12ecf6d4f15842a2aba5
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:20:32 2008 +0100
+
+    pass preprocessor defines to gcc (configdir, version)
+
 commit 9d3075c189eebd446678c883c01da3d659cf1aed
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Wed Nov 19 23:06:34 2008 +0100
