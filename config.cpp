@@ -29,22 +29,37 @@ CConfig::ParseLine(std::string line)
 			_mpassword = tokens[1];
 		else if(tokens[0] == "port")
 			_mport = atoi(tokens[1].c_str());
+		else if(tokens[0] == "runas")
+			_runninguser = tokens[1];
+
 	}
 }
 
-CConfig::CConfig()
+CConfig::CConfig(char* cfg)
 {
 	/* Set optional settings to default */
 	_mhost = "localhost";
 	_mport = 6600;
 
 	std::string line = "";
-	std::string path = getenv("HOME");
-	path.append("/.mpdasrc");
+	std::string path = "";
+	if(!cfg) {
+		path = CONFDIR;
+		path.append("/mpdasrc");
+		if(!fileexists(path.c_str())) {
+			iprintf("Global config (%s) does not exist. Falling back to home directory.", path.c_str());
+			path = getenv("HOME");
+			path.append("/.mpdasrc");
+		}
+	}
+	else {
+		path = cfg;
+	}
+
 	std::ifstream ifs(path.c_str(), std::ios::in);
 
 	if(!ifs.good()) {
-		eprintf("%s", "Config file does not exist or is not readable.");
+		eprintf("Config file (%s) does not exist or is not readable.", path.c_str());
 		exit(EXIT_FAILURE);
 	}
 
