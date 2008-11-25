@@ -12,8 +12,11 @@ onclose()
 }
 
 void
-setid(char* username)
+setid(const char* username)
 {
+	if(strlen(username) == 0)
+		return;
+
 	passwd* userinfo = 0;
 
 	if(getuid() != 0) {
@@ -27,7 +30,7 @@ setid(char* username)
 		exit(EXIT_FAILURE);
 	}
 
-	if(setuid(userinfo->pw_uid == -1 || setgid(userinfo->pw_gid))) {
+	if(setgid(userinfo->pw_gid == -1 || setuid(userinfo->pw_uid)) == -1) {
 			eprintf("%s %s", "Could not switch to user", username);
 			exit(EXIT_FAILURE);
 	}
@@ -35,15 +38,58 @@ setid(char* username)
 	setenv("HOME", userinfo->pw_dir, 1);
 }
 
+void
+printversion()
+{
+	fprintf(stdout, "mpdas-"VERSION", (C) 2008 Henrik Friedrichsen.\n");
+}
+
+void
+printhelp()
+{
+	fprintf(stderr, "\nusage: mpdas [-h] [-v] [-c config]\n");
+
+	fprintf(stderr, "\n\th: print this help");
+	fprintf(stderr, "\n\tv: print program version");
+	fprintf(stderr, "\n\tc: load specified config file");
+
+	fprintf(stderr, "\n");
+}
+
 int
 main(int argc, char* argv[])
 {
+	int i;
+	char* config = 0;
+
+	if(argc >= 2) {
+		for(i = 1; i <=  argc-1; i++) {
+			if(strstr(argv[i], "-h") == argv[i]) {
+				printversion();
+				printhelp();
+				return EXIT_SUCCESS;
+			}
+			if(strstr(argv[i], "-v") == argv[i]) {
+				printversion();
+				return EXIT_SUCCESS;
+			}
+
+			else if(strstr(argv[i], "-c") == argv[i]) {
+				if(i >= argc-1) {
+					fprintf(stderr, "mpdas: config path missing!\n");
+					printhelp();
+					return EXIT_FAILURE;
+				}
+				config = argv[i+1];
+			}
+		}
+	}
+
 	atexit(onclose);
 
-	if(argc >= 2)
-		setid(argv[1]);
+	Config = new CConfig(config);
 
-	Config = new CConfig();
+	setid(Config->getRUser().c_str());
 
 	MPD = new CMPD();
 	if(!MPD->isConnected())
