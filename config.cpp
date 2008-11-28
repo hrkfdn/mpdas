@@ -43,18 +43,13 @@ CConfig::LoadConfig(std::string path)
 	std::ifstream ifs(path.c_str(), std::ios::in);
 
 	if(!ifs.good()) {
-		eprintf("Config file (%s) does not exist or is not readable.", path.c_str());
-		exit(EXIT_FAILURE);
+		iprintf("Config file (%s) does not exist or is not readable.", path.c_str());
+		return;
 	}
 
 	while(ifs.good()) {
 		getline(ifs, line);
 		ParseLine(line);
-	}
-
-	if(!_lusername.size() || !_lpassword.size()) {
-		eprintf("%s", "AudioScrobbler username or password not set.");
-		exit(EXIT_FAILURE);
 	}
 
 }
@@ -70,15 +65,20 @@ CConfig::CConfig(char* cfg)
 	if(!cfg) {
 		path = CONFDIR;
 		path.append("/mpdasrc");
-		if(!fileexists(path.c_str())) {
-			iprintf("Global config (%s) does not exist. Falling back to home directory.", path.c_str());
-			path = getenv("HOME");
-			path.append("/.mpdasrc");
-		}
 	}
 	else {
 		path = cfg;
 	}
 
 	LoadConfig(path);
+
+	// Load config in home dir as well (if possible)
+	path = getenv("HOME");
+	path.append("/.mpdasrc");
+	LoadConfig(path);
+
+	if(!_lusername.size() || !_lpassword.size()) {
+		eprintf("%s", "AudioScrobbler username or password not set.");
+		exit(EXIT_FAILURE);
+	}
 }
