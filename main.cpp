@@ -36,6 +36,11 @@ setid(const char* username)
 	}
 
 	setenv("HOME", userinfo->pw_dir, 1);
+
+	// Load config in home dir as well (if possible)
+	std::string path = getenv("HOME");
+	path.append("/.mpdasrc");
+	Config->LoadConfig(path);
 }
 
 void
@@ -90,6 +95,11 @@ main(int argc, char* argv[])
 	Config = new CConfig(config);
 
 	setid(Config->getRUser().c_str());
+
+	if(!Config->gotNecessaryData()) {
+		eprintf("%s", "AudioScrobbler username or password not set.");
+		return EXIT_FAILURE;
+	}
 
 	MPD = new CMPD();
 	if(!MPD->isConnected())
