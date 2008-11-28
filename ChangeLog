@@ -1,3 +1,15 @@
+commit 8cc0e2f11834bbeddc92ed6c5d6ac7f3d500d2ef
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 17:31:23 2008 +0100
+
+    remove manpage on uninstall
+
+commit a05572b37e9eb3ac8420fe1d7117b16dbcf2392f
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 17:28:31 2008 +0100
+
+    install manpage
+
 commit 8191c9dfd82d97f9f4d488c98432708f8cdef2f4
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Fri Nov 28 16:19:25 2008 +0100
