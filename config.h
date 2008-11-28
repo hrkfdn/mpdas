@@ -12,9 +12,15 @@ class CConfig
 		std::string getMPassword() { return _mpassword; }
 		std::string getRUser() { return _runninguser; }
 		int getMPort() { return _mport; }
+
+		bool gotNecessaryData() { 
+			if(!_lusername.size() || !_lpassword.size())
+				return false;
+			return true;
+		}
+		void LoadConfig(std::string path);
 	private:
 		void ParseLine(std::string line);
-		void LoadConfig(std::string path);
 		std::string _lusername, _lpassword;
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
