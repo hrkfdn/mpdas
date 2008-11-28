@@ -1,3 +1,39 @@
+commit 8191c9dfd82d97f9f4d488c98432708f8cdef2f4
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 16:19:25 2008 +0100
+
+    implement gotNecessaryData(), make LoadConfig() public.
+
+commit f520a1dc519f4376c3507abce7c15bc6e33ebdc9
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 16:19:09 2008 +0100
+
+    load user config after setting the uid
+
+commit 0adfe8e284c47df192011478ce64b8a5beaed28a
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 16:18:38 2008 +0100
+
+    load userconfig after setting the uid
+
+commit 9a347576a272e3239b23c35f6c842d6959e63eab
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 16:06:12 2008 +0100
+
+    ignore runas when run as a user.
+
+commit 5515c399e5b3791deaf8139d5335e57263baa23e
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 15:49:08 2008 +0100
+
+    load global config first and then the config in home dir
+
+commit e784a491ee8c18bda516951a8d3792552d83a3cf
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 15:45:49 2008 +0100
+
+    separate config loader from constructor
+
 commit 11fb3fabd103addea106f2952094e05d52c0eb0d
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Tue Nov 25 21:23:50 2008 +0100
