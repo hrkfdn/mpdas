@@ -25,6 +25,7 @@ clean:
 
 install: all
 	install mpdas ${PREFIX}/bin
+	install -m 644 mpdas.1 ${PREFIX}/man/man1/mpdas.1
 
 uninstall:
 	-rm ${PREFIX}/bin/hrktorrent
