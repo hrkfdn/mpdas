@@ -35,26 +35,10 @@ CConfig::ParseLine(std::string line)
 	}
 }
 
-CConfig::CConfig(char* cfg)
+void
+CConfig::LoadConfig(std::string path)
 {
-	/* Set optional settings to default */
-	_mhost = "localhost";
-	_mport = 6600;
-
 	std::string line = "";
-	std::string path = "";
-	if(!cfg) {
-		path = CONFDIR;
-		path.append("/mpdasrc");
-		if(!fileexists(path.c_str())) {
-			iprintf("Global config (%s) does not exist. Falling back to home directory.", path.c_str());
-			path = getenv("HOME");
-			path.append("/.mpdasrc");
-		}
-	}
-	else {
-		path = cfg;
-	}
 
 	std::ifstream ifs(path.c_str(), std::ios::in);
 
@@ -72,4 +56,29 @@ CConfig::CConfig(char* cfg)
 		eprintf("%s", "AudioScrobbler username or password not set.");
 		exit(EXIT_FAILURE);
 	}
+
+}
+
+CConfig::CConfig(char* cfg)
+{
+	/* Set optional settings to default */
+	_mhost = "localhost";
+	_mport = 6600;
+
+	std::string path = "";
+
+	if(!cfg) {
+		path = CONFDIR;
+		path.append("/mpdasrc");
+		if(!fileexists(path.c_str())) {
+			iprintf("Global config (%s) does not exist. Falling back to home directory.", path.c_str());
+			path = getenv("HOME");
+			path.append("/.mpdasrc");
+		}
+	}
+	else {
+		path = cfg;
+	}
+
+	LoadConfig(path);
 }

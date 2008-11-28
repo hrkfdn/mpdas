@@ -14,6 +14,7 @@ class CConfig
 		int getMPort() { return _mport; }
 	private:
 		void ParseLine(std::string line);
+		void LoadConfig(std::string path);
 		std::string _lusername, _lpassword;
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
