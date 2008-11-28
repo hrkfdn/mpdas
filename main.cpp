@@ -20,8 +20,8 @@ setid(const char* username)
 	passwd* userinfo = 0;
 
 	if(getuid() != 0) {
-		eprintf("%s", "You are not root.");
-		exit(EXIT_FAILURE);
+		eprintf("%s", "You are not root. Not changing user ..");
+		return;
 	}
 
 	userinfo = getpwnam(username);
