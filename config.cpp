@@ -71,14 +71,4 @@ CConfig::CConfig(char* cfg)
 	}
 
 	LoadConfig(path);
-
-	// Load config in home dir as well (if possible)
-	path = getenv("HOME");
-	path.append("/.mpdasrc");
-	LoadConfig(path);
-
-	if(!_lusername.size() || !_lpassword.size()) {
-		eprintf("%s", "AudioScrobbler username or password not set.");
-		exit(EXIT_FAILURE);
-	}
 }
