@@ -15,11 +15,13 @@ CXXFLAGS	+= -DCONFDIR="\"$(CONFIG)\"" -DVERSION="\"$(VERSION)\""
 
 all: $(OUT)
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+.cpp.o:
+	@echo [CXX] $<
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(OUT): $(OBJ)
-	$(CXX) $(OBJ) $(LIBS) -o $(OUT)
+	@echo [LD] $@
+	@$(CXX) $(OBJ) $(LIBS) -o $(OUT)
 
 clean:
 	rm -rf $(OBJ) $(OUT)
