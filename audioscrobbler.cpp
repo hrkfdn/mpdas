@@ -176,6 +176,10 @@ CAudioScrobbler::Handshake()
 		eprintf("%s", "Bad username/password.");
 		exit(EXIT_FAILURE);
 	}
+	else if(_response.find("BADTIME") == 0) {
+		eprintf("%s", "Your computer time is not accurate enough to generate a session id.");
+		exit(EXIT_FAILURE);
+	}
 
 	CLEANUP();
 }
