@@ -11,6 +11,7 @@ class CConfig
 		std::string getMHost() { return _mhost; }
 		std::string getMPassword() { return _mpassword; }
 		std::string getRUser() { return _runninguser; }
+		bool getDebug() { return (_debug == true); }
 		int getMPort() { return _mport; }
 
 		bool gotNecessaryData() { 
@@ -25,6 +26,7 @@ class CConfig
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
 		int _mport;
+		bool _debug;
 };
 
 extern CConfig* Config;

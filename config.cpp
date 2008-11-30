@@ -31,6 +31,8 @@ CConfig::ParseLine(std::string line)
 			_mport = atoi(tokens[1].c_str());
 		else if(tokens[0] == "runas")
 			_runninguser = tokens[1];
+		else if(tokens[0] == "debug")
+			_debug == atoi(tokens[1].c_str()) > 0;
 
 	}
 }
@@ -59,6 +61,7 @@ CConfig::CConfig(char* cfg)
 	/* Set optional settings to default */
 	_mhost = "localhost";
 	_mport = 6600;
+	_debug = false;
 
 	std::string path = "";
 
