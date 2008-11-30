@@ -77,6 +77,8 @@ eprintf(const char* fmt, ...)
 void
 iprintf(const char* fmt, ...)
 {
+	if(Config && Config->getDebug() == false)
+		return;
 	time_t rawtime = time(NULL);
 	struct tm* t = localtime(&rawtime);
 	char* abuf;
