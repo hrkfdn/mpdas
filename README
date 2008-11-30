@@ -4,7 +4,7 @@
 | '_ ` _ \| '_ \ / _` |/ _` / __|
 | | | | | | |_) | (_| | (_| \__ \
 |_| |_| |_| .__/ \__,_|\__,_|___/
-          |_|                    0.2.3
+          |_|                    0.2.4
 ================================================
 
 mpdas is a MPD AudioScrobbler client
@@ -15,6 +15,9 @@ to retrieve the song data from MPD and
 libcurl to post it to Last.fm
 
 ================================================
+
+NOTE: There is a manpage available as well:
+man mpdas
 
 To configure mpdas, simply create a file called 
 .mpdasrc in your home directory or in
@@ -37,6 +40,7 @@ host:			MPD Host
 mpdpassword:		MPD Password
 port:			MPD Port
 runas:			Change the user mpdas runs as
+debug:			Print debug information
 
 ================================================
 
