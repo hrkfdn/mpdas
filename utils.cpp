@@ -88,6 +88,6 @@ iprintf(const char* fmt, ...)
 	std::string buf(abuf);
 	free(abuf);
 
-	std::cerr << "(" << timestr() << ") [" << YELLOW << "INFO" << RESET << "] " << buf << std::endl;
+	std::cout << "(" << timestr() << ") [" << YELLOW << "INFO" << RESET << "] " << buf << std::endl;
 }
 
