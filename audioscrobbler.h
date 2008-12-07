@@ -14,6 +14,7 @@ class CAudioScrobbler
 		void Failure();
 		void GetLove();
 	private:
+		void InitPipe();
 		void OpenURL(std::string url, const char* postfields, char* errbuf);
 		bool CheckFailure(std::string response);
 
@@ -28,7 +29,7 @@ class CAudioScrobbler
 
 		bool _authed;
 		int _failcount;
-		FILE* _ratingpipe;
+		int _ratingpipe;
 		bool _love;
 };
 

@@ -17,6 +17,8 @@ writecb(void* ptr, size_t size, size_t nmemb, void *stream)
 
 CAudioScrobbler::CAudioScrobbler()
 {
+	_ratingpipe = 0;
+	_love = false;
 	_failcount = 0;
 	_authed = false;
 	_response = "";
@@ -26,14 +28,21 @@ CAudioScrobbler::CAudioScrobbler()
 		exit(EXIT_FAILURE);
 	}
 
-	if(mkfifo("/tmp/mpdaspipe", 0666) != 0)
-		eprintf("Could not create the rating pipe.");
+	InitPipe();
+}
+
+void
+CAudioScrobbler::InitPipe()
+{
+	if(mkfifo("/tmp/mpdaspipe", 0666) != 0 && errno != EEXIST)
+		eprintf("Could not create the rating pipe. (%s)", strerror(errno));
 	else {
-		_ratingpipe = fopen("/tmp/mpdaspipe", "r");
+		_ratingpipe = open("/tmp/mpdaspipe", O_RDONLY | O_NDELAY);
 		if(!_ratingpipe)
-			eprintf("Could not open the rating pipe.");
+			eprintf("Could not open the rating pipe. (%s)", strerror(errno));
 	}
 }
+
 
 void
 CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char* errbuf = 0)
@@ -69,7 +78,10 @@ CAudioScrobbler::CreateScrobbleMessage(int index, centry_t* entry)
 	msg << "&a[" << index << "]=" << entry->artist;
 	msg << "&t[" << index << "]=" << entry->title;
 	msg << "&i[" << index << "]=" << entry->starttime;
-	msg << "&o[" << index << "]=P&r[" << index << "]=";
+	msg << "&o[" << index << "]=P";
+	msg << "&r[" << index << "]=";
+	if(_love)
+		msg << "L";
 	msg << "&l[" << index << "]=" << entry->time;
 	msg << "&b[" << index << "]=";
 	if(entry->album)
@@ -106,6 +118,27 @@ CAudioScrobbler::CheckFailure(std::string response)
 	return retval;
 }
 
+void
+CAudioScrobbler::GetLove()
+{
+	if(_ratingpipe == 0)
+		return;
+	char buf[80];
+	int numread = 0;
+	memset(buf, 0, sizeof(buf));
+
+	numread = read(_ratingpipe, &buf, sizeof(buf));
+	if(numread > 0) {
+		if(strstr(buf, "L")) {
+			iprintf("Track will be scrobbled with \"love\" attribute.");
+			_love = true;
+		}
+		else if(strstr(buf, "C")) {
+			iprintf("Track will not be scrobbled with \"love\" attribute.");
+			_love = false;
+		}
+	}
+}
 
 bool
 CAudioScrobbler::Scrobble(centry_t* entry)
@@ -130,6 +163,8 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 	}
 
 	CLEANUP();
+
+	_love = false;
 	return retval;
 }
 
@@ -138,6 +173,8 @@ CAudioScrobbler::SendNowPlaying(mpd_Song* song)
 {
 	bool retval = false;
 	if(!song || !song->artist || !song->title) return retval;
+	_love = false;
+
 	char* artist = curl_easy_escape(_handle, song->artist, 0);
 	char* title = curl_easy_escape(_handle, song->title, 0);
 	char* album = 0;
