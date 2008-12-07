@@ -26,7 +26,13 @@ CAudioScrobbler::CAudioScrobbler()
 		exit(EXIT_FAILURE);
 	}
 
-	_ratingpipe = mkfifo("/tmp/mpdaspipe", 0666);
+	if(mkfifo("/tmp/mpdaspipe", 0666) != 0)
+		eprintf("Could not create the rating pipe.");
+	else {
+		_ratingpipe = fopen("/tmp/mpdaspipe", "r");
+		if(!_ratingpipe)
+			eprintf("Could not open the rating pipe.");
+	}
 }
 
 void

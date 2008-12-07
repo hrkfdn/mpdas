@@ -26,7 +26,7 @@ class CAudioScrobbler
 
 		bool _authed;
 		int _failcount;
-		int _ratingpipe;
+		FILE* _ratingpipe;
 };
 
 extern CAudioScrobbler* AudioScrobbler;
