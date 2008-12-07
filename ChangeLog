@@ -1,3 +1,45 @@
+commit 4b21a18e0f565b1fdc28fca0efff0e2f499a3b88
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 15:04:07 2008 +0100
+
+    check if debug is on when printing info messages
+
+commit 20f023023d80f90e0b681970a3a6e376383d25cf
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 15:03:38 2008 +0100
+
+    implement debug setting
+
+commit 4630ec076823269f9acf77327501f9a6fe924d91
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 15:03:18 2008 +0100
+
+    update version, mention 'debug' config setting
+
+commit 7adebf193f3d883a3493b1f90fbf4340669b0c83
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 15:03:11 2008 +0100
+
+    update version
+
+commit 84905518a8bfeb5926fe9e45a23ac175d39ec4ee
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 14:55:45 2008 +0100
+
+    don't print info messages to the error stream
+
+commit c1b8fcf2c99ef5f07c3b38878c714e18f8c01e1a
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 00:02:25 2008 +0100
+
+    respect BADTIME error message by server
+
+commit 971a24b7363d1dc3cfebd77dfa09e506de4777d5
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sat Nov 29 22:53:59 2008 +0100
+
+    prettify makefile output
+
 commit 8cc0e2f11834bbeddc92ed6c5d6ac7f3d500d2ef
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Fri Nov 28 17:31:23 2008 +0100
