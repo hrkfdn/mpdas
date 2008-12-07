@@ -47,6 +47,7 @@ void
 printversion()
 {
 	fprintf(stdout, "mpdas-"VERSION", (C) 2008 Henrik Friedrichsen.\n");
+	fprintf(stdout, "Global config path is set to \"%s\"\n", CONFDIR);
 }
 
 void
@@ -112,6 +113,7 @@ main(int argc, char* argv[])
 
 scan:
 	MPD->Update();
+	AudioScrobbler->GetLove();
 	Cache->WorkCache();
 	usleep(500000);
 	goto scan;
