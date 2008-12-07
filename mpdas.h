@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <errno.h>
 
 #include <fstream>
 #include <iostream>
