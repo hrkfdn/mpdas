@@ -25,6 +25,8 @@ CAudioScrobbler::CAudioScrobbler()
 		eprintf("%s", "Could not initialize CURL.");
 		exit(EXIT_FAILURE);
 	}
+
+	_ratingpipe = mkfifo("/tmp/mpdaspipe", 0666);
 }
 
 void
