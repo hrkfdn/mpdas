@@ -1,3 +1,81 @@
+commit 888b8397fd5ad2afed444c107129dddd84a817b4
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Wed Dec 24 15:28:28 2008 +0100
+
+    update program version in makefile
+
+commit 90d9d549cebf4ea9affcb1e60e5b2ffc5fecdaad
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Wed Dec 24 15:21:48 2008 +0100
+
+    bump as client version
+
+commit d0021ab064e0b48ab055affa7b6baaecde84070b
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Wed Dec 24 15:10:11 2008 +0100
+
+    fix compile error
+
+commit 7d2eb9721d01b2ac628535f57436409f6a0d76a6
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Wed Dec 24 15:00:01 2008 +0100
+
+    load config in homedir if no username is given
+
+commit b4b6455907466959ca30434e4e4118528d425370
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 17:50:30 2008 +0100
+
+    check pipe in mainloop
+
+commit 66a917e20d55b0f2d0d4305dd1a83451057ec7cc
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 17:50:07 2008 +0100
+
+    add pipe for loving tracks (still just a draft)
+
+commit a25c47b6e936a4ddacc5e7d3e8f1959c1013c36e
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 17:49:57 2008 +0100
+
+    add fcntl.h header
+
+commit 85f78f1408fb817d56de4a0065d6038a5abb4218
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 17:49:41 2008 +0100
+
+    fix debug option
+
+commit 833836bf75fc137baa683ee2cb76181630eb8280
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 16:43:44 2008 +0100
+
+    add GetLove() and love indicator
+
+commit 2de826f61ed8aa7e0320bf469793fdc0073d0e53
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 16:43:33 2008 +0100
+
+    add errno.h header
+
+commit a047a41702c71cddf5c88147590ce4b7b7c1b49e
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 16:34:30 2008 +0100
+
+    open rating pipe
+
+commit edfc9159cddbc94af58d31736ad7715c0077fdea
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 16:34:19 2008 +0100
+
+    add headers for mkfifo()
+
+commit 3cb9fdb513471da5014ae7a493cc58d7db5049d8
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 16:27:31 2008 +0100
+
+    create rating pipe
+
 commit 4b21a18e0f565b1fdc28fca0efff0e2f499a3b88
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Sun Nov 30 15:04:07 2008 +0100
