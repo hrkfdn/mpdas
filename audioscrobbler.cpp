@@ -3,7 +3,7 @@
 #define HOST		"http://post.audioscrobbler.com"
 #define PVERSION	"1.2.1"
 #define CLIENT		"mp5"
-#define CVERSION	"0.1"
+#define CVERSION	"0.2.4"
 
 CAudioScrobbler* AudioScrobbler = 0;
 
