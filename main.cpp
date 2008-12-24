@@ -14,10 +14,10 @@ onclose()
 void
 setid(const char* username)
 {
+	passwd* userinfo = 0;
+
 	if(strlen(username) == 0)
 		goto homecfg;
-
-	passwd* userinfo = 0;
 
 	if(getuid() != 0) {
 		eprintf("%s", "You are not root. Not changing user ..");
