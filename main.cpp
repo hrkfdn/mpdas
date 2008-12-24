@@ -15,7 +15,7 @@ void
 setid(const char* username)
 {
 	if(strlen(username) == 0)
-		return;
+		goto homecfg;
 
 	passwd* userinfo = 0;
 
@@ -37,6 +37,7 @@ setid(const char* username)
 
 	setenv("HOME", userinfo->pw_dir, 1);
 
+homecfg:
 	// Load config in home dir as well (if possible)
 	std::string path = getenv("HOME");
 	path.append("/.mpdasrc");
