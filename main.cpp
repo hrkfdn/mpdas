@@ -68,6 +68,7 @@ main(int argc, char* argv[])
 {
 	int i;
 	char* config = 0;
+	bool go_daemon = false;
 
 	if(argc >= 2) {
 		for(i = 1; i <=  argc-1; i++) {
@@ -89,6 +90,10 @@ main(int argc, char* argv[])
 				}
 				config = argv[i+1];
 			}
+
+			else if(strstr(argv[i], "-d") == argv[i]) {
+				go_daemon = true;
+			}
 		}
 	}
 
@@ -101,6 +106,13 @@ main(int argc, char* argv[])
 	if(!Config->gotNecessaryData()) {
 		eprintf("%s", "AudioScrobbler username or password not set.");
 		return EXIT_FAILURE;
+	}
+
+	if (go_daemon) {
+		if (daemon(1, 0)) {
+			perror("daemon");
+			return EXIT_FAILURE;
+		}
 	}
 
 	MPD = new CMPD();
