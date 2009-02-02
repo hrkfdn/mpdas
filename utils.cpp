@@ -31,6 +31,7 @@ md5sum(const char* fmt, ...)
 	va_start(ap, fmt);
 	if(vasprintf(&abuf, fmt, ap) == -1) {
 		error("in md5sum: Could not allocate memory for vasprintf()");
+		va_end(ap);
 		exit(EXIT_FAILURE);
 	}
 	va_end(ap);
