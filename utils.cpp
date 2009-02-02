@@ -14,6 +14,12 @@ fileexists(const char* file)
 		return false;
 }
 
+void
+error(std::string msg)
+{
+	std::cerr << "(" << timestr() << ")" << "[" << RED << "ERROR" << RESET << "]" << msg << std::endl;
+}
+
 std::string
 md5sum(const char* fmt, ...)
 {
@@ -23,7 +29,10 @@ md5sum(const char* fmt, ...)
 	unsigned char md5buf[16];
 
 	va_start(ap, fmt);
-	vasprintf(&abuf, fmt, ap);
+	if(vasprintf(&abuf, fmt, ap) == -1) {
+		error("in md5sum: Could not allocate memory for vasprintf()");
+		exit(EXIT_FAILURE);
+	}
 	va_end(ap);
 
 	std::string buf(abuf);
@@ -65,7 +74,11 @@ eprintf(const char* fmt, ...)
 	char* abuf;
 	va_list ap;
 	va_start(ap, fmt);
-	vasprintf(&abuf, fmt, ap);
+	if(vasprintf(&abuf, fmt, ap) == -1) {
+		error("in eprintf: Could not allocate memory for vasprintf()");
+		va_end(ap);
+		return;
+	}
 	va_end(ap);
 
 	std::string buf(abuf);
@@ -84,7 +97,11 @@ iprintf(const char* fmt, ...)
 	char* abuf;
 	va_list ap;
 	va_start(ap, fmt);
-	vasprintf(&abuf, fmt, ap);
+	if(vasprintf(&abuf, fmt, ap) == -1) {
+		error("in iprintf: could not allocate memory for vasprintf()");
+		va_end(ap);
+		return;
+	}
 	va_end(ap);
 
 	std::string buf(abuf);
