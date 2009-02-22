@@ -37,6 +37,7 @@ CAudioScrobbler::InitPipe()
 	if(mkfifo("/tmp/mpdaspipe", 0666) != 0 && errno != EEXIST)
 		eprintf("Could not create the rating pipe. (%s)", strerror(errno));
 	else {
+		chmod("/tmp/mpdaspipe", 0666); // somehow this didnt suffice in the mkfifo() call
 		_ratingpipe = open("/tmp/mpdaspipe", O_RDONLY | O_NDELAY);
 		if(!_ratingpipe)
 			eprintf("Could not open the rating pipe. (%s)", strerror(errno));
