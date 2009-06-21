@@ -34,6 +34,7 @@ CAudioScrobbler::CAudioScrobbler()
 void
 CAudioScrobbler::InitPipe()
 {
+	umask(0666);
 	if(mkfifo("/tmp/mpdaspipe", 0666) != 0 && errno != EEXIST)
 		eprintf("Could not create the rating pipe. (%s)", strerror(errno));
 	else {
