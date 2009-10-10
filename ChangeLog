@@ -1,8 +1,86 @@
+commit 4e7ae606915dbfc2b20f2771d5589582a216bfdb
+Author: Henrik Friedrichsen <hrkfdn@gmail.com>
+Date:   Sat Oct 10 14:18:42 2009 +0200
+
+    update version
+
+commit 2dbc1013cdcd5ae278cc4517a3cb3b7b81368488
+Author: Henrik Friedrichsen <hrkfdn@gmail.com>
+Date:   Sat Oct 10 14:18:22 2009 +0200
+
+    make PREFIX, MANPREFIX and CONFIG changeable
+
+commit d79f3cbacc95cb155a390dc2c288ee2ea892492a
+Author: Henrik Friedrichsen <hrkfdn@gmail.com>
+Date:   Sun Jun 21 15:35:54 2009 +0200
+
+    fix pipe access mask
+
+commit 2771366a25e4a4d428acf1df2472caa5c6322c15
+Author: Henrik Friedrichsen <henrik@kiwi.icecap>
+Date:   Sun Feb 22 14:31:47 2009 +0100
+
+    fix mpdaspipe permissions
+
+commit e70310ea90a67b2df19754f095ac906ea9c9ff50
+Author: Henrik Friedrichsen <henrik@kiwi.icecap>
+Date:   Mon Feb 2 22:19:06 2009 +0100
+
+    end arglist
+
+commit 9f898da9820706e98401c86b3966322e70cd1c6a
+Author: Henrik Friedrichsen <henrik@kiwi.icecap>
+Date:   Mon Feb 2 21:58:02 2009 +0100
+
+    fix g++ warnings
+
+commit d225ccdfdccf5211b3a6bee3bce56c2140462d8d
+Author: Henrik Friedrichsen <henrik@kiwi.icecap>
+Date:   Mon Feb 2 21:56:15 2009 +0100
+
+    add timestr() prototype
+
+commit 05f6fbcad4e38fd15f79948b910a1aa6e3f29219
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Fri Dec 26 23:52:58 2008 +0100
+
+    update email/nickname
+
+commit 57a22ee6f60ef20fbab7314ca9498b511e4ec46e
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Fri Dec 26 23:49:46 2008 +0100
+
+    daemonize mpdas when launched with -d switch (Romain Tartière)
+
+commit 324843e11be9f39e13e8d1374879be4ef8fc755c
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Fri Dec 26 15:29:55 2008 +0100
+
+    foo part II
+
+commit a60b3ebcc9bec80df7f59ea2ae18fb29ab2838c8
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Fri Dec 26 15:26:19 2008 +0100
+
+    foo
+
+commit 3e3e6b6d5823c1574c8dbde48ea7163e5d7a9546
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Fri Dec 26 15:12:42 2008 +0100
+
+    add newline before debug. (thanks to tuqs, the manpage nazi)
+
 commit 888b8397fd5ad2afed444c107129dddd84a817b4
 Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
 Date:   Wed Dec 24 15:28:28 2008 +0100
 
     update program version in makefile
+
+commit e0083fe81d9c324010aef8ec8da3ef5603f7884f
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Wed Dec 24 15:26:09 2008 +0100
+
+    update manpage version
 
 commit 90d9d549cebf4ea9affcb1e60e5b2ffc5fecdaad
 Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
@@ -76,11 +154,23 @@ Date:   Sun Dec 7 16:27:31 2008 +0100
 
     create rating pipe
 
+commit 949910ad574452a46ae287dec2436fc4553d1098
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 15:04:19 2008 +0100
+
+    include debug output in example config
+
 commit 4b21a18e0f565b1fdc28fca0efff0e2f499a3b88
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Sun Nov 30 15:04:07 2008 +0100
 
     check if debug is on when printing info messages
+
+commit d6adc043d4fabee5cca8629812c2e57474ae91c7
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Nov 30 15:03:53 2008 +0100
+
+    explain debug config variable
 
 commit 20f023023d80f90e0b681970a3a6e376383d25cf
 Author: hrkfrd <hrkfrd@gmail.com>
@@ -130,6 +220,12 @@ Date:   Fri Nov 28 17:28:31 2008 +0100
 
     install manpage
 
+commit 830d5e5d23232762f84907f6ad512a3fc5a9ec9e
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 17:25:39 2008 +0100
+
+    add manpage (thanks tuqs)
+
 commit 8191c9dfd82d97f9f4d488c98432708f8cdef2f4
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Fri Nov 28 16:19:25 2008 +0100
@@ -165,6 +261,12 @@ Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Fri Nov 28 15:45:49 2008 +0100
 
     separate config loader from constructor
+
+commit c8869baea95e52c523e84fc697e2ed09f5b69870
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:30:02 2008 +0100
+
+    add example config
 
 commit 11fb3fabd103addea106f2952094e05d52c0eb0d
 Author: hrkfrd <hrkfrd@gmail.com>
