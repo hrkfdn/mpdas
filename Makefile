@@ -4,7 +4,7 @@ CXX	?= g++
 OBJ	= main.o md5.o utils.o mpd.o audioscrobbler.o cache.o config.o
 OUT	= mpdas
 PREFIX ?= /usr/local
-MANPREFIX ?= ${PREFIX}/man/man1
+MANPREFIX ?= ${PREFIX}
 CONFIG ?= $(PREFIX)/etc
 
 CXXFLAGS	+= `pkg-config --cflags libmpd libcurl` 
