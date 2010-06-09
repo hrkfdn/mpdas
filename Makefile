@@ -21,7 +21,7 @@ all: $(OUT)
 
 $(OUT): $(OBJ)
 	@echo [LD] $@
-	@$(CXX) $(OBJ) $(LIBS) -o $(OUT)
+	@$(CXX) $(LDFLAGS) $(OBJ) $(LIBS) -o $(OUT)
 
 clean:
 	rm -rf $(OBJ) $(OUT)
