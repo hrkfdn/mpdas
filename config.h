@@ -4,7 +4,7 @@
 class CConfig
 {
 	public:
-		CConfig(char* cfg);
+		CConfig(char* cfg, char* excl);
 
 		std::string getLUsername() { return _lusername; }
 		std::string getLPassword() { return _lpassword; }
@@ -20,11 +20,14 @@ class CConfig
 			return true;
 		}
 		void LoadConfig(std::string path);
+        void LoadExcludes(std::string path);
 	private:
-		void ParseLine(std::string line);
+		void ParseConfigLine(std::string line);
+        void ParseExcludesLine(std::string line);
 		std::string _lusername, _lpassword;
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
+        std::vector<std::string> _exclude;
 		int _mport;
 		bool _debug;
 };

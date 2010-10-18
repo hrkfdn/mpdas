@@ -3,7 +3,7 @@
 CConfig* Config = 0;
 
 void
-CConfig::ParseLine(std::string line)
+CConfig::ParseConfigLine(std::string line)
 {
 	std::vector<std::string> tokens;
 	char* pstr = 0;
@@ -40,6 +40,11 @@ CConfig::ParseLine(std::string line)
 }
 
 void
+CConfig::ParseExcludesLine(std::string line)
+{
+}
+
+void
 CConfig::LoadConfig(std::string path)
 {
 	std::string line = "";
@@ -53,12 +58,30 @@ CConfig::LoadConfig(std::string path)
 
 	while(ifs.good()) {
 		getline(ifs, line);
-		ParseLine(line);
+		ParseConfigLine(line);
 	}
 
 }
 
-CConfig::CConfig(char* cfg)
+void
+CConfig::LoadExcludes(std::string path)
+{
+    std::string line = "";
+
+	std::ifstream ifs(path.c_str(), std::ios::in);
+
+	if(!ifs.good()) {
+		iprintf("Excludes file (%s) does not exist or is not readable.", path.c_str());
+		return;
+	}
+
+	while(ifs.good()) {
+		getline(ifs, line);
+		ParseExcludesLine(line);
+	}
+}
+
+CConfig::CConfig(char* cfg, char* excl)
 {
 	/* Set optional settings to default */
 	_mhost = "localhost";
@@ -75,5 +98,15 @@ CConfig::CConfig(char* cfg)
 		path = cfg;
 	}
 
-	LoadConfig(path);
+    LoadConfig(path);
+
+    if(!excl) {
+		path = CONFDIR;
+		path.append("/mpdasexc");
+	}
+	else {
+		path = excl;
+	}
+
+	LoadExcludes(path);
 }

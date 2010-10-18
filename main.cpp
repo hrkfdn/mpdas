@@ -68,6 +68,7 @@ main(int argc, char* argv[])
 {
 	int i;
 	char* config = 0;
+    char* exclude = 0;
 	bool go_daemon = false;
 
 	if(argc >= 2) {
@@ -94,12 +95,21 @@ main(int argc, char* argv[])
 			else if(strstr(argv[i], "-d") == argv[i]) {
 				go_daemon = true;
 			}
+
+            else if(strstr(argv[i], "-e") == argv[i]) {
+                if(i >= argc-1) {
+					fprintf(stderr, "mpdas: exclude path missing!\n");
+					printhelp();
+					return EXIT_FAILURE;
+				}
+				exclude = argv[i+1];
+            }
 		}
 	}
 
 	atexit(onclose);
 
-	Config = new CConfig(config);
+	Config = new CConfig(config,exclude);
 
 	setid(Config->getRUser().c_str());
 
