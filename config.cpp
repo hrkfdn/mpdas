@@ -35,7 +35,6 @@ CConfig::ParseConfigLine(std::string line)
 			if(tokens[1] == "1" || tokens[1] == "true")
 				_debug = true;
 		}
-
 	}
 }
 
@@ -68,19 +67,22 @@ CConfig::LoadConfig(std::string path)
 void
 CConfig::LoadExcludes(std::string path)
 {
+    unsigned int numexcls = 0;    
     std::string line = "";
-
-	std::ifstream ifs(path.c_str(), std::ios::in);
+    std::ifstream ifs(path.c_str(), std::ios::in);
 
 	if(!ifs.good()) {
 		iprintf("Excludes file (%s) does not exist or is not readable.", path.c_str());
 		return;
 	}
 
-	while(ifs.good()) {
+    while(ifs.good()) {
 		getline(ifs, line);
 		ParseExcludesLine(line);
+        ++numexcls;
 	}
+
+    iprintf("Excluding (%i) artists from scrobbling.", numexcls);
 }
 
 bool CConfig::IsArtistExcluded(std::string artist)
@@ -105,7 +107,7 @@ CConfig::CConfig(char* cfg, char* excl)
 	_mport = 6600;
 	_debug = false;
 
-	std::string path = "";
+    std::string path = "";
 
 	if(!cfg) {
 		path = CONFDIR;
