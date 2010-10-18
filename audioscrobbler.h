@@ -7,16 +7,16 @@ class CAudioScrobbler
 	public:
 		CAudioScrobbler();
 		void Handshake();
-		std::string CreateScrobbleMessage(int index, centry_t* entry);
-		bool Scrobble(centry_t* entry);
-		void ReportResponse(char* buf, size_t size);
-		bool SendNowPlaying(mpd_Song* song);
+		const std::string CreateScrobbleMessage(const int index, const centry_t* entry);
+		const bool Scrobble(const centry_t* entry);
+		void ReportResponse(const char* buf, const size_t size);
+		const bool SendNowPlaying(const mpd_Song* song);
 		void Failure();
 		void GetLove();
 	private:
 		void InitPipe();
-		void OpenURL(std::string url, const char* postfields, char* errbuf);
-		bool CheckFailure(std::string response);
+		void OpenURL(const std::string& url, const char* postfields, const char* errbuf);
+		const bool CheckFailure(const std::string& response);
 
 		CURL* _handle;
 

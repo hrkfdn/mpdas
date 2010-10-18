@@ -47,7 +47,7 @@ CAudioScrobbler::InitPipe()
 
 
 void
-CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char* errbuf = 0)
+CAudioScrobbler::OpenURL(const std::string& url, const char* postfields = 0, const char* errbuf = 0)
 {
 	curl_easy_setopt(_handle, CURLOPT_DNS_CACHE_TIMEOUT, 0);
 	curl_easy_setopt(_handle, CURLOPT_NOPROGRESS, 1);
@@ -68,13 +68,13 @@ CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char* errb
 
 
 void
-CAudioScrobbler::ReportResponse(char* buf, size_t size)
+CAudioScrobbler::ReportResponse(const char* buf, const size_t size)
 {
 	_response.append(buf);
 }
 
-std::string
-CAudioScrobbler::CreateScrobbleMessage(int index, centry_t* entry)
+const std::string
+CAudioScrobbler::CreateScrobbleMessage(const int index, const centry_t* entry)
 {
 	std::stringstream msg;
 	msg << "&a[" << index << "]=" << entry->artist;
@@ -104,8 +104,8 @@ CAudioScrobbler::Failure()
 	}
 }
 
-bool
-CAudioScrobbler::CheckFailure(std::string response)
+const bool
+CAudioScrobbler::CheckFailure(const std::string& response)
 {
 	bool retval = false;
 	if(_response.find("BADSESSION")) {
@@ -142,8 +142,8 @@ CAudioScrobbler::GetLove()
 	}
 }
 
-bool
-CAudioScrobbler::Scrobble(centry_t* entry)
+const bool
+CAudioScrobbler::Scrobble(const centry_t* entry)
 {
 	bool retval = false;
 	if(!_authed) {
@@ -170,8 +170,8 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 	return retval;
 }
 
-bool
-CAudioScrobbler::SendNowPlaying(mpd_Song* song)
+const bool
+CAudioScrobbler::SendNowPlaying(const mpd_Song* song)
 {
 	bool retval = false;
 	if(!song || !song->artist || !song->title) return retval;
