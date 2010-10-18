@@ -3,7 +3,7 @@
 CConfig* Config = 0;
 
 void
-CConfig::ParseConfigLine(std::string line)
+CConfig::ParseConfigLine(const std::string& line)
 {
 	std::vector<std::string> tokens;
 	char* pstr = 0;
@@ -39,14 +39,14 @@ CConfig::ParseConfigLine(std::string line)
 }
 
 void
-CConfig::ParseExcludesLine(std::string line)
+CConfig::ParseExcludesLine(const std::string& line)
 {
     // could be more robust here
     _excludes.push_back(line);
 }
 
 void
-CConfig::LoadConfig(std::string path)
+CConfig::LoadConfig(const std::string& path)
 {
 	std::string line = "";
 
@@ -65,7 +65,7 @@ CConfig::LoadConfig(std::string path)
 }
 
 void
-CConfig::LoadExcludes(std::string path)
+CConfig::LoadExcludes(const std::string& path)
 {
     unsigned int numexcls = 0;    
     std::string line = "";
@@ -85,9 +85,9 @@ CConfig::LoadExcludes(std::string path)
     iprintf("Excluding (%i) artists from scrobbling.", numexcls);
 }
 
-bool CConfig::IsArtistExcluded(std::string artist)
+const bool CConfig::IsArtistExcluded(const std::string& artist) const
 {
-    std::vector<std::string>::iterator it;
+    std::vector<std::string>::const_iterator it;
 
     for(it = _excludes.begin(); it != _excludes.end(); ++it)
     {
@@ -100,7 +100,7 @@ bool CConfig::IsArtistExcluded(std::string artist)
     return false;
 }
 
-CConfig::CConfig(char* cfg, char* excl)
+CConfig::CConfig(const char* cfg, const char* excl)
 {
 	/* Set optional settings to default */
 	_mhost = "localhost";
