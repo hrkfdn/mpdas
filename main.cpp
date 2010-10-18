@@ -59,6 +59,7 @@ printhelp()
 	fprintf(stderr, "\n\th: print this help");
 	fprintf(stderr, "\n\tv: print program version");
 	fprintf(stderr, "\n\tc: load specified config file");
+    fprintf(stderr, "\n\te: load specified excludes file");
 
 	fprintf(stderr, "\n");
 }
@@ -98,7 +99,7 @@ main(int argc, char* argv[])
 
             else if(strstr(argv[i], "-e") == argv[i]) {
                 if(i >= argc-1) {
-					fprintf(stderr, "mpdas: exclude path missing!\n");
+					fprintf(stderr, "mpdas: excludes path missing!\n");
 					printhelp();
 					return EXIT_FAILURE;
 				}

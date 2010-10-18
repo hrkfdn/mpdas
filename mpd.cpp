@@ -7,7 +7,7 @@ void
 CMPD::SetSong(mpd_Song* song)
 {
 	_cached = false;
-	if(song && song->artist && song->title) {
+	if(song && song->artist && song->title && !Config->IsArtistExcluded(song->artist)) {
 		_song.artist = song->artist;
 		_song.title = song->title;
 		if(song->album)

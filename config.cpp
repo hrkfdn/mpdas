@@ -42,6 +42,8 @@ CConfig::ParseConfigLine(std::string line)
 void
 CConfig::ParseExcludesLine(std::string line)
 {
+    // could be more robust here
+    _excludes.push_back(line);
 }
 
 void
@@ -79,6 +81,21 @@ CConfig::LoadExcludes(std::string path)
 		getline(ifs, line);
 		ParseExcludesLine(line);
 	}
+}
+
+bool CConfig::IsArtistExcluded(std::string artist)
+{
+    std::vector<std::string>::iterator it;
+
+    for(it = _excludes.begin(); it != _excludes.end(); ++it)
+    {
+        if(*it == artist) {
+            iprintf("Excluding artist (%s) from scrobble.", artist.c_str());
+            return true;
+        }
+    }
+
+    return false;
 }
 
 CConfig::CConfig(char* cfg, char* excl)

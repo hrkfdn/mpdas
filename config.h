@@ -21,13 +21,14 @@ class CConfig
 		}
 		void LoadConfig(std::string path);
         void LoadExcludes(std::string path);
+        bool IsArtistExcluded(std::string artist);
 	private:
 		void ParseConfigLine(std::string line);
         void ParseExcludesLine(std::string line);
 		std::string _lusername, _lpassword;
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
-        std::vector<std::string> _exclude;
+        std::vector<std::string> _excludes;
 		int _mport;
 		bool _debug;
 };
