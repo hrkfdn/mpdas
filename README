@@ -4,7 +4,7 @@
 | '_ ` _ \| '_ \ / _` |/ _` / __|
 | | | | | | |_) | (_| | (_| \__ \
 |_| |_| |_| .__/ \__,_|\__,_|___/
-          |_|                    0.2.5
+          |_|                    0.3.0
 ================================================
 
 mpdas is a MPD AudioScrobbler client
@@ -58,7 +58,7 @@ Also checkout LICENSE
 ================================================
 
 Contact:
-IRC: hrkfdn / irc.rizon.net
+IRC: henrik / irc.rizon.net
 Jabber: hrkfdn@gmail.com
 WWW: http://www.50hz.ws
 
