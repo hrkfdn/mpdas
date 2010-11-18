@@ -24,8 +24,6 @@ class CAudioScrobbler
 		std::string _response;
 
 		std::string _sessionid;
-		std::string _npurl;
-		std::string _scroburl;
 
 		bool _authed;
 		int _failcount;
