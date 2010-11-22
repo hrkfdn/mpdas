@@ -1,8 +1,122 @@
+commit 644a36c4958d9c14f1503199c8a1934efc48eaac
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Mon Nov 22 02:07:30 2010 +0100
+
+    improve error handling and verbose output
+
+commit 11ff627f77822c57769d6efe9114fe09acc460c0
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Mon Nov 22 01:50:02 2010 +0100
+
+    remove rating/love pipe system. apparently last.fm doesn't want to properly implement it for scrobblers..
+
+commit b487152240331aea7d831f1c5475c788f8c08817
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Mon Nov 22 01:44:07 2010 +0100
+
+    audioscrobbler now takes care of urlencoding
+
+commit e6e2817cdd6d4e36bf3b67819e9410046df89d93
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Mon Nov 22 01:44:00 2010 +0100
+
+    don't zero std::strings
+
+commit bc8ff1a736e717021ad667e64aaf1048a0620d50
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Mon Nov 22 01:42:51 2010 +0100
+
+    audioscrobbler class now takes care of the urlencoding
+
+commit 91441372d9206f443a545542fc3f818f27d6b089
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Mon Nov 22 01:41:43 2010 +0100
+
+    support the new scrobbling api (version 2.0)
+
+commit 18e43b62be686df8f7f5071e09f2140da22a01ce
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Mon Nov 22 01:27:31 2010 +0100
+
+    add GetSong() method returning data on the currently playing song (this is required for loving tracks)
+
+commit 6843a704afc4d8019e51ae4e27228ee10f536f94
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Sun Nov 21 20:46:55 2010 +0100
+
+    escape the entry fields only when needed
+
+commit d13e8faec18ca173fe9534e3154ef277fa9c9a25
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Thu Nov 18 21:51:09 2010 +0100
+
+    new protocol doesn't require specific scrobble & now-playing urls
+
+commit 3f3087c25833b7508531483fe7739b9af959d908
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Thu Nov 18 21:49:14 2010 +0100
+
+    mention 2.0 protocol in readme
+
+commit a1ab730a6d371d384168b9f4078120c5f01ff0c7
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Thu Nov 18 21:43:29 2010 +0100
+
+    bump version to 0.3.0, update contact info
+
+commit e24533dafd4279af0842405bf320264e3ab1c8c7
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Thu Nov 18 21:42:44 2010 +0100
+
+    bump version to 0.3.0
+
+commit 8c753bcaa3708c86de8165ca9ad04942787372ff
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Thu Nov 18 21:42:12 2010 +0100
+
+    update copyright notice
+
+commit dc078c5455708854a893152b9b67cfa332ed438b
+Author: Henrik Friedrichsen <henrik@dsp.(none)>
+Date:   Wed Jun 9 02:56:36 2010 +0200
+
+    fix a bug in the makefile where the LDFLAGS would be ignored (patch by Christoph Mende)
+
+commit 0d7dab6506fbbc399d0e97f72f4a2d6e81eee9d3
+Author: hrkfdn <hrkfdn@gmail.com>
+Date:   Thu Feb 25 14:02:54 2010 +0100
+
+    fix Makefile. thanks namelessjon & harald pfeiffer
+
+commit 868cb2b8ed91ecd6feb4452c8aa6961ff5396013
+Author: Henrik Friedrichsen <henrik@lolita.localdomain>
+Date:   Thu Feb 25 13:58:39 2010 +0100
+
+    change manprefix in makefile. thanks namelessjon & harald pfeiffer!
+
+commit 652e5e73910284f9ce1ba3d30ae5f4165bf3afc3
+Author: Henrik Friedrichsen <hrkfdn@gmail.com>
+Date:   Sat Oct 10 14:44:53 2009 +0200
+
+    update version
+
+commit 09410ff356763b9d838c42be99601ab8446632f5
+Author: Henrik Friedrichsen <hrkfdn@gmail.com>
+Date:   Sat Oct 10 14:29:10 2009 +0200
+
+    update changelog
+
 commit 0f02764aa99ca3db0316987f3deedaa233d050d3
 Author: Henrik Friedrichsen <hrkfdn@gmail.com>
 Date:   Sat Oct 10 14:28:41 2009 +0200
 
     update version
+
+commit 52439dde1b886646453443427e9b31e0a5784b88
+Author: Henrik Friedrichsen <hrkfdn@gmail.com>
+Date:   Sat Oct 10 14:22:06 2009 +0200
+
+    update changelog
 
 commit 4e7ae606915dbfc2b20f2771d5589582a216bfdb
 Author: Henrik Friedrichsen <hrkfdn@gmail.com>
@@ -75,6 +189,12 @@ Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
 Date:   Fri Dec 26 15:12:42 2008 +0100
 
     add newline before debug. (thanks to tuqs, the manpage nazi)
+
+commit cce52aaa672697ac45cee3c76d7036d8376447cf
+Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
+Date:   Wed Dec 24 15:28:51 2008 +0100
+
+    update changelog
 
 commit 888b8397fd5ad2afed444c107129dddd84a817b4
 Author: Henrik Friedrichsen <henrik@canaan.megawr.ath.cx>
@@ -160,6 +280,12 @@ Date:   Sun Dec 7 16:27:31 2008 +0100
 
     create rating pipe
 
+commit f22d27e38d714d97dc3174e3bcc6e0aa82551139
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Sun Dec 7 16:24:50 2008 +0100
+
+    update ChangeLog
+
 commit 949910ad574452a46ae287dec2436fc4553d1098
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Sun Nov 30 15:04:19 2008 +0100
@@ -214,6 +340,12 @@ Date:   Sat Nov 29 22:53:59 2008 +0100
 
     prettify makefile output
 
+commit 0c71a2c00989ef8f656f050909ce0db35ed5e81b
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 17:31:51 2008 +0100
+
+    update ChangeLog
+
 commit 8cc0e2f11834bbeddc92ed6c5d6ac7f3d500d2ef
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Fri Nov 28 17:31:23 2008 +0100
@@ -225,6 +357,12 @@ Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Fri Nov 28 17:28:31 2008 +0100
 
     install manpage
+
+commit b1ea2a61cc07632abe58d3d7c5979dd929a64306
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Fri Nov 28 17:28:21 2008 +0100
+
+    update changelog
 
 commit 830d5e5d23232762f84907f6ad512a3fc5a9ec9e
 Author: hrkfrd <hrkfrd@gmail.com>
@@ -274,6 +412,12 @@ Date:   Tue Nov 25 21:30:02 2008 +0100
 
     add example config
 
+commit 90a8f2fb86eb27da14ecf30618fa7fb01bd653c7
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 25 21:26:59 2008 +0100
+
+    update changelog
+
 commit 11fb3fabd103addea106f2952094e05d52c0eb0d
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Tue Nov 25 21:23:50 2008 +0100
@@ -322,6 +466,12 @@ Date:   Tue Nov 25 21:20:32 2008 +0100
 
     pass preprocessor defines to gcc (configdir, version)
 
+commit 57dfe0ec9f98f00f698a744fa156d37eac1aa505
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Wed Nov 19 23:07:38 2008 +0100
+
+    Update ChangeLog
+
 commit 9d3075c189eebd446678c883c01da3d659cf1aed
 Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Wed Nov 19 23:06:34 2008 +0100
@@ -339,6 +489,12 @@ Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Wed Nov 19 23:06:01 2008 +0100
 
     make Failure() method public
+
+commit 94fedbf78b80d07029b62c026fc76b8d7d045d62
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Tue Nov 18 23:40:23 2008 +0100
+
+    update changelog
 
 commit 85bd50748ec641e31484d1278532ffea0a930bd0
 Author: hrkfrd <hrkfrd@gmail.com>
@@ -369,6 +525,12 @@ Author: hrkfrd <hrkfrd@gmail.com>
 Date:   Mon Nov 17 23:53:46 2008 +0100
 
     allow switching to other usernames when root
+
+commit d71c90d147b585979241474efe0681493f747f54
+Author: hrkfrd <hrkfrd@gmail.com>
+Date:   Mon Nov 17 21:34:12 2008 +0100
+
+    add ChangeLog
 
 commit 99be10bffe20701032572d9bd794efd2d7596a6e
 Author: hrkfrd <hrkfrd@gmail.com>
@@ -579,6 +741,18 @@ Author: Henrik Friedrichsen <hrkfrd@gmail.com>
 Date:   Mon Aug 25 22:26:03 2008 +0200
 
     add CreateScrobbleMessage to CAudioScrobbler
+
+commit f459a6d48c4062a6b8390b8b2097b408e5f80fe2
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 22:01:31 2008 +0200
+
+    remove gitignore
+
+commit afbc86c4de1f7e1459579cef874dfe3dfa91303a
+Author: Henrik Friedrichsen <hrkfrd@gmail.com>
+Date:   Mon Aug 25 21:57:23 2008 +0200
+
+    add gitignore
 
 commit dfbc2bb8524ab0d7bd50b1eab8c71dbe6844120d
 Author: Henrik Friedrichsen <hrkfrd@gmail.com>
