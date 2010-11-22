@@ -33,7 +33,7 @@ CMPD::CheckSubmit()
 	if(!_gotsong || _cached || (!_song.artist.size() || !_song.title.size())) return;
 	int curplaytime = mpd_stats_get_playtime(_obj);
 	if(curplaytime - _start >= 240 || curplaytime - _start >= _song.time/2) {
-		Cache->AddToCache(_song.time, _song.artist, _song.title, _song.album, _starttime, false);
+		Cache->AddToCache(_song.time, _song.artist, _song.title, _song.album, _starttime);
 		_cached = true;
 	}
 }
