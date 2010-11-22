@@ -94,10 +94,10 @@ CCache::WorkCache()
 }
 
 void
-CCache::AddToCache(int time, std::string& artist, std::string& title, std::string& album, time_t starttime)
+CCache::AddToCache(int time, const std::string& artist, const std::string& title, const std::string& album, time_t starttime)
 {
 	centry_t* entry = new centry_t;
-	bzero(entry, sizeof(centry_t));
+	entry->starttime = entry->time = 0;
 
 	entry->time = time;
 	entry->artist = artist;
