@@ -1,9 +1,8 @@
 #include "mpdas.h"
 
-#define HOST		"http://post.audioscrobbler.com"
-#define PVERSION	"1.2.1"
-#define CLIENT		"mp5"
-#define CVERSION	"0.2.5"
+#define ROOTURL		"http://ws.audioscrobbler.com/2.0/"
+#define APIKEY		"a0ed2629d3d28606f67d7214c916788d"
+#define	SECRET		"295f31c5d28215215b1503fb0327cc01"
 
 CAudioScrobbler* AudioScrobbler = 0;
 
@@ -76,19 +75,43 @@ CAudioScrobbler::ReportResponse(char* buf, size_t size)
 std::string
 CAudioScrobbler::CreateScrobbleMessage(int index, centry_t* entry)
 {
-	std::stringstream msg;
-	msg << "&a[" << index << "]=" << entry->artist;
-	msg << "&t[" << index << "]=" << entry->title;
-	msg << "&i[" << index << "]=" << entry->starttime;
-	msg << "&o[" << index << "]=P";
-	msg << "&r[" << index << "]=";
-	if(_love)
-		msg << "L";
-	msg << "&l[" << index << "]=" << entry->time;
-	msg << "&b[" << index << "]=";
-	if(entry->album)
-		msg << entry->album;
-	msg << "&n[" << index << "]=&m[" << index << "]=";
+	std::ostringstream msg, sigmsg ;
+	std::string artist, title, album, array = "=";
+
+	char* temp = 0;
+	temp = curl_easy_escape(_handle, entry->artist.c_str(), entry->artist.length());
+	artist = temp;
+	curl_free(temp);
+	temp = curl_easy_escape(_handle, entry->title.c_str(), entry->title.length());
+	title = temp;
+	curl_free(temp);
+	temp = curl_easy_escape(_handle, entry->album.c_str(), entry->album.length());
+	album = temp;
+	curl_free(temp);
+
+	msg << "&album" << array << album;
+	msg << "&api_key=" << APIKEY;
+	msg << "&artist" << array << artist;
+	msg << "&duration" << array << entry->time;
+	msg << "&method=track.Scrobble";
+	msg << "&timestamp" << array << entry->starttime;
+	msg << "&track" << array << title;
+	msg << "&sk=" << _sessionid;
+
+	array = "";
+
+	sigmsg << "album" << array << entry->album;
+	sigmsg << "api_key" << APIKEY;
+	sigmsg << "artist" << array << entry->artist;
+	sigmsg << "duration" << array << entry->time;
+	sigmsg << "methodtrack.Scrobble";
+	sigmsg << "sk" << _sessionid;
+	sigmsg << "timestamp" << array << entry->starttime;
+	sigmsg << "track" << array << entry->title;
+	sigmsg << SECRET;
+
+	std::string sighash(md5sum((char*)"%s", sigmsg.str().c_str()));
+	msg << "&api_sig=" << sighash;
 
 	return msg.str();
 }
@@ -108,15 +131,15 @@ bool
 CAudioScrobbler::CheckFailure(std::string response)
 {
 	bool retval = false;
-	if(_response.find("BADSESSION")) {
-		eprintf("%s", "Bad session ID, re-handshaking!");
-		Handshake();
-		retval = false;
-	}
-	else if(_response.find("FAILED"))
-		retval = true;
-	else if(_response.find("OK"))
-		retval = false;
+
+	size_t start, end;
+	start = _response.find("<error code=\"")+13;
+	end = _response.find(">", start)-1;
+	std::string errorcode = _response.substr(start, end-start);
+	int code = strtol(errorcode.c_str(), 0, 10);
+
+	eprintf("%s%i", "Code: ", code);
+
 	return retval;
 }
 
@@ -133,6 +156,37 @@ CAudioScrobbler::GetLove()
 	if(numread > 0) {
 		if(strstr(buf, "L")) {
 			iprintf("Track will be scrobbled with \"love\" attribute.");
+			std::ostringstream msg, sig;
+			const song_t* song = MPD->GetSong();
+
+			if(!song->title.length() || !song->artist.length()) {
+				eprintf("No song playing to love.");
+				return;
+			}
+
+			char* temp = curl_easy_escape(_handle, song->artist.c_str(), song->artist.length());
+			msg << "?method=track.love&artist=" << temp;
+			curl_free(temp);
+			temp = curl_easy_escape(_handle, song->title.c_str(), song->title.length());
+			msg << "?title=" << temp;
+			curl_free(temp);
+			msg << "?api_key=" << APIKEY << "?sk=" << _sessionid;
+
+			sig << "api_key" << APIKEY << "artist" << song->artist << "sk" << _sessionid << "track" << song->title << SECRET;
+			std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
+
+
+			msg << "?api_sig=" << sig;
+
+			OpenURL(ROOTURL, msg.str().c_str());
+			if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+				iprintf("%s", "Loved successfully.");
+			}
+			else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
+				eprintf("%s%s", "Could not love track:\n", _response.c_str());
+				if(CheckFailure(_response))
+					Failure();
+			}
 			_love = true;
 		}
 		else if(strstr(buf, "C")) {
@@ -151,19 +205,18 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 		Handshake();
 		return retval;
 	}
-	std::ostringstream post;
-	iprintf("Scrobbling: %s - %s", entry->artist, entry->title);
-	post << "s=" << _sessionid;
-	post << CreateScrobbleMessage(0, entry);
-
-	OpenURL(_scroburl, post.str().c_str());
-	if(_response.find("OK") == 0)
+	iprintf("Scrobbling: %s - %s", entry->artist.c_str(), entry->title.c_str());
+	
+	OpenURL(ROOTURL, CreateScrobbleMessage(0, entry).c_str());
+	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+		iprintf("%s", "Scrobbled successfully.");
 		retval = true;
-	else {
+	}
+	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
+		eprintf("%s%s", "Last.fm returned an error while scrobbling:\n", _response.c_str());
 		if(CheckFailure(_response))
 			Failure();
 	}
-
 	CLEANUP();
 
 	_love = false;
@@ -183,20 +236,31 @@ CAudioScrobbler::SendNowPlaying(mpd_Song* song)
 	if(song->album)
 		album = curl_easy_escape(_handle, song->album, 0);
 
-	std::ostringstream post;
-	post << "s=" << _sessionid << "&a=" << artist << "&t=" << title << "&b=";
-	if(album)
-		post << album;
-	post << "&l=" << song->time << "&n=&m=";
+	std::ostringstream query, sig;
+	query << "method=track.updateNowPlaying&track=" << title << "&artist=" << artist << "&duration=" << song->time << "&api_key=" << APIKEY << "&sk=" << _sessionid;
+	if(album) {
+		query << "&album=" << album;
+		sig << "album" << song->album;
+	}
 
-	OpenURL(_npurl, post.str().c_str());
+	sig << "api_key" << APIKEY << "artist" << song->artist << "duration" << song->time << "methodtrack.updateNowPlaying" << "sk" << _sessionid << "track" << song->title << SECRET;
 
-	if(_response.find("OK") == 0)
+	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
+
+	query << "&api_sig=" << sighash;
+
+	OpenURL(ROOTURL, query.str().c_str());
+
+	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+		iprintf("%s", "Updated \"Now Playing\" status successfully.");
 		retval = true;
-	else {
+	}
+	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
+		eprintf("%s%s", "Last.fm returned an error while updating the currently playing track:\n", _response.c_str());
 		if(CheckFailure(_response))
 			Failure();
 	}
+
 	CLEANUP();
 	return retval;
 }
@@ -204,27 +268,32 @@ CAudioScrobbler::SendNowPlaying(mpd_Song* song)
 void
 CAudioScrobbler::Handshake()
 {
-	time_t timestamp = time(NULL);
-	std::string authtoken(md5sum((char*)"%s%i", Config->getLPassword().c_str(), timestamp));
+	std::string username="";
+	for(unsigned int i = 0; i < Config->getLUsername().length(); i++) {
+		username.append(1, tolower(Config->getLUsername().c_str()[i]));
+	}
+	std::string authtoken(md5sum((char*)"%s%s", username.c_str(), Config->getLPassword().c_str()));
 
-	std::ostringstream query;
-	query << HOST << "/?hs=true&p=" << PVERSION << "&c=" << CLIENT << "&v=" << CVERSION << "&u=" << Config->getLUsername() << "&t=" << timestamp << "&a=" << authtoken;
-	
-	OpenURL(query.str());
-	if(_response.find("OK") == 0) {
-		iprintf("%s", "AudioScrobbler handshake successful.");
+	std::ostringstream query, sig;
+	query << "method=auth.getMobileSession&username=" << Config->getLUsername() << "&authToken=" << authtoken << "&api_key=" << APIKEY;
+
+	sig << "api_key" << APIKEY << "authToken" << authtoken << "methodauth.getMobileSessionusername" << Config->getLUsername() << SECRET;
+	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
+
+	query << "&api_sig=" << sighash;
+
+	OpenURL(ROOTURL, query.str().c_str());
+
+	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+		size_t start, end;
+		start = _response.find("<key>") + 5;
+		end = _response.find("</key>");
+		_sessionid = _response.substr(start, end-start);
+		iprintf("%s%s", "Last.fm handshake successful. SessionID: ", _sessionid.c_str());
 		_authed = true;
-		_sessionid = _response.substr(3, 32);
-		int found = _response.find("\n", 36);
-		_npurl = _response.substr(36, found-36);
-		_scroburl = _response.substr(found+1, _response.length()-found-2);
 	}
-	else if(_response.find("BADAUTH") == 0) {
-		eprintf("%s", "Bad username/password.");
-		exit(EXIT_FAILURE);
-	}
-	else if(_response.find("BADTIME") == 0) {
-		eprintf("%s", "Your computer time is not accurate enough to generate a session id.");
+	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
+		CheckFailure(_response);
 		exit(EXIT_FAILURE);
 	}
 
