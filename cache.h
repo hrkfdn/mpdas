@@ -16,7 +16,7 @@ class CCache
 {
 	public:
 		CCache() { _failtime = 0; }
-		void AddToCache(int time, std::string& artist, std::string& title, std::string& album, time_t starttime);
+		void AddToCache(int time, const std::string& artist, const std::string& title, const std::string& album, time_t starttime);
 		void WorkCache();
 		void SaveCache();
 		void LoadCache();
