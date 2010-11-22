@@ -126,7 +126,6 @@ main(int argc, char* argv[])
 
 scan:
 	MPD->Update();
-	AudioScrobbler->GetLove();
 	Cache->WorkCache();
 	usleep(500000);
 	goto scan;

@@ -12,9 +12,7 @@ class CAudioScrobbler
 		void ReportResponse(char* buf, size_t size);
 		bool SendNowPlaying(mpd_Song* song);
 		void Failure();
-		void GetLove();
 	private:
-		void InitPipe();
 		void OpenURL(std::string url, const char* postfields, char* errbuf);
 		bool CheckFailure(std::string response);
 
@@ -27,8 +25,6 @@ class CAudioScrobbler
 
 		bool _authed;
 		int _failcount;
-		int _ratingpipe;
-		bool _love;
 };
 
 extern CAudioScrobbler* AudioScrobbler;

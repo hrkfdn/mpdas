@@ -16,8 +16,6 @@ writecb(void* ptr, size_t size, size_t nmemb, void *stream)
 
 CAudioScrobbler::CAudioScrobbler()
 {
-	_ratingpipe = 0;
-	_love = false;
 	_failcount = 0;
 	_authed = false;
 	_response = "";
@@ -26,24 +24,7 @@ CAudioScrobbler::CAudioScrobbler()
 		eprintf("%s", "Could not initialize CURL.");
 		exit(EXIT_FAILURE);
 	}
-
-	InitPipe();
 }
-
-void
-CAudioScrobbler::InitPipe()
-{
-	umask(0666);
-	if(mkfifo("/tmp/mpdaspipe", 0666) != 0 && errno != EEXIST)
-		eprintf("Could not create the rating pipe. (%s)", strerror(errno));
-	else {
-		chmod("/tmp/mpdaspipe", 0666); // somehow this didnt suffice in the mkfifo() call
-		_ratingpipe = open("/tmp/mpdaspipe", O_RDONLY | O_NDELAY);
-		if(!_ratingpipe)
-			eprintf("Could not open the rating pipe. (%s)", strerror(errno));
-	}
-}
-
 
 void
 CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char* errbuf = 0)
@@ -143,59 +124,6 @@ CAudioScrobbler::CheckFailure(std::string response)
 	return retval;
 }
 
-void
-CAudioScrobbler::GetLove()
-{
-	if(_ratingpipe == 0)
-		return;
-	char buf[80];
-	int numread = 0;
-	memset(buf, 0, sizeof(buf));
-
-	numread = read(_ratingpipe, &buf, sizeof(buf));
-	if(numread > 0) {
-		if(strstr(buf, "L")) {
-			iprintf("Track will be scrobbled with \"love\" attribute.");
-			std::ostringstream msg, sig;
-			const song_t* song = MPD->GetSong();
-
-			if(!song->title.length() || !song->artist.length()) {
-				eprintf("No song playing to love.");
-				return;
-			}
-
-			char* temp = curl_easy_escape(_handle, song->artist.c_str(), song->artist.length());
-			msg << "?method=track.love&artist=" << temp;
-			curl_free(temp);
-			temp = curl_easy_escape(_handle, song->title.c_str(), song->title.length());
-			msg << "?title=" << temp;
-			curl_free(temp);
-			msg << "?api_key=" << APIKEY << "?sk=" << _sessionid;
-
-			sig << "api_key" << APIKEY << "artist" << song->artist << "sk" << _sessionid << "track" << song->title << SECRET;
-			std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
-
-
-			msg << "?api_sig=" << sig;
-
-			OpenURL(ROOTURL, msg.str().c_str());
-			if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
-				iprintf("%s", "Loved successfully.");
-			}
-			else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
-				eprintf("%s%s", "Could not love track:\n", _response.c_str());
-				if(CheckFailure(_response))
-					Failure();
-			}
-			_love = true;
-		}
-		else if(strstr(buf, "C")) {
-			iprintf("Track will not be scrobbled with \"love\" attribute.");
-			_love = false;
-		}
-	}
-}
-
 bool
 CAudioScrobbler::Scrobble(centry_t* entry)
 {
@@ -219,7 +147,6 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 	}
 	CLEANUP();
 
-	_love = false;
 	return retval;
 }
 
@@ -228,7 +155,6 @@ CAudioScrobbler::SendNowPlaying(mpd_Song* song)
 {
 	bool retval = false;
 	if(!song || !song->artist || !song->title) return retval;
-	_love = false;
 
 	char* artist = curl_easy_escape(_handle, song->artist, 0);
 	char* title = curl_easy_escape(_handle, song->title, 0);
