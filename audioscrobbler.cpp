@@ -121,6 +121,31 @@ CAudioScrobbler::CheckFailure(std::string response)
 
 	eprintf("%s%i", "Code: ", code);
 
+	switch(code) {
+		case 3:
+			eprintf("Invalid Method. This should not happen.");
+			retval = true;
+			break;
+		case 4:
+			eprintf("Authentification failed. Please check your login data.");
+			exit(EXIT_FAILURE);
+		case 9:
+			eprintf("Invalid session key. Reauthentificating.");
+			retval = true;
+			_failcount = 3;
+			break;
+		case 10:
+			eprintf("Invalid API-Key. Let's bugger off.");
+			exit(EXIT_FAILURE);
+		case 16:
+			eprintf("The service is temporarily unavailable, we will try again later..");
+			retval = true;
+			break;
+		case 26:
+			eprintf("Uh oh. Suspended API key - Access for your account has been suspended, please contact Last.fm");
+			exit(EXIT_FAILURE);
+	}
+
 	return retval;
 }
 
