@@ -17,6 +17,7 @@ class CMPD
 		void Update();
 		void SetSong(mpd_Song* song);
 		void CheckSubmit();
+		const song_t* GetSong() { return &_song; };
 
 		inline bool isConnected() { return _connected; }
 	private:
