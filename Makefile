@@ -27,9 +27,9 @@ clean:
 	rm -rf $(OBJ) $(OUT)
 
 install: all
-	install mpdas ${PREFIX}/bin
-	install -m 644 mpdas.1 ${MANPREFIX}/mpdas.1
+	install mpdas ${DESTDIR}${PREFIX}/bin
+	install -m 644 mpdas.1 ${DESTDIR}${MANPREFIX}/mpdas.1
 
 uninstall:
-	-rm ${PREFIX}/bin/mpdas
-	-rm ${MANPREFIX}/mpdas.1
+	-rm ${DESTDIR}${PREFIX}/bin/mpdas
+	-rm ${DESTDIR}${MANPREFIX}/mpdas.1
