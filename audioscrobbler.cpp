@@ -127,10 +127,10 @@ CAudioScrobbler::CheckFailure(std::string response)
 			retval = true;
 			break;
 		case 4:
-			eprintf("Authentification failed. Please check your login data.");
+			eprintf("Authentication failed. Please check your login data.");
 			exit(EXIT_FAILURE);
 		case 9:
-			eprintf("Invalid session key. Reauthentificating.");
+			eprintf("Invalid session key. Re-authenticating.");
 			retval = true;
 			_failcount = 3;
 			break;
