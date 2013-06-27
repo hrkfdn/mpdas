@@ -27,6 +27,8 @@ clean:
 	rm -rf $(OBJ) $(OUT)
 
 install: all
+	install -d ${DESTDIR}${PREFIX}/bin
+	install -d ${DESTDIR}${MANPREFIX}
 	install -m 755 mpdas ${DESTDIR}${PREFIX}/bin
 	install -m 644 mpdas.1 ${DESTDIR}${MANPREFIX}/mpdas.1
 
