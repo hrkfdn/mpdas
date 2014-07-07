@@ -1,0 +1,2 @@
+- Rewrite. Maybe even in C?
+- Adapt to libmpdclient as libmpd is deprecated.
