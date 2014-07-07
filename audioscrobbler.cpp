@@ -12,6 +12,7 @@ size_t
 writecb(void* ptr, size_t size, size_t nmemb, void *stream)
 {
 	AudioScrobbler->ReportResponse((char*)ptr, size*nmemb);
+    return size*nmemb;
 }
 
 CAudioScrobbler::CAudioScrobbler()
@@ -41,7 +42,7 @@ CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char* errb
 		curl_easy_setopt(_handle, CURLOPT_POST, 0);
 	if(errbuf)
 		curl_easy_setopt(_handle, CURLOPT_ERRORBUFFER, errbuf);
-	
+
 	curl_easy_setopt(_handle, CURLOPT_URL, url.c_str());
 	curl_easy_perform(_handle);
 }
@@ -159,7 +160,7 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 		return retval;
 	}
 	iprintf("Scrobbling: %s - %s", entry->artist.c_str(), entry->title.c_str());
-	
+
 	OpenURL(ROOTURL, CreateScrobbleMessage(0, entry).c_str());
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Scrobbled successfully.");
