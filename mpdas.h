@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <errno.h>
+#include <signal.h>
 
 #include <fstream>
 #include <iostream>

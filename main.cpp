@@ -1,5 +1,13 @@
 #include "mpdas.h"
 
+bool running = true;
+
+void
+got_signal(int)
+{
+    running = false;
+}
+
 void
 onclose()
 {
@@ -124,11 +132,18 @@ main(int argc, char* argv[])
 	Cache = new CCache();
 	Cache->LoadCache();
 
-scan:
-	MPD->Update();
-	Cache->WorkCache();
-	usleep(500000);
-	goto scan;
+    // catch sigint
+    struct sigaction sa;
+    memset(&sa, 0, sizeof(sa));
+    sa.sa_handler = got_signal;
+    sigfillset(&sa.sa_mask);
+    sigaction(SIGINT, &sa, NULL);
+
+    while(running) {
+	    MPD->Update();
+	    Cache->WorkCache();
+	    usleep(500000);
+    }
 
 	return EXIT_SUCCESS;
 }

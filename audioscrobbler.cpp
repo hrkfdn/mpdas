@@ -27,6 +27,12 @@ CAudioScrobbler::CAudioScrobbler()
 	}
 }
 
+CAudioScrobbler::~CAudioScrobbler()
+{
+    curl_easy_cleanup(_handle);
+    curl_global_cleanup();
+}
+
 void
 CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char* errbuf = 0)
 {
@@ -194,6 +200,10 @@ CAudioScrobbler::SendNowPlaying(mpd_Song* song)
 		query << "&album=" << album;
 		sig << "album" << song->album;
 	}
+
+    curl_free(artist);
+    curl_free(title);
+    curl_free(album);
 
 	sig << "api_key" << APIKEY << "artist" << song->artist << "duration" << song->time << "methodtrack.updateNowPlaying" << "sk" << _sessionid << "track" << song->title << SECRET;
 

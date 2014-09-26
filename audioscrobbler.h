@@ -6,6 +6,8 @@ class CAudioScrobbler
 {
 	public:
 		CAudioScrobbler();
+        ~CAudioScrobbler();
+
 		void Handshake();
 		std::string CreateScrobbleMessage(int index, centry_t* entry);
 		bool Scrobble(centry_t* entry);
