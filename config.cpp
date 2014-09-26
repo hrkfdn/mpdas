@@ -16,7 +16,7 @@ CConfig::ParseLine(std::string line)
 		tokens.push_back(pstr);
 		pstr = strtok(NULL, " :=\t");
 	}
-	delete szline;
+	delete[] szline;
 
 	if(tokens.size() > 1) {
 		if(tokens[0] == "username")
