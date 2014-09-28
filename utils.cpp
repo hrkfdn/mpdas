@@ -93,8 +93,7 @@ iprintf(const char* fmt, ...)
 {
 	if(Config && Config->getDebug() == false)
 		return;
-	time_t rawtime = time(NULL);
-	struct tm* t = localtime(&rawtime);
+
 	char* abuf;
 	va_list ap;
 	va_start(ap, fmt);
