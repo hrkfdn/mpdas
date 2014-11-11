@@ -25,7 +25,7 @@ setid(const char* username)
 	passwd* userinfo = 0;
 
 	if(strlen(username) == 0)
-		goto homecfg;
+        return;
 
 	if(getuid() != 0) {
 		eprintf("%s", "You are not root. Not changing user ..");
@@ -44,12 +44,6 @@ setid(const char* username)
 	}
 
 	setenv("HOME", userinfo->pw_dir, 1);
-
-homecfg:
-	// Load config in home dir as well (if possible)
-	std::string path = getenv("HOME");
-	path.append("/.mpdasrc");
-	Config->LoadConfig(path);
 }
 
 void
@@ -111,6 +105,13 @@ main(int argc, char* argv[])
 
 	setid(Config->getRUser().c_str());
 
+	// Load config in home dir as well (if possible)
+    if(config == 0) {
+   	    std::string path = getenv("HOME");
+   	    path.append("/.mpdasrc");
+   	    Config->LoadConfig(path);
+    }
+
 	if(!Config->gotNecessaryData()) {
 		eprintf("%s", "AudioScrobbler username or password not set.");
 		return EXIT_FAILURE;
@@ -140,9 +141,9 @@ main(int argc, char* argv[])
     sigaction(SIGINT, &sa, NULL);
 
     while(running) {
-	    MPD->Update();
-	    Cache->WorkCache();
-	    usleep(500000);
+        MPD->Update();
+        Cache->WorkCache();
+        usleep(500000);
     }
 
 	return EXIT_SUCCESS;
