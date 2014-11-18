@@ -38,7 +38,7 @@ setid(const char* username)
 		exit(EXIT_FAILURE);
 	}
 
-	if(setgid(userinfo->pw_gid == -1 || setuid(userinfo->pw_uid)) == -1) {
+	if(setgid(userinfo->pw_gid) == -1 || setuid(userinfo->pw_uid) == -1) {
 			eprintf("%s %s", "Could not switch to user", username);
 			exit(EXIT_FAILURE);
 	}
