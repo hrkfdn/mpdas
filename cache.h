@@ -1,28 +1,37 @@
 #ifndef _CACHE_H
 #define _CACHE_H
 
-typedef struct
-centry_s
+class CacheEntry
 {
-	time_t starttime;
+    public:
+        CacheEntry() {};
+        CacheEntry(const Song& song, time_t starttime) {
+            this->song = song;
+            this->starttime = starttime;
+        }
 
-	std::string artist;
-	std::string title;
-	std::string album;
-	int time;
-} centry_t;
+        // stream serialization
+        friend std::ofstream& operator <<(std::ofstream& outstream, const CacheEntry& inobj);
+        friend std::ifstream& operator >>(std::ifstream& instream, CacheEntry& outobj);
+
+        Song getSong() const { return song; }
+        time_t getStartTime() const { return starttime; }
+    private:
+        Song song;
+        time_t starttime;
+};
 
 class CCache
 {
 	public:
 		CCache() { _failtime = 0; }
-		void AddToCache(int time, const std::string& artist, const std::string& title, const std::string& album, time_t starttime);
+		void AddToCache(const Song& song, time_t starttime);
 		void WorkCache();
 		void SaveCache();
 		void LoadCache();
 	private:
 		time_t _failtime;
-		std::vector<centry_s*> _entries;
+		std::vector<CacheEntry*> _entries;
 };
 
 extern CCache* Cache;

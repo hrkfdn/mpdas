@@ -5,108 +5,114 @@ CCache* Cache = 0;
 void
 CCache::SaveCache()
 {
-	std::string path = getenv("HOME");
-	path.append("/.mpdascache");
-	remove(path.c_str());
-	std::ofstream ofs(path.c_str());
-	if(!_entries.size()) {
-		remove(path.c_str());
-		return;
-	}
+    std::string path = getenv("HOME");
+    path.append("/.mpdascache");
+    remove(path.c_str());
+    std::ofstream ofs(path.c_str());
+    if(!_entries.size()) {
+        remove(path.c_str());
+        return;
+    }
 
-	for(unsigned int i = 0; i < _entries.size(); i++) {
-		centry_t* entry = _entries[i];
-		if(entry->album.length())
-			ofs << true << "\n";
-		ofs << entry->artist << "\n";
-		ofs << entry->title << "\n";
-		ofs << entry->time << "\n";
-		ofs << entry->starttime;
-		if(entry->album.length())
-			ofs << "\n" << entry->album;
-		if(i+1 == _entries.size())
-			ofs.flush();
-		else
-			ofs << std::endl;
-	}
-	ofs.close();
+    for(unsigned int i = 0; i < _entries.size(); i++) {
+        CacheEntry* entry = _entries[i];
+        ofs << *entry;
+
+        if(i+1 == _entries.size())
+            ofs.flush();
+        else
+            ofs << std::endl;
+    }
+    ofs.close();
 }
 
 void
 CCache::LoadCache()
 {
-	int length;
-	std::string path = getenv("HOME");
-	path.append("/.mpdascache");
-	std::ifstream ifs(path.c_str(), std::ios::in|std::ios::binary);
+    int length;
+    std::string path = getenv("HOME");
+    path.append("/.mpdascache");
+    std::ifstream ifs(path.c_str(), std::ios::in|std::ios::binary);
 
-	ifs.seekg (0, std::ios::end);
-	length = ifs.tellg();
-	ifs.seekg (0, std::ios::beg);
+    ifs.seekg (0, std::ios::end);
+    length = ifs.tellg();
+    ifs.seekg (0, std::ios::beg);
 
 
-	while(ifs.good()) {
-		if(length == ifs.tellg())
-			break;
-		std::string artist, album, title;
-		bool gotalbum = false;
-		int time;
-		time_t starttime;
+    while(ifs.good()) {
+        if(length == ifs.tellg())
+            break;
 
-		ifs >> gotalbum;
-		ifs.ignore(1);
-		ifs >> artist;
-		ifs >> title;
-		ifs >> time;
-		ifs.ignore(1);
-		ifs >> starttime;
-		ifs.ignore(1);
-		if(gotalbum)
-			getline(ifs, album);
-		AddToCache(time, artist, title, album, starttime);
-	}
+        CacheEntry *entry = new CacheEntry();
+        ifs >> *entry;
+        _entries.push_back(entry);
+    }
 
-	ifs.close();
-	remove(path.c_str());
+    ifs.close();
+    remove(path.c_str());
 }
 
 void
 CCache::WorkCache()
 {
-	if(_failtime && time(NULL) - _failtime < 300) {
-		return;
-	}
-	_failtime = 0;
-	while(_entries.size()) {
-		if(AudioScrobbler->Scrobble(_entries.front())) {
-			delete _entries.front();
-			_entries.erase(_entries.begin());
-		}
-		else {
-			eprintf("%s", "Error scrobbling. Trying again in 5 minutes.");
-			_failtime = time(NULL);
-			AudioScrobbler->Failure();
-			break;
-		}
-		sleep(1);
-	}
-	SaveCache();
+    if(_failtime && time(NULL) - _failtime < 300) {
+        return;
+    }
+    _failtime = 0;
+    while(_entries.size()) {
+        if(AudioScrobbler->Scrobble(*_entries.front())) {
+            delete _entries.front();
+            _entries.erase(_entries.begin());
+        }
+        else {
+            eprintf("%s", "Error scrobbling. Trying again in 5 minutes.");
+            _failtime = time(NULL);
+            AudioScrobbler->Failure();
+            break;
+        }
+        sleep(1);
+    }
+    SaveCache();
 }
 
 void
-CCache::AddToCache(int time, const std::string& artist, const std::string& title, const std::string& album, time_t starttime)
+CCache::AddToCache(const Song& song, time_t starttime)
 {
-	centry_t* entry = new centry_t;
-	entry->starttime = entry->time = 0;
+    CacheEntry *entry = new CacheEntry(song, starttime);
 
-	entry->time = time;
-	entry->artist = artist;
-	entry->title = title;
-	if(album.size())
-		entry->album = album;
-	else
-		entry->album = "";
-	entry->starttime = starttime;
-	_entries.push_back(entry);
-	SaveCache();
+    _entries.push_back(entry);
+    SaveCache();
+}
+
+std::ofstream& operator <<(std::ofstream& outstream, const CacheEntry& inobj)
+{
+    Song song = inobj.getSong();
+    outstream << song.getArtist() << std::endl
+        << song.getTitle() << std::endl
+        << song.getAlbum() << std::endl
+        << song.getDuration() << std::endl
+        << inobj.getStartTime();
+
+    return outstream;
+}
+
+std::ifstream& operator >>(std::ifstream& instream, CacheEntry& outobj)
+{
+    std::string artist, title, album;
+    int duration;
+    time_t starttime;
+
+    getline(instream, artist);
+    getline(instream, title);
+    getline(instream, album);
+
+    instream >> duration;
+    instream.ignore(1);
+    instream >> starttime;
+    instream.ignore(1);
+
+    Song song(artist, title, album, duration);
+    outobj = CacheEntry(song, starttime);
+
+    return instream;
 }

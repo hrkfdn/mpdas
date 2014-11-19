@@ -2,58 +2,29 @@
 
 CMPD* MPD = 0;
 
-
 void
-CMPD::SetSong(mpd_Song* song)
+CMPD::SetSong(const Song *song)
 {
-	_cached = false;
-	if(song && song->artist && song->title) {
-		_song.artist = song->artist;
-		_song.title = song->title;
-		if(song->album)
-			_song.album = song->album;
-		else
-			_song.album = "";
-		_song.time = song->time;
+    _cached = false;
+	if(song && !song->getArtist().empty() && !song->getTitle().empty()) {
+        _song = *song;
 		_gotsong = true;
-		iprintf("New song: %s - %s", _song.artist.c_str(), _song.title.c_str());
+		iprintf("New song: %s - %s", _song.getArtist().c_str(), _song.getTitle().c_str());
+        AudioScrobbler->SendNowPlaying(*song);
 	}
 	else {
 		_gotsong = false;
-		return;
 	}
-	_start = mpd_stats_get_playtime(_obj);
 	_starttime = time(NULL);
-	AudioScrobbler->SendNowPlaying(song);
 }
 
 void
-CMPD::CheckSubmit()
+CMPD::CheckSubmit(int curplaytime)
 {
-	if(!_gotsong || _cached || (!_song.artist.size() || !_song.title.size())) return;
-	int curplaytime = mpd_stats_get_playtime(_obj);
-	if(curplaytime - _start >= 240 || curplaytime - _start >= _song.time/2) {
-		Cache->AddToCache(_song.time, _song.artist, _song.title, _song.album, _starttime);
+	if(!_gotsong || _cached || (_song.getArtist().empty() || _song.getTitle().empty())) return;
+	if(curplaytime - _start >= 240 || curplaytime - _start >= _song.getDuration()/2) {
+		Cache->AddToCache(_song, _starttime);
 		_cached = true;
-	}
-}
-
-void
-CMPD::StatusChanged(MpdObj* obj, ChangedStatusType what)
-{
-	mpd_Song* song = 0;
-
-	if(what & MPD_CST_SONGID) {
-		song = mpd_playlist_get_current_song(obj);
-		if(song)
-			MPD->SetSong(song);
-	}
-	else if(what & MPD_CST_STATE) {
-		if(mpd_player_get_state(obj) == MPD_PLAYER_STOP)
-			MPD->SetSong(0);
-	}
-	else if(what & MPD_CST_ELAPSED_TIME) {
-		MPD->CheckSubmit();
 	}
 }
 
@@ -62,8 +33,9 @@ CMPD::CMPD()
 	_gotsong = false;
 	_connected = false;
 	_cached = false;
-	_obj = mpd_new((char*)Config->getMHost().c_str(), Config->getMPort(), (char*)Config->getMPassword().c_str());
-	mpd_signal_connect_status_changed(_obj, (StatusChangedCallback)&StatusChanged, NULL);
+    _songid = -1;
+    _songpos = -1;
+
 	if(Connect())
 		iprintf("%s", "Connected to MPD.");
 	else
@@ -72,32 +44,88 @@ CMPD::CMPD()
 
 CMPD::~CMPD()
 {
-	if(_obj)
-		mpd_free(_obj);
+	if(_conn)
+		mpd_connection_free(_conn);
 }
 
 bool
 CMPD::Connect()
 {
-	_connected = true;
-	if(mpd_connect(_obj)) {
-		_connected = false;
-		return _connected;
-	}
-	if(mpd_send_password(_obj))
-		_connected = false;
-	return (_connected == true);
+    if(_conn)
+        mpd_connection_free(_conn);
+
+	_conn = mpd_connection_new(Config->getMHost().c_str(), Config->getMPort(), 0);
+    _connected = _conn && mpd_connection_get_error(_conn) == MPD_ERROR_SUCCESS;
+
+    if(_connected && Config->getMPassword().size() > 0) {
+        _connected &= mpd_run_password(_conn, Config->getMPassword().c_str());
+    }
+
+	return _connected;
 }
 
+void
+CMPD::GotNewSong(struct mpd_song *song)
+{
+    Song *s = new Song(song);
+    SetSong(s);
+    delete s;
+}
 
 void
 CMPD::Update()
 {
-	if(!_connected || !mpd_check_connected(_obj)) {
-		eprintf("%s", "Disconnected from MPD. Reconnecting ..");
-		Connect();
-		return;
+	if(!_connected) {
+        iprintf("Reconnecting in 10 seconds.");
+        sleep(10);
+		if(Connect())
+            iprintf("%s", "Reconnected!");
+        else {
+            eprintf("%s", "Could not reconnect.");
+            return;
+        }
 	}
-	mpd_status_update(_obj);
-	mpd_stats_update(_obj);
+
+    mpd_status *status = mpd_run_status(_conn);
+    mpd_stats *stats = mpd_run_stats(_conn);
+
+    if(status && stats) {
+        int newsongid = mpd_status_get_song_id(status);
+        int newsongpos = mpd_status_get_elapsed_time(status);
+        int curplaytime = mpd_stats_get_play_time(stats);
+        mpd_song *song = mpd_run_current_song(_conn);
+
+        // new song
+        if(newsongid != _songid) {
+            _songid = newsongid;
+            _songpos = newsongpos;
+            _start = curplaytime;
+
+            if(song) {
+                GotNewSong(song);
+                mpd_song_free(song);
+            }
+        }
+
+        // song playing
+        if(newsongpos != _songpos) {
+            _songpos = newsongpos;
+            CheckSubmit(curplaytime);
+        }
+
+        mpd_status_free(status);
+        mpd_stats_free(stats);
+    }
+    else { // we have most likely lost our connection
+        eprintf("Could not query MPD server: %s", mpd_connection_get_error_message(_conn));
+        _connected = false;
+    }
+}
+
+Song::Song(struct mpd_song *song)
+{
+    artist = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
+    title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
+    album = mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
+    duration = mpd_song_get_duration(song);
 }

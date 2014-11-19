@@ -21,10 +21,7 @@
 
 #include <curl/curl.h>
 
-// this is one ugly fix ..
-#define new arg_new
-#include <libmpd/libmpd.h>
-#undef new
+#include <mpd/client.h>
 #include <curl/curl.h>
 #include "md5.h"
 

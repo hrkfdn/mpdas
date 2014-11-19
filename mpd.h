@@ -1,11 +1,25 @@
 #ifndef _MPD_H
 #define _MPD_H
 
-typedef struct
-{
-	std::string artist, title, album;
-	int time;
-} song_t;
+class Song {
+    public:
+        Song() {};
+        Song(struct mpd_song *song);
+        Song(std::string artist, std::string title, std::string album, int duration) {
+            this->artist = artist;
+            this->title = title;
+            this->album = album;
+            this->duration = duration;
+        }
+
+        std::string getArtist() const { return artist; }
+        std::string getTitle() const { return title; }
+        std::string getAlbum() const { return album; }
+        int getDuration() const { return duration; }
+    private:
+        std::string artist, title, album;
+        int duration;
+};
 
 class CMPD
 {
@@ -15,16 +29,18 @@ class CMPD
 
 		bool Connect();
 		void Update();
-		void SetSong(mpd_Song* song);
-		void CheckSubmit();
-		const song_t* GetSong() { return &_song; };
+		void SetSong(const Song *song);
+		void CheckSubmit(int curplaytime);
+		Song GetSong() const { return _song; };
 
 		inline bool isConnected() { return _connected; }
 	private:
-		static void StatusChanged(MpdObj*, ChangedStatusType);
+        void GotNewSong(struct mpd_song *song);
 
-		MpdObj* _obj;
-		song_t _song;
+		mpd_connection *_conn;
+        int _songid;
+        int _songpos;
+		Song _song;
 		bool _gotsong;
 		int _start;
 		time_t _starttime;

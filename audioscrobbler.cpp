@@ -61,41 +61,42 @@ CAudioScrobbler::ReportResponse(char* buf, size_t size)
 }
 
 std::string
-CAudioScrobbler::CreateScrobbleMessage(int index, centry_t* entry)
+CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& entry)
 {
+    const Song& song = entry.getSong();
 	std::ostringstream msg, sigmsg ;
 	std::string artist, title, album, array = "=";
 
 	char* temp = 0;
-	temp = curl_easy_escape(_handle, entry->artist.c_str(), entry->artist.length());
+	temp = curl_easy_escape(_handle, song.getArtist().c_str(), song.getArtist().length());
 	artist = temp;
 	curl_free(temp);
-	temp = curl_easy_escape(_handle, entry->title.c_str(), entry->title.length());
+	temp = curl_easy_escape(_handle, song.getTitle().c_str(), song.getTitle().length());
 	title = temp;
 	curl_free(temp);
-	temp = curl_easy_escape(_handle, entry->album.c_str(), entry->album.length());
+	temp = curl_easy_escape(_handle, song.getAlbum().c_str(), song.getAlbum().length());
 	album = temp;
 	curl_free(temp);
 
 	msg << "&album" << array << album;
 	msg << "&api_key=" << APIKEY;
 	msg << "&artist" << array << artist;
-	msg << "&duration" << array << entry->time;
+	msg << "&duration" << array << song.getDuration();
 	msg << "&method=track.Scrobble";
-	msg << "&timestamp" << array << entry->starttime;
+	msg << "&timestamp" << array << entry.getStartTime();
 	msg << "&track" << array << title;
 	msg << "&sk=" << _sessionid;
 
 	array = "";
 
-	sigmsg << "album" << array << entry->album;
+	sigmsg << "album" << array << song.getAlbum();
 	sigmsg << "api_key" << APIKEY;
-	sigmsg << "artist" << array << entry->artist;
-	sigmsg << "duration" << array << entry->time;
+	sigmsg << "artist" << array << song.getArtist();
+	sigmsg << "duration" << array << song.getDuration();
 	sigmsg << "methodtrack.Scrobble";
 	sigmsg << "sk" << _sessionid;
-	sigmsg << "timestamp" << array << entry->starttime;
-	sigmsg << "track" << array << entry->title;
+	sigmsg << "timestamp" << array << entry.getStartTime();
+	sigmsg << "track" << array << song.getTitle();
 	sigmsg << SECRET;
 
 	std::string sighash(md5sum((char*)"%s", sigmsg.str().c_str()));
@@ -157,7 +158,7 @@ CAudioScrobbler::CheckFailure(std::string response)
 }
 
 bool
-CAudioScrobbler::Scrobble(centry_t* entry)
+CAudioScrobbler::Scrobble(const CacheEntry& entry)
 {
 	bool retval = false;
 	if(!_authed) {
@@ -165,7 +166,7 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 		Handshake();
 		return retval;
 	}
-	iprintf("Scrobbling: %s - %s", entry->artist.c_str(), entry->title.c_str());
+	iprintf("Scrobbling: %s - %s", entry.getSong().getArtist().c_str(), entry.getSong().getTitle().c_str());
 
 	OpenURL(ROOTURL, CreateScrobbleMessage(0, entry).c_str());
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
@@ -183,29 +184,36 @@ CAudioScrobbler::Scrobble(centry_t* entry)
 }
 
 bool
-CAudioScrobbler::SendNowPlaying(mpd_Song* song)
+CAudioScrobbler::SendNowPlaying(const Song& song)
 {
 	bool retval = false;
-	if(!song || !song->artist || !song->title) return retval;
 
-	char* artist = curl_easy_escape(_handle, song->artist, 0);
-	char* title = curl_easy_escape(_handle, song->title, 0);
-	char* album = 0;
-	if(song->album)
-		album = curl_easy_escape(_handle, song->album, 0);
+	char* artist = curl_easy_escape(_handle, song.getArtist().c_str(), 0);
+	char* title = curl_easy_escape(_handle, song.getTitle().c_str(), 0);
+    char* album = song.getAlbum().empty() ? 0 : curl_easy_escape(_handle, song.getAlbum().c_str(), 0);
 
 	std::ostringstream query, sig;
-	query << "method=track.updateNowPlaying&track=" << title << "&artist=" << artist << "&duration=" << song->time << "&api_key=" << APIKEY << "&sk=" << _sessionid;
+	query << "method=track.updateNowPlaying&track=" << title
+        << "&artist=" << artist
+        << "&duration=" << song.getDuration()
+        << "&api_key=" << APIKEY
+        << "&sk=" << _sessionid;
 	if(album) {
 		query << "&album=" << album;
-		sig << "album" << song->album;
+		sig << "album" << song.getAlbum();
 	}
 
     curl_free(artist);
     curl_free(title);
     curl_free(album);
 
-	sig << "api_key" << APIKEY << "artist" << song->artist << "duration" << song->time << "methodtrack.updateNowPlaying" << "sk" << _sessionid << "track" << song->title << SECRET;
+	sig << "api_key" << APIKEY
+        << "artist" << song.getArtist()
+        << "duration" << song.getDuration()
+        << "methodtrack.updateNowPlaying"
+        << "sk" << _sessionid
+        << "track" << song.getTitle()
+        << SECRET;
 
 	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
 

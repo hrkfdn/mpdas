@@ -7,8 +7,8 @@ PREFIX ?= /usr/local
 MANPREFIX ?= ${PREFIX}/man/man1
 CONFIG ?= $(PREFIX)/etc
 
-CXXFLAGS	+= `pkg-config --cflags libmpd libcurl` 
-LIBS		= `pkg-config --libs libmpd libcurl`
+CXXFLAGS	+= `pkg-config --cflags libmpdclient libcurl`
+LIBS		= `pkg-config --libs libmpdclient libcurl`
 
 CXXFLAGS	+= -DCONFDIR="\"$(CONFIG)\"" -DVERSION="\"$(VERSION)\""
 
