@@ -10,6 +10,7 @@
 #include <pwd.h>
 #include <errno.h>
 #include <signal.h>
+#include <stdarg.h>
 
 #include <fstream>
 #include <iostream>
