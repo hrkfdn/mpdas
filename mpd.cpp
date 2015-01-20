@@ -61,6 +61,9 @@ CMPD::Connect()
         _connected &= mpd_run_password(_conn, Config->getMPassword().c_str());
     }
 
+    if(_connected)
+        mpd_run_subscribe(_conn, "mpdas");
+
 	return _connected;
 }
 
@@ -111,6 +114,18 @@ CMPD::Update()
         if(newsongpos != _songpos) {
             _songpos = newsongpos;
             CheckSubmit(curplaytime);
+        }
+
+        // check for client-to-client messages
+        if(mpd_send_read_messages(_conn)) {
+            mpd_message *msg;
+            while((msg = mpd_recv_message(_conn)) != NULL) {
+                const char *text = mpd_message_get_text(msg);
+                if(_gotsong && text && !strncmp(text, "love", 4))
+                    AudioScrobbler->LoveTrack(_song);
+                mpd_message_free(msg);
+            }
+            mpd_response_finish(_conn);
         }
 
         mpd_status_free(status);

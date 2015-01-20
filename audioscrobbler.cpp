@@ -184,6 +184,51 @@ CAudioScrobbler::Scrobble(const CacheEntry& entry)
 }
 
 bool
+CAudioScrobbler::LoveTrack(const Song& song)
+{
+    bool retval = false;
+
+    char* artist = curl_easy_escape(_handle, song.getArtist().c_str(), 0);
+	char* title = curl_easy_escape(_handle, song.getTitle().c_str(), 0);
+
+    std::ostringstream query, sig;
+    query << "method=track.love&"
+        << "&track=" << title
+        << "&artist=" << artist
+        << "&api_key=" << APIKEY
+        << "&sk=" << _sessionid;
+
+    curl_free(artist);
+    curl_free(title);
+
+    sig << "api_key" << APIKEY
+        << "artist" << song.getArtist()
+        << "method" << "track.love"
+        << "sk" << _sessionid
+        << "track" << song.getTitle()
+        << SECRET;
+
+	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
+
+	query << "&api_sig=" << sighash;
+
+	OpenURL(ROOTURL, query.str().c_str());
+
+	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+		iprintf("%s", "Loved track successfully.");
+		retval = true;
+	}
+	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
+		eprintf("%s%s", "Last.fm returned an error while loving the currently playing track:\n", _response.c_str());
+		if(CheckFailure(_response))
+			Failure();
+	}
+
+	CLEANUP();
+	return retval;
+}
+
+bool
 CAudioScrobbler::SendNowPlaying(const Song& song)
 {
 	bool retval = false;

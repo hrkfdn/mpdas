@@ -50,6 +50,8 @@ Features:
 - Caching
 - Config files
 - User switching
+- "Love" tracks on Last.fm
+    (e.g. with 'mpc sendmessage mpdas love')
 
 ================================================
 
