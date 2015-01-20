@@ -30,6 +30,7 @@ CMPD::CheckSubmit(int curplaytime)
 
 CMPD::CMPD()
 {
+    _conn = NULL;
 	_gotsong = false;
 	_connected = false;
 	_cached = false;
@@ -51,6 +52,7 @@ CMPD::~CMPD()
 bool
 CMPD::Connect()
 {
+    std::cout << _conn;
     if(_conn)
         mpd_connection_free(_conn);
 
