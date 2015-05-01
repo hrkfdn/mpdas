@@ -141,8 +141,16 @@ CMPD::Update()
 
 Song::Song(struct mpd_song *song)
 {
-    artist = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
-    title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
-    album = mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
+    const char* temp;
+
+    temp = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
+    artist = temp ? temp : "";
+
+    temp = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
+    title = temp ? temp : "";
+
+    temp = mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
+    album = temp ? temp : "";
+
     duration = mpd_song_get_duration(song);
 }
