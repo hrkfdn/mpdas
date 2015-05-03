@@ -10,7 +10,7 @@ class CAudioScrobbler
         ~CAudioScrobbler();
 
 		void Handshake();
-		std::string CreateScrobbleMessage(int index, const CacheEntry& entry);
+		std::string CreateScrobbleMessage(const CacheEntry& entry);
 		bool Scrobble(const CacheEntry& entry);
 		void ReportResponse(char* buf, size_t size);
         bool LoveTrack(const Song& song);

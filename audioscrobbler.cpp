@@ -86,48 +86,16 @@ CAudioScrobbler::CreateSignedMessage(std::map<std::string, std::string> params)
 }
 
 std::string
-CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& entry)
+CAudioScrobbler::CreateScrobbleMessage(const CacheEntry& entry)
 {
-    const Song& song = entry.getSong();
-	std::ostringstream msg, sigmsg ;
-	std::string artist, title, album, array = "=";
+    std::map<std::string, std::string> params = entry.getSong().tags();
 
-	char* temp = 0;
-	temp = curl_easy_escape(_handle, song.getArtist().c_str(), song.getArtist().length());
-	artist = temp;
-	curl_free(temp);
-	temp = curl_easy_escape(_handle, song.getTitle().c_str(), song.getTitle().length());
-	title = temp;
-	curl_free(temp);
-	temp = curl_easy_escape(_handle, song.getAlbum().c_str(), song.getAlbum().length());
-	album = temp;
-	curl_free(temp);
+    params["method"] = "track.scrobble";
+    params["timestamp"] = std::to_string(entry.getStartTime());
+    params["api_key"] = APIKEY;
+    params["sk"] = _sessionid;
 
-	msg << "&album" << array << album;
-	msg << "&api_key=" << APIKEY;
-	msg << "&artist" << array << artist;
-	msg << "&duration" << array << song.getDuration();
-	msg << "&method=track.Scrobble";
-	msg << "&timestamp" << array << entry.getStartTime();
-	msg << "&track" << array << title;
-	msg << "&sk=" << _sessionid;
-
-	array = "";
-
-	sigmsg << "album" << array << song.getAlbum();
-	sigmsg << "api_key" << APIKEY;
-	sigmsg << "artist" << array << song.getArtist();
-	sigmsg << "duration" << array << song.getDuration();
-	sigmsg << "methodtrack.Scrobble";
-	sigmsg << "sk" << _sessionid;
-	sigmsg << "timestamp" << array << entry.getStartTime();
-	sigmsg << "track" << array << song.getTitle();
-	sigmsg << SECRET;
-
-	std::string sighash(md5sum((char*)"%s", sigmsg.str().c_str()));
-	msg << "&api_sig=" << sighash;
-
-	return msg.str();
+    return CreateSignedMessage(params);
 }
 
 void
@@ -193,7 +161,7 @@ CAudioScrobbler::Scrobble(const CacheEntry& entry)
 	}
 	iprintf("Scrobbling: %s - %s", entry.getSong().getArtist().c_str(), entry.getSong().getTitle().c_str());
 
-	OpenURL(ROOTURL, CreateScrobbleMessage(0, entry).c_str());
+	OpenURL(ROOTURL, CreateScrobbleMessage(entry).c_str());
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Scrobbled successfully.");
 		retval = true;
@@ -213,31 +181,15 @@ CAudioScrobbler::LoveTrack(const Song& song)
 {
     bool retval = false;
 
-    char* artist = curl_easy_escape(_handle, song.getArtist().c_str(), 0);
-	char* title = curl_easy_escape(_handle, song.getTitle().c_str(), 0);
+    std::map<std::string, std::string> params;
 
-    std::ostringstream query, sig;
-    query << "method=track.love&"
-        << "&track=" << title
-        << "&artist=" << artist
-        << "&api_key=" << APIKEY
-        << "&sk=" << _sessionid;
+    params["artist"] = song["artist"];
+    params["track"] = song["track"];
+    params["method"] = "track.love";
+    params["api_key"] = APIKEY;
+    params["sk"] = _sessionid;
 
-    curl_free(artist);
-    curl_free(title);
-
-    sig << "api_key" << APIKEY
-        << "artist" << song.getArtist()
-        << "method" << "track.love"
-        << "sk" << _sessionid
-        << "track" << song.getTitle()
-        << SECRET;
-
-	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
-
-	query << "&api_sig=" << sighash;
-
-	OpenURL(ROOTURL, query.str().c_str());
+	OpenURL(ROOTURL, CreateSignedMessage(params).c_str());
 
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Loved track successfully.");
@@ -258,38 +210,13 @@ CAudioScrobbler::SendNowPlaying(const Song& song)
 {
 	bool retval = false;
 
-	char* artist = curl_easy_escape(_handle, song.getArtist().c_str(), 0);
-	char* title = curl_easy_escape(_handle, song.getTitle().c_str(), 0);
-    char* album = song.getAlbum().empty() ? 0 : curl_easy_escape(_handle, song.getAlbum().c_str(), 0);
+	std::map<std::string, std::string> params = song.tags();
 
-	std::ostringstream query, sig;
-	query << "method=track.updateNowPlaying&track=" << title
-        << "&artist=" << artist
-        << "&duration=" << song.getDuration()
-        << "&api_key=" << APIKEY
-        << "&sk=" << _sessionid;
-	if(album) {
-		query << "&album=" << album;
-		sig << "album" << song.getAlbum();
-	}
+	params["method"] = "track.updateNowPlaying";
+	params["api_key"] = APIKEY;
+	params["sk"] = _sessionid;
 
-    curl_free(artist);
-    curl_free(title);
-    curl_free(album);
-
-	sig << "api_key" << APIKEY
-        << "artist" << song.getArtist()
-        << "duration" << song.getDuration()
-        << "methodtrack.updateNowPlaying"
-        << "sk" << _sessionid
-        << "track" << song.getTitle()
-        << SECRET;
-
-	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
-
-	query << "&api_sig=" << sighash;
-
-	OpenURL(ROOTURL, query.str().c_str());
+	OpenURL(ROOTURL, CreateSignedMessage(params).c_str());
 
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Updated \"Now Playing\" status successfully.");
@@ -305,24 +232,23 @@ CAudioScrobbler::SendNowPlaying(const Song& song)
 	return retval;
 }
 
+// This method uses the DEPRECATED authToken parameter
 void
 CAudioScrobbler::Handshake()
 {
+	std::map<std::string, std::string> params;
+
 	std::string username="";
 	for(unsigned int i = 0; i < Config->getLUsername().length(); i++) {
 		username.append(1, tolower(Config->getLUsername().c_str()[i]));
 	}
-	std::string authtoken(md5sum((char*)"%s%s", username.c_str(), Config->getLPassword().c_str()));
 
-	std::ostringstream query, sig;
-	query << "method=auth.getMobileSession&username=" << Config->getLUsername() << "&authToken=" << authtoken << "&api_key=" << APIKEY;
+	params["method"] = "auth.getMobileSession";
+	params["username"] = Config->getLUsername();
+	params["authToken"] = md5sum((char*)"%s%s", username.c_str(), Config->getLPassword().c_str());
+	params["api_key"] = APIKEY;
 
-	sig << "api_key" << APIKEY << "authToken" << authtoken << "methodauth.getMobileSessionusername" << Config->getLUsername() << SECRET;
-	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
-
-	query << "&api_sig=" << sighash;
-
-	OpenURL(ROOTURL, query.str().c_str());
+	OpenURL(ROOTURL, CreateSignedMessage(params).c_str());
 
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		size_t start, end;
