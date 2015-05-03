@@ -1,6 +1,7 @@
 #ifndef _AUDIOSCROBBLER_H
 #define _AUDIOSCROBBLER_H
 
+#include <map>
 
 class CAudioScrobbler
 {
@@ -18,6 +19,7 @@ class CAudioScrobbler
 	private:
 		void OpenURL(std::string url, const char* postfields, char* errbuf);
 		bool CheckFailure(std::string response);
+        std::string CreateSignedMessage(std::map<std::string, std::string> params);
 
 		CURL* _handle;
 

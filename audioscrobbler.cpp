@@ -60,6 +60,31 @@ CAudioScrobbler::ReportResponse(char* buf, size_t size)
 	_response.append(buf);
 }
 
+
+std::string
+CAudioScrobbler::CreateSignedMessage(std::map<std::string, std::string> params)
+{
+    std::ostringstream msg, sig;
+
+    // Add the Last.fm method signature: http://www.last.fm/api/authspec#8
+    // std::map keeps the elements sorted by key, which makes this simple
+    for(auto param : params)
+        sig << param.first << param.second;
+    sig << SECRET;
+
+    params["api_sig"] = md5sum((char*)"%s", sig.str().c_str());
+
+    // Create a message in application/x-www-form-urlencoded format
+    for(auto param : params)
+    {
+        char* temp = curl_easy_escape(_handle, param.second.c_str(), 0);
+        msg << "&" << param.first << "=" << std::string(temp);
+        curl_free(temp);
+    }
+
+    return msg.str();
+}
+
 std::string
 CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& entry)
 {
