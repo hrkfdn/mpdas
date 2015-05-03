@@ -6,6 +6,9 @@ Song::Song(struct mpd_song *song)
     setTag("artist", mpd_song_get_tag(song, MPD_TAG_ARTIST, 0));
     setTag("track", mpd_song_get_tag(song, MPD_TAG_TITLE, 0));
     setTag("album", mpd_song_get_tag(song, MPD_TAG_ALBUM, 0));
+    setTag("trackNumber", mpd_song_get_tag(song, MPD_TAG_TRACK, 0));
+    setTag("mbid", mpd_song_get_tag(song, MPD_TAG_MUSICBRAINZ_RELEASETRACKID, 0));
+    setTag("albumArtist", mpd_song_get_tag(song, MPD_TAG_ALBUM_ARTIST, 0));
 
     setDuration(mpd_song_get_duration(song));
 }
