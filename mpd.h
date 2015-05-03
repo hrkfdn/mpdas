@@ -1,25 +1,6 @@
 #ifndef _MPD_H
 #define _MPD_H
 
-class Song {
-    public:
-        Song() {};
-        Song(struct mpd_song *song);
-        Song(std::string artist, std::string title, std::string album, int duration) {
-            this->artist = artist;
-            this->title = title;
-            this->album = album;
-            this->duration = duration;
-        }
-
-        std::string getArtist() const { return artist; }
-        std::string getTitle() const { return title; }
-        std::string getAlbum() const { return album; }
-        int getDuration() const { return duration; }
-    private:
-        std::string artist, title, album;
-        int duration;
-};
 
 class CMPD
 {

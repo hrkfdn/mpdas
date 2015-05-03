@@ -138,19 +138,3 @@ CMPD::Update()
         _connected = false;
     }
 }
-
-Song::Song(struct mpd_song *song)
-{
-    const char* temp;
-
-    temp = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
-    artist = temp ? temp : "";
-
-    temp = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
-    title = temp ? temp : "";
-
-    temp = mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
-    album = temp ? temp : "";
-
-    duration = mpd_song_get_duration(song);
-}

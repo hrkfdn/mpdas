@@ -1,12 +1,13 @@
 VERSION = 0.4-dev
 
 CXX	?= g++
-OBJ	= main.o md5.o utils.o mpd.o audioscrobbler.o cache.o config.o
+OBJ	= main.o md5.o utils.o song.o mpd.o audioscrobbler.o cache.o config.o
 OUT	= mpdas
 PREFIX ?= /usr/local
 MANPREFIX ?= ${PREFIX}/man/man1
 CONFIG ?= $(PREFIX)/etc
 
+CXXFLAGS	+= --std=c++11
 CXXFLAGS	+= `pkg-config --cflags libmpdclient libcurl`
 LIBS		= `pkg-config --libs libmpdclient libcurl`
 

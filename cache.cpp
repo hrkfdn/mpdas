@@ -111,7 +111,12 @@ std::ifstream& operator >>(std::ifstream& instream, CacheEntry& outobj)
     instream >> starttime;
     instream.ignore(1);
 
-    Song song(artist, title, album, duration);
+    Song song;
+    song["artist"] = artist;
+    song["track"] = title;
+    song["album"] = album;
+    song["duration"] = std::to_string(duration);
+
     outobj = CacheEntry(song, starttime);
 
     return instream;
