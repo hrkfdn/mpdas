@@ -159,7 +159,7 @@ CAudioScrobbler::Scrobble(const CacheEntry& entry)
 		Handshake();
 		return retval;
 	}
-	iprintf("Scrobbling: %s - %s", entry.getSong().getArtist().c_str(), entry.getSong().getTitle().c_str());
+	iprintf("Scrobbling: %s - %s", entry.getSong()["artist"].c_str(), entry.getSong()["track"].c_str());
 
 	OpenURL(ROOTURL, CreateScrobbleMessage(entry).c_str());
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {

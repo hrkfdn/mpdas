@@ -27,12 +27,6 @@ class Song {
             return _tags[tagName];
         }
 
-        // TODO: remove these
-        std::string getArtist() const { return (*this)["artist"]; }
-        std::string getTitle() const { return (*this)["track"]; }
-        std::string getAlbum() const { return (*this)["album"]; }
-        int getDuration() const { return duration(); }
-
     private:
         std::map<std::string, std::string> _tags;
 
