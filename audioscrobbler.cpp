@@ -72,7 +72,7 @@ CAudioScrobbler::CreateSignedMessage(std::map<std::string, std::string> params)
         sig << param.first << param.second;
     sig << SECRET;
 
-    params["api_sig"] = md5sum((char*)"%s", sig.str().c_str());
+    params["api_sig"] = md5sum(sig.str());
 
     // Create a message in application/x-www-form-urlencoded format
     for(auto param : params)
@@ -245,7 +245,7 @@ CAudioScrobbler::Handshake()
 
 	params["method"] = "auth.getMobileSession";
 	params["username"] = Config->getLUsername();
-	params["authToken"] = md5sum((char*)"%s%s", username.c_str(), Config->getLPassword().c_str());
+	params["authToken"] = md5sum(username + Config->getLPassword());
 	params["api_key"] = APIKEY;
 
 	OpenURL(ROOTURL, CreateSignedMessage(params).c_str());

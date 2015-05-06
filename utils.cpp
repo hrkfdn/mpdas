@@ -21,26 +21,13 @@ error(std::string msg)
 }
 
 std::string
-md5sum(const char* fmt, ...)
+md5sum(const std::string& str)
 {
-	va_list ap;
-	char* abuf;
 	md5_state_t state;
 	unsigned char md5buf[16];
 
-	va_start(ap, fmt);
-	if(vasprintf(&abuf, fmt, ap) == -1) {
-		error("in md5sum: Could not allocate memory for vasprintf()");
-		va_end(ap);
-		exit(EXIT_FAILURE);
-	}
-	va_end(ap);
-
-	std::string buf(abuf);
-	free(abuf);
-
 	md5_init(&state);
-	md5_append(&state, (const md5_byte_t*)buf.c_str(), buf.length());
+	md5_append(&state, (const md5_byte_t*)str.c_str(), str.length());
 	md5_finish(&state, md5buf);
 
 	std::ostringstream ret;
