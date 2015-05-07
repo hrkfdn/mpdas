@@ -1,6 +1,23 @@
 #include "mpdas.h"
+#include <wordexp.h>
 
 CConfig* Config = 0;
+
+std::string 
+CConfig::ExpandEnvironment(std::string value) 
+{
+	wordexp_t result;
+	std::string ret = "";
+	if(wordexp(value.c_str(), &result, WRDE_NOCMD)) {
+		wordfree(&result);
+		return value;
+	}
+	for(int i = 0; i < result.we_wordc; i++) {
+		ret.append(result.we_wordv[i]);
+	}
+	wordfree(&result);
+	return ret;
+}
 
 void
 CConfig::ParseLine(std::string line)
@@ -20,13 +37,13 @@ CConfig::ParseLine(std::string line)
 
 	if(tokens.size() > 1) {
 		if(tokens[0] == "username")
-			_lusername = tokens[1];
+			_lusername = ExpandEnvironment(tokens[1]);
 		else if(tokens[0] == "password")
-			_lpassword = tokens[1];
+			_lpassword = ExpandEnvironment(tokens[1]);
 		else if(tokens[0] == "host")
-			_mhost = tokens[1];
+			_mhost = ExpandEnvironment(tokens[1]);
 		else if(tokens[0] == "mpdpassword")
-			_mpassword = tokens[1];
+			_mpassword = ExpandEnvironment(tokens[1]);
 		else if(tokens[0] == "port")
 			_mport = atoi(tokens[1].c_str());
 		else if(tokens[0] == "runas")

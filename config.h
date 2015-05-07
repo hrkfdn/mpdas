@@ -22,6 +22,7 @@ class CConfig
 		void LoadConfig(std::string path);
 	private:
 		void ParseLine(std::string line);
+		std::string ExpandEnvironment(std::string value);
 		std::string _lusername, _lpassword;
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
