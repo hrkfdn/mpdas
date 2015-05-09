@@ -28,6 +28,7 @@
 
 #include "config.h"
 #include "utils.h"
+#include "song.hpp"
 #include "mpd.h"
 #include "cache.h"
 #include "audioscrobbler.h"

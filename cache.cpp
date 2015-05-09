@@ -87,10 +87,10 @@ CCache::AddToCache(const Song& song, time_t starttime)
 std::ofstream& operator <<(std::ofstream& outstream, const CacheEntry& inobj)
 {
     Song song = inobj.getSong();
-    outstream << song.getArtist() << std::endl
-        << song.getTitle() << std::endl
-        << song.getAlbum() << std::endl
-        << song.getDuration() << std::endl
+    outstream << song["artist"] << std::endl
+        << song["track"] << std::endl
+        << song["album"] << std::endl
+        << song["duration"] << std::endl
         << inobj.getStartTime();
 
     return outstream;
@@ -111,7 +111,12 @@ std::ifstream& operator >>(std::ifstream& instream, CacheEntry& outobj)
     instream >> starttime;
     instream.ignore(1);
 
-    Song song(artist, title, album, duration);
+    Song song;
+    song["artist"] = artist;
+    song["track"] = title;
+    song["album"] = album;
+    song["duration"] = std::to_string(duration);
+
     outobj = CacheEntry(song, starttime);
 
     return instream;

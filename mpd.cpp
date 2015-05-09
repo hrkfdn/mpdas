@@ -6,10 +6,10 @@ void
 CMPD::SetSong(const Song *song)
 {
     _cached = false;
-	if(song && !song->getArtist().empty() && !song->getTitle().empty()) {
+	if(song && !(*song)["artist"].empty() && !(*song)["track"].empty()) {
         _song = *song;
 		_gotsong = true;
-		iprintf("New song: %s - %s", _song.getArtist().c_str(), _song.getTitle().c_str());
+		iprintf("New song: %s - %s", _song["artist"].c_str(), _song["track"].c_str());
         AudioScrobbler->SendNowPlaying(*song);
 	}
 	else {
@@ -21,8 +21,8 @@ CMPD::SetSong(const Song *song)
 void
 CMPD::CheckSubmit(int curplaytime)
 {
-	if(!_gotsong || _cached || (_song.getArtist().empty() || _song.getTitle().empty())) return;
-	if(curplaytime - _start >= 240 || curplaytime - _start >= _song.getDuration()/2) {
+	if(!_gotsong || _cached || (_song["artist"].empty() || _song["track"].empty())) return;
+	if(curplaytime - _start >= 240 || curplaytime - _start >= _song.duration()/2) {
 		Cache->AddToCache(_song, _starttime);
 		_cached = true;
 	}
@@ -137,20 +137,4 @@ CMPD::Update()
         eprintf("Could not query MPD server: %s", mpd_connection_get_error_message(_conn));
         _connected = false;
     }
-}
-
-Song::Song(struct mpd_song *song)
-{
-    const char* temp;
-
-    temp = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
-    artist = temp ? temp : "";
-
-    temp = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
-    title = temp ? temp : "";
-
-    temp = mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
-    album = temp ? temp : "";
-
-    duration = mpd_song_get_duration(song);
 }
