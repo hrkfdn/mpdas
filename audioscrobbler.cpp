@@ -1,4 +1,5 @@
 #include "mpdas.h"
+#include "http.hpp"
 
 #define ROOTURL		"http://ws.audioscrobbler.com/2.0/"
 #define APIKEY		"a0ed2629d3d28606f67d7214c916788d"
@@ -6,58 +7,10 @@
 
 CAudioScrobbler* AudioScrobbler = 0;
 
-#define CLEANUP()	_response.clear()
-
-size_t
-writecb(void* ptr, size_t size, size_t nmemb, void *stream)
-{
-	AudioScrobbler->ReportResponse((char*)ptr, size*nmemb);
-    return size*nmemb;
-}
-
 CAudioScrobbler::CAudioScrobbler()
 {
 	_failcount = 0;
 	_authed = false;
-	_response = "";
-	_handle = curl_easy_init();
-	if(!_handle) {
-		eprintf("%s", "Could not initialize CURL.");
-		exit(EXIT_FAILURE);
-	}
-}
-
-CAudioScrobbler::~CAudioScrobbler()
-{
-    curl_easy_cleanup(_handle);
-    curl_global_cleanup();
-}
-
-void
-CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char* errbuf = 0)
-{
-	curl_easy_setopt(_handle, CURLOPT_DNS_CACHE_TIMEOUT, 0);
-	curl_easy_setopt(_handle, CURLOPT_NOPROGRESS, 1);
-	curl_easy_setopt(_handle, CURLOPT_WRITEFUNCTION, writecb);
-
-	if(postfields) {
-		curl_easy_setopt(_handle, CURLOPT_POST, 1);
-		curl_easy_setopt(_handle, CURLOPT_POSTFIELDS, postfields);
-	}
-	else
-		curl_easy_setopt(_handle, CURLOPT_POST, 0);
-	if(errbuf)
-		curl_easy_setopt(_handle, CURLOPT_ERRORBUFFER, errbuf);
-
-	curl_easy_setopt(_handle, CURLOPT_URL, url.c_str());
-	curl_easy_perform(_handle);
-}
-
-
-void
-CAudioScrobbler::ReportResponse(char* buf, size_t size)
-{
-	_response.append(buf);
 }
 
 
@@ -76,11 +29,7 @@ CAudioScrobbler::CreateSignedMessage(std::map<std::string, std::string> params)
 
     // Create a message in application/x-www-form-urlencoded format
     for(auto param : params)
-    {
-        char* temp = curl_easy_escape(_handle, param.second.c_str(), 0);
-        msg << "&" << param.first << "=" << std::string(temp);
-        curl_free(temp);
-    }
+        msg << "&" << param.first << "=" << conn.urlencode(param.second);
 
     return msg.str();
 }
@@ -115,9 +64,9 @@ CAudioScrobbler::CheckFailure(std::string response)
 	bool retval = false;
 
 	size_t start, end;
-	start = _response.find("<error code=\"")+13;
-	end = _response.find(">", start)-1;
-	std::string errorcode = _response.substr(start, end-start);
+	start = conn.response().find("<error code=\"")+13;
+	end = conn.response().find(">", start)-1;
+	std::string errorcode = conn.response().substr(start, end-start);
 	int code = strtol(errorcode.c_str(), 0, 10);
 
 	eprintf("%s%i", "Code: ", code);
@@ -161,17 +110,16 @@ CAudioScrobbler::Scrobble(const CacheEntry& entry)
 	}
 	iprintf("Scrobbling: %s - %s", entry.getSong()["artist"].c_str(), entry.getSong()["track"].c_str());
 
-	OpenURL(ROOTURL, CreateScrobbleMessage(entry).c_str());
-	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+	conn.post(ROOTURL, CreateScrobbleMessage(entry));
+	if(conn.response().find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Scrobbled successfully.");
 		retval = true;
 	}
-	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
-		eprintf("%s%s", "Last.fm returned an error while scrobbling:\n", _response.c_str());
-		if(CheckFailure(_response))
+	else if(conn.response().find("<lfm status=\"failed\">") != std::string::npos) {
+		eprintf("%s%s", "Last.fm returned an error while scrobbling:\n", conn.response().c_str());
+		if(CheckFailure(conn.response()))
 			Failure();
 	}
-	CLEANUP();
 
 	return retval;
 }
@@ -189,19 +137,18 @@ CAudioScrobbler::LoveTrack(const Song& song)
     params["api_key"] = APIKEY;
     params["sk"] = _sessionid;
 
-	OpenURL(ROOTURL, CreateSignedMessage(params).c_str());
+	conn.post(ROOTURL, CreateSignedMessage(params));
 
-	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+	if(conn.response().find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Loved track successfully.");
 		retval = true;
 	}
-	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
-		eprintf("%s%s", "Last.fm returned an error while loving the currently playing track:\n", _response.c_str());
-		if(CheckFailure(_response))
+	else if(conn.response().find("<lfm status=\"failed\">") != std::string::npos) {
+		eprintf("%s%s", "Last.fm returned an error while loving the currently playing track:\n", conn.response().c_str());
+		if(CheckFailure(conn.response()))
 			Failure();
 	}
 
-	CLEANUP();
 	return retval;
 }
 
@@ -216,19 +163,18 @@ CAudioScrobbler::SendNowPlaying(const Song& song)
 	params["api_key"] = APIKEY;
 	params["sk"] = _sessionid;
 
-	OpenURL(ROOTURL, CreateSignedMessage(params).c_str());
+	conn.post(ROOTURL, CreateSignedMessage(params));
 
-	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+	if(conn.response().find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Updated \"Now Playing\" status successfully.");
 		retval = true;
 	}
-	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
-		eprintf("%s%s", "Last.fm returned an error while updating the currently playing track:\n", _response.c_str());
-		if(CheckFailure(_response))
+	else if(conn.response().find("<lfm status=\"failed\">") != std::string::npos) {
+		eprintf("%s%s", "Last.fm returned an error while updating the currently playing track:\n", conn.response().c_str());
+		if(CheckFailure(conn.response()))
 			Failure();
 	}
 
-	CLEANUP();
 	return retval;
 }
 
@@ -248,20 +194,19 @@ CAudioScrobbler::Handshake()
 	params["authToken"] = md5sum(username + Config->getLPassword());
 	params["api_key"] = APIKEY;
 
-	OpenURL(ROOTURL, CreateSignedMessage(params).c_str());
+        conn.post(ROOTURL, CreateSignedMessage(params));
 
-	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
+	if(conn.response().find("<lfm status=\"ok\">") != std::string::npos) {
 		size_t start, end;
-		start = _response.find("<key>") + 5;
-		end = _response.find("</key>");
-		_sessionid = _response.substr(start, end-start);
+		start = conn.response().find("<key>") + 5;
+		end = conn.response().find("</key>");
+		_sessionid = conn.response().substr(start, end-start);
 		iprintf("%s%s", "Last.fm handshake successful. SessionID: ", _sessionid.c_str());
 		_authed = true;
 	}
-	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
-		CheckFailure(_response);
+	else if(conn.response().find("<lfm status=\"failed\">") != std::string::npos) {
+		CheckFailure(conn.response());
 		exit(EXIT_FAILURE);
 	}
 
-	CLEANUP();
 }

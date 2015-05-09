@@ -1,7 +1,7 @@
 VERSION = 0.4-dev
 
 CXX	?= g++
-OBJ	= main.o md5.o utils.o song.o mpd.o audioscrobbler.o cache.o config.o
+OBJ	= main.o md5.o http.o utils.o song.o mpd.o audioscrobbler.o cache.o config.o
 OUT	= mpdas
 PREFIX ?= /usr/local
 MANPREFIX ?= ${PREFIX}/man/man1
