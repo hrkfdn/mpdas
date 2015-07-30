@@ -104,3 +104,28 @@ void iprintf(const char* fmt, ...)
 	std::cout << "(" << timestr() << ") [" << YELLOW << "INFO" << RESET << "] " << buf << std::endl;
 }
 
+
+/*
+ * Converts the given song's title into songArtist and songTitle strings
+ * according to the following rules:
+ *
+ * 1. If the title contains the separator string " - ", songArtist is the string
+ *    preceding the separator and songTitle is the string succeding the separator.
+ * 2. If the title does not contain the separator string " - ", songArtist is
+ *    the empty string and songTitle is the title.
+ */
+void
+parseSongTitle(const Song &song, std::string &songArtist, std::string &songTitle)
+{
+    size_t separatorIndex;
+    songArtist = song.getArtist();
+    songTitle = song.getTitle();
+
+    if (song.getArtist().empty()) {
+        separatorIndex = song.getTitle().find(" - ");
+        if (separatorIndex != std::string::npos) {
+            songArtist = song.getTitle().substr(0, separatorIndex);
+            songTitle = song.getTitle().substr(separatorIndex + 3);
+        }
+    }
+}
