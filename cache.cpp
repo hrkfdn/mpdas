@@ -83,8 +83,12 @@ void CCache::AddToCache(const Song& song, time_t starttime)
 std::ofstream& operator <<(std::ofstream& outstream, const CacheEntry& inobj)
 {
     Song song = inobj.getSong();
-    outstream << song.getArtist() << std::endl
-        << song.getTitle() << std::endl
+
+    std::string songArtist, songTitle;
+    parseSongTitle(song, songArtist, songTitle);
+
+    outstream << songArtist << std::endl
+        << songTitle << std::endl
         << song.getAlbum() << std::endl
         << song.getDuration() << std::endl
         << inobj.getStartTime();

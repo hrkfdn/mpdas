@@ -27,7 +27,7 @@
 #include "md5.h"
 
 #include "config.h"
-#include "utils.h"
 #include "mpd.h"
+#include "utils.h"
 #include "cache.h"
 #include "audioscrobbler.h"
