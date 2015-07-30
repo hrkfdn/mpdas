@@ -17,7 +17,7 @@ LIBS		= `pkg-config --libs libmpdclient libcurl`
 CXXFLAGS	+= -DCONFDIR="\"$(CONFIG)\"" -DVERSION="\"$(VERSION)\""
 
 
-all: $(OUT)
+all: $(OUT) $(TESTS_OUT)
 
 .cpp.o:
 	@echo [CXX] $<
