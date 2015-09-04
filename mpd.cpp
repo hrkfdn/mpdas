@@ -52,7 +52,6 @@ CMPD::~CMPD()
 bool
 CMPD::Connect()
 {
-    std::cout << _conn;
     if(_conn)
         mpd_connection_free(_conn);
 
