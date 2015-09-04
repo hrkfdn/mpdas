@@ -290,9 +290,9 @@ CAudioScrobbler::Handshake()
 	std::string authtoken(md5sum((char*)"%s%s", username.c_str(), Config->getLPassword().c_str()));
 
 	std::ostringstream query, sig;
-	query << "method=auth.getMobileSession&username=" << Config->getLUsername() << "&authToken=" << authtoken << "&api_key=" << APIKEY;
+	query << "method=auth.getMobileSession&username=" << username << "&authToken=" << authtoken << "&api_key=" << APIKEY;
 
-	sig << "api_key" << APIKEY << "authToken" << authtoken << "methodauth.getMobileSessionusername" << Config->getLUsername() << SECRET;
+	sig << "api_key" << APIKEY << "authToken" << authtoken << "methodauth.getMobileSessionusername" << username << SECRET;
 	std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
 
 	query << "&api_sig=" << sighash;
