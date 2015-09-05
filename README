@@ -10,7 +10,7 @@
 mpdas is a MPD AudioScrobbler client
 supporting the 2.0 protocol specs.
 
-It is written in C++ and uses libmpd
+It is written in C++ and uses libmpdclient
 to retrieve the song data from MPD and
 libcurl to post it to Last.fm
 
