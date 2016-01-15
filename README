@@ -52,6 +52,19 @@ Features:
 - User switching
 - "Love" tracks on Last.fm
     (e.g. with 'mpc sendmessage mpdas love')
+- Optional UPnP support (see next)
+================================================
+
+If mpdas is configured with --enable-upnp, it supports monitoring an
+UPnP renderer (as an alternative to monitoring mpd).
+
+The build will need libupnpp:
+http://www.lesbonscomptes.com/upmpdcli/downloads.
+
+The switch to UPnP use is triggered by the presence of the
+upnpname variable inside the configuration file:
+
+upnpname = upnp-friendly-name-or-uuid
 
 ================================================
 

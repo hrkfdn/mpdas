@@ -11,6 +11,7 @@ class CConfig
 		std::string getMHost() { return _mhost; }
 		std::string getMPassword() { return _mpassword; }
 		std::string getRUser() { return _runninguser; }
+		std::string getUPnPName() { return _upnpname; }
 		bool getDebug() { return (_debug == true); }
 		int getMPort() { return _mport; }
 
@@ -25,6 +26,7 @@ class CConfig
 		std::string _lusername, _lpassword;
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
+		std::string _upnpname;
 		int _mport;
 		bool _debug;
 };

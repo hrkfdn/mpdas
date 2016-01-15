@@ -1,4 +1,7 @@
 #include "mpdas.h"
+#if WITH_UPNP
+#include "upnpav.h"
+#endif
 
 bool running = true;
 
@@ -49,7 +52,7 @@ setid(const char* username)
 void
 printversion()
 {
-	fprintf(stdout, "mpdas-"VERSION", (C) 2010 Henrik Friedrichsen.\n");
+	fprintf(stdout, "mpdas-" VERSION ", (C) 2010 Henrik Friedrichsen.\n");
 	fprintf(stdout, "Global config path is set to \"%s\"\n", CONFDIR);
 }
 
@@ -124,10 +127,20 @@ main(int argc, char* argv[])
 		}
 	}
 
-	MPD = new CMPD();
-	if(!MPD->isConnected())
-		return EXIT_FAILURE;
-
+#if WITH_UPNP
+	bool useUPnP = !Config->getUPnPName().empty();
+	if (useUPnP) {
+		UPNP = new CUPNP();
+		if(!UPNP->isConnected())
+			return EXIT_FAILURE;
+	} else {
+#endif
+		MPD = new CMPD();
+		if(!MPD->isConnected())
+			return EXIT_FAILURE;
+#if WITH_UPNP
+	}
+#endif
 	AudioScrobbler = new CAudioScrobbler();
 	AudioScrobbler->Handshake();
 	Cache = new CCache();
@@ -141,7 +154,15 @@ main(int argc, char* argv[])
     sigaction(SIGINT, &sa, NULL);
 
     while(running) {
-        MPD->Update();
+#if WITH_UPNP
+		if (useUPnP) {
+			UPNP->Update();
+		} else {
+#endif
+			MPD->Update();
+#if WITH_UPNP
+		}
+#endif
         Cache->WorkCache();
         usleep(500000);
     }
