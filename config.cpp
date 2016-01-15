@@ -31,6 +31,8 @@ CConfig::ParseLine(std::string line)
 			_mport = atoi(tokens[1].c_str());
 		else if(tokens[0] == "runas")
 			_runninguser = tokens[1];
+		else if(tokens[0] == "upnpname")
+			_upnpname = tokens[1];
 		else if(tokens[0] == "debug") {
 			if(tokens[1] == "1" || tokens[1] == "true")
 				_debug = true;
