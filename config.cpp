@@ -27,6 +27,8 @@ CConfig::ParseLine(std::string line)
 			_mhost = tokens[1];
 		else if(tokens[0] == "mpdpassword")
 			_mpassword = tokens[1];
+		else if(tokens[0] == "service" && tokens[1] == "librefm")
+			_service = LibreFm;
 		else if(tokens[0] == "port")
 			_mport = atoi(tokens[1].c_str());
 		else if(tokens[0] == "runas")
@@ -62,6 +64,7 @@ CConfig::CConfig(char* cfg)
 {
 	/* Set optional settings to default */
 	_mhost = "localhost";
+	_service = LastFm;
 	_mport = 6600;
 	_debug = false;
 

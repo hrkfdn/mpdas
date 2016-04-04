@@ -61,6 +61,9 @@ CMPD::Connect()
     if(_connected && Config->getMPassword().size() > 0) {
         _connected &= mpd_run_password(_conn, Config->getMPassword().c_str());
     }
+    else if(!_connected) {
+        eprintf("MPD connection error: %s", mpd_connection_get_error_message(_conn));
+    }
 
     if(_connected)
         mpd_run_subscribe(_conn, "mpdas");

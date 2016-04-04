@@ -117,6 +117,8 @@ main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
+	iprintf("Using %s service URL", Config->getService() == LastFm ? "Last.fm" : "Libre.fm");
+
 	if (go_daemon) {
 		if (daemon(1, 0)) {
 			perror("daemon");

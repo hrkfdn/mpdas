@@ -1,6 +1,11 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
+enum ScrobblingService {
+	LastFm,
+	LibreFm
+};
+
 class CConfig
 {
 	public:
@@ -11,6 +16,7 @@ class CConfig
 		std::string getMHost() { return _mhost; }
 		std::string getMPassword() { return _mpassword; }
 		std::string getRUser() { return _runninguser; }
+		ScrobblingService getService() { return _service; }
 		bool getDebug() { return (_debug == true); }
 		int getMPort() { return _mport; }
 
@@ -25,6 +31,7 @@ class CConfig
 		std::string _lusername, _lpassword;
 		std::string _mhost, _mpassword;
 		std::string _runninguser;
+		ScrobblingService _service;
 		int _mport;
 		bool _debug;
 };

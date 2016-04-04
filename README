@@ -41,6 +41,8 @@ mpdpassword:		MPD Password
 port:			MPD Port
 runas:			Change the user mpdas runs as
 debug:			Print debug information
+service:        Will scrobble to Libre.fm if set
+                to "librefm"
 
 ================================================
 

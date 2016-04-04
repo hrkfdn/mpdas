@@ -1,6 +1,5 @@
 #include "mpdas.h"
 
-#define ROOTURL		"http://ws.audioscrobbler.com/2.0/"
 #define APIKEY		"a0ed2629d3d28606f67d7214c916788d"
 #define	SECRET		"295f31c5d28215215b1503fb0327cc01"
 
@@ -31,6 +30,15 @@ CAudioScrobbler::~CAudioScrobbler()
 {
     curl_easy_cleanup(_handle);
     curl_global_cleanup();
+}
+
+std::string
+CAudioScrobbler::GetServiceURL()
+{
+    if(Config->getService() == LibreFm) {
+	return "https://libre.fm/2.0/";
+    }
+    return "http://ws.audioscrobbler.com/2.0/";
 }
 
 void
@@ -168,7 +176,7 @@ CAudioScrobbler::Scrobble(const CacheEntry& entry)
 	}
 	iprintf("Scrobbling: %s - %s", entry.getSong().getArtist().c_str(), entry.getSong().getTitle().c_str());
 
-	OpenURL(ROOTURL, CreateScrobbleMessage(0, entry).c_str());
+	OpenURL(GetServiceURL(), CreateScrobbleMessage(0, entry).c_str());
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Scrobbled successfully.");
 		retval = true;
@@ -212,7 +220,7 @@ CAudioScrobbler::LoveTrack(const Song& song)
 
 	query << "&api_sig=" << sighash;
 
-	OpenURL(ROOTURL, query.str().c_str());
+	OpenURL(GetServiceURL(), query.str().c_str());
 
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Loved track successfully.");
@@ -264,7 +272,7 @@ CAudioScrobbler::SendNowPlaying(const Song& song)
 
 	query << "&api_sig=" << sighash;
 
-	OpenURL(ROOTURL, query.str().c_str());
+	OpenURL(GetServiceURL(), query.str().c_str());
 
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		iprintf("%s", "Updated \"Now Playing\" status successfully.");
@@ -297,7 +305,7 @@ CAudioScrobbler::Handshake()
 
 	query << "&api_sig=" << sighash;
 
-	OpenURL(ROOTURL, query.str().c_str());
+	OpenURL(GetServiceURL(), query.str().c_str());
 
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
 		size_t start, end;

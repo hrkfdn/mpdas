@@ -16,6 +16,7 @@ class CAudioScrobbler
 		bool SendNowPlaying(const Song& song);
 		void Failure();
 	private:
+		std::string GetServiceURL();
 		void OpenURL(std::string url, const char* postfields, char* errbuf);
 		bool CheckFailure(std::string response);
 
