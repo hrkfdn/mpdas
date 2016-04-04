@@ -1,2 +1,3 @@
 - Rewrite. Maybe even in C?
 - Write test cases for cache, as it seems to contain duplicates in some cases..
+- Pass instances around instead of using globals
