@@ -2,8 +2,7 @@
 
 CConfig* Config = 0;
 
-void
-CConfig::ParseLine(std::string line)
+void CConfig::ParseLine(std::string line)
 {
 	std::vector<std::string> tokens;
 	char* pstr = 0;
@@ -41,8 +40,7 @@ CConfig::ParseLine(std::string line)
 	}
 }
 
-void
-CConfig::LoadConfig(std::string path)
+void CConfig::LoadConfig(std::string path)
 {
 	std::string line = "";
 

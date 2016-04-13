@@ -2,8 +2,7 @@
 
 CCache* Cache = 0;
 
-void
-CCache::SaveCache()
+void CCache::SaveCache()
 {
     std::string path = getenv("HOME");
     path.append("/.mpdascache");
@@ -26,8 +25,7 @@ CCache::SaveCache()
     ofs.close();
 }
 
-void
-CCache::LoadCache()
+void CCache::LoadCache()
 {
     int length;
     std::string path = getenv("HOME");
@@ -52,8 +50,7 @@ CCache::LoadCache()
     remove(path.c_str());
 }
 
-void
-CCache::WorkCache()
+void CCache::WorkCache()
 {
     if(_failtime && time(NULL) - _failtime < 300) {
         return;
@@ -75,8 +72,7 @@ CCache::WorkCache()
     SaveCache();
 }
 
-void
-CCache::AddToCache(const Song& song, time_t starttime)
+void CCache::AddToCache(const Song& song, time_t starttime)
 {
     CacheEntry *entry = new CacheEntry(song, starttime);
 

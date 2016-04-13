@@ -2,60 +2,57 @@
 
 CMPD* MPD = 0;
 
-void
-CMPD::SetSong(const Song *song)
+void CMPD::SetSong(const Song *song)
 {
     _cached = false;
-	if(song && !song->getArtist().empty() && !song->getTitle().empty()) {
+    if(song && !song->getArtist().empty() && !song->getTitle().empty()) {
         _song = *song;
-		_gotsong = true;
-		iprintf("New song: %s - %s", _song.getArtist().c_str(), _song.getTitle().c_str());
+        _gotsong = true;
+        iprintf("New song: %s - %s", _song.getArtist().c_str(), _song.getTitle().c_str());
         AudioScrobbler->SendNowPlaying(*song);
-	}
-	else {
-		_gotsong = false;
-	}
-	_starttime = time(NULL);
+    }
+    else {
+        _gotsong = false;
+    }
+    _starttime = time(NULL);
 }
 
-void
-CMPD::CheckSubmit(int curplaytime)
+void CMPD::CheckSubmit(int curplaytime)
 {
-	if(!_gotsong || _cached || (_song.getArtist().empty() || _song.getTitle().empty())) return;
-	if(curplaytime - _start >= 240 || curplaytime - _start >= _song.getDuration()/2) {
-		Cache->AddToCache(_song, _starttime);
-		_cached = true;
-	}
+    if(!_gotsong || _cached || (_song.getArtist().empty() || _song.getTitle().empty())) return;
+    if(curplaytime - _start >= 240 || curplaytime - _start >= _song.getDuration()/2) {
+        Cache->AddToCache(_song, _starttime);
+        _cached = true;
+    }
 }
 
 CMPD::CMPD()
 {
     _conn = NULL;
-	_gotsong = false;
-	_connected = false;
-	_cached = false;
+    _gotsong = false;
+    _connected = false;
+    _cached = false;
     _songid = -1;
     _songpos = -1;
 
-	if(Connect())
-		iprintf("%s", "Connected to MPD.");
-	else
-		eprintf("%s", "Could not connect to MPD.");
+    if(Connect())
+        iprintf("%s", "Connected to MPD.");
+    else
+        eprintf("%s", "Could not connect to MPD.");
 }
 
 CMPD::~CMPD()
 {
-	if(_conn)
-		mpd_connection_free(_conn);
+    if(_conn)
+        mpd_connection_free(_conn);
 }
 
-bool
-CMPD::Connect()
+bool CMPD::Connect()
 {
     if(_conn)
         mpd_connection_free(_conn);
 
-	_conn = mpd_connection_new(Config->getMHost().c_str(), Config->getMPort(), 0);
+    _conn = mpd_connection_new(Config->getMHost().c_str(), Config->getMPort(), 0);
     _connected = _conn && mpd_connection_get_error(_conn) == MPD_ERROR_SUCCESS;
 
     if(_connected && Config->getMPassword().size() > 0) {
@@ -68,30 +65,28 @@ CMPD::Connect()
     if(_connected)
         mpd_run_subscribe(_conn, "mpdas");
 
-	return _connected;
+    return _connected;
 }
 
-void
-CMPD::GotNewSong(struct mpd_song *song)
+void CMPD::GotNewSong(struct mpd_song *song)
 {
     Song *s = new Song(song);
     SetSong(s);
     delete s;
 }
 
-void
-CMPD::Update()
+void CMPD::Update()
 {
-	if(!_connected) {
+    if(!_connected) {
         iprintf("Reconnecting in 10 seconds.");
         sleep(10);
-		if(Connect())
+        if(Connect())
             iprintf("%s", "Reconnected!");
         else {
             eprintf("%s", "Could not reconnect.");
             return;
         }
-	}
+    }
 
     mpd_status *status = mpd_run_status(_conn);
     mpd_stats *stats = mpd_run_stats(_conn);

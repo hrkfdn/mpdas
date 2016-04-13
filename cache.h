@@ -23,15 +23,15 @@ class CacheEntry
 
 class CCache
 {
-	public:
-		CCache() { _failtime = 0; }
-		void AddToCache(const Song& song, time_t starttime);
-		void WorkCache();
-		void SaveCache();
-		void LoadCache();
-	private:
-		time_t _failtime;
-		std::vector<CacheEntry*> _entries;
+    public:
+        CCache() { _failtime = 0; }
+        void AddToCache(const Song& song, time_t starttime);
+        void WorkCache();
+        void SaveCache();
+        void LoadCache();
+    private:
+        time_t _failtime;
+        std::vector<CacheEntry*> _entries;
 };
 
 extern CCache* Cache;

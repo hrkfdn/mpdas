@@ -5,8 +5,7 @@
 #define GREEN "\x1b[32;01m"
 #define YELLOW "\x1b[33;01m"
 
-bool
-fileexists(const char* file)
+bool fileexists(const char* file)
 {
 	if (access(file, F_OK) == 0)
 		return true;
@@ -14,14 +13,12 @@ fileexists(const char* file)
 		return false;
 }
 
-void
-error(std::string msg)
+void error(std::string msg)
 {
 	std::cerr << "(" << timestr() << ")" << "[" << RED << "ERROR" << RESET << "]" << msg << std::endl;
 }
 
-std::string
-md5sum(const char* fmt, ...)
+std::string md5sum(const char* fmt, ...)
 {
 	va_list ap;
 	char* abuf;
@@ -49,8 +46,7 @@ md5sum(const char* fmt, ...)
 	return ret.str();
 }
 
-std::string
-timestr()
+std::string timestr()
 {
 	std::stringstream buf;
 	time_t rawtime = time(NULL);
@@ -69,8 +65,7 @@ timestr()
 	return buf.str();
 }
 
-void
-eprintf(const char* fmt, ...)
+void eprintf(const char* fmt, ...)
 {
 	char* abuf;
 	va_list ap;
@@ -88,8 +83,7 @@ eprintf(const char* fmt, ...)
 	std::cerr << "(" << timestr() << ") [" << RED << "ERROR" << RESET << "] " << buf << std::endl;
 }
 
-void
-iprintf(const char* fmt, ...)
+void iprintf(const char* fmt, ...)
 {
 	if(Config && Config->getDebug() == false)
 		return;
