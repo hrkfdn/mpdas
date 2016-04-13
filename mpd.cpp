@@ -125,8 +125,14 @@ CMPD::Update()
             mpd_message *msg;
             while((msg = mpd_recv_message(_conn)) != NULL) {
                 const char *text = mpd_message_get_text(msg);
-                if(_gotsong && text && !strncmp(text, "love", 4))
-                    AudioScrobbler->LoveTrack(_song);
+                if(_gotsong && text) {
+                    if(!strncmp(text, "love", 4)) {
+                        AudioScrobbler->LoveTrack(_song);
+                    }
+                    else if(!strncmp(text, "unlove", 6)) {
+                        AudioScrobbler->LoveTrack(_song, true);
+                    }
+                }
                 mpd_message_free(msg);
             }
             mpd_response_finish(_conn);

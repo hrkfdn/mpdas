@@ -12,7 +12,7 @@ class CAudioScrobbler
 		std::string CreateScrobbleMessage(int index, const CacheEntry& entry);
 		bool Scrobble(const CacheEntry& entry);
 		void ReportResponse(char* buf, size_t size);
-        bool LoveTrack(const Song& song);
+        bool LoveTrack(const Song& song, bool unlove = false);
 		bool SendNowPlaying(const Song& song);
 		void Failure();
 	private:

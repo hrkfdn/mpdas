@@ -53,7 +53,8 @@ Features:
 - Config files
 - User switching
 - "Love" tracks on Last.fm
-    (e.g. with 'mpc sendmessage mpdas love')
+    (e.g. with 'mpc sendmessage mpdas love' and
+     'mpc sendmessage mpdas unlove' to revert)
 
 ================================================
 

@@ -192,7 +192,7 @@ CAudioScrobbler::Scrobble(const CacheEntry& entry)
 }
 
 bool
-CAudioScrobbler::LoveTrack(const Song& song)
+CAudioScrobbler::LoveTrack(const Song& song, bool unlove)
 {
     bool retval = false;
 
@@ -200,7 +200,7 @@ CAudioScrobbler::LoveTrack(const Song& song)
 	char* title = curl_easy_escape(_handle, song.getTitle().c_str(), 0);
 
     std::ostringstream query, sig;
-    query << "method=track.love&"
+    query << (unlove ? "method=track.unlove&" : "method=track.love&")
         << "&track=" << title
         << "&artist=" << artist
         << "&api_key=" << APIKEY
@@ -211,7 +211,7 @@ CAudioScrobbler::LoveTrack(const Song& song)
 
     sig << "api_key" << APIKEY
         << "artist" << song.getArtist()
-        << "method" << "track.love"
+        << "method" << (unlove ? "track.unlove" : "track.love")
         << "sk" << _sessionid
         << "track" << song.getTitle()
         << SECRET;
@@ -223,11 +223,11 @@ CAudioScrobbler::LoveTrack(const Song& song)
 	OpenURL(GetServiceURL(), query.str().c_str());
 
 	if(_response.find("<lfm status=\"ok\">") != std::string::npos) {
-		iprintf("%s", "Loved track successfully.");
+		iprintf("%s", "(Un)loved track successfully.");
 		retval = true;
 	}
 	else if(_response.find("<lfm status=\"failed\">") != std::string::npos) {
-		eprintf("%s%s", "Last.fm returned an error while loving the currently playing track:\n", _response.c_str());
+		eprintf("%s%s", "Last.fm returned an error while (un)loving the currently playing track:\n", _response.c_str());
 		if(CheckFailure(_response))
 			Failure();
 	}
