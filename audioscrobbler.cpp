@@ -72,13 +72,12 @@ void CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char*
             sleep(CURL_RETRY_DELAY);
             retries++;
             eprintf("Retry %d/%d", retries, CURL_MAX_RETRIES);
-            res = curl_easy_perform(_handle);
-        } while (res != CURLE_OK && retries < CURL_MAX_RETRIES);
 
-        // Still failing?
-        if (res != CURLE_OK) {
-            eprintf("Failed after %d retries, try again later.", CURL_MAX_RETRIES);
-        }
+            res = curl_easy_perform(_handle);
+            if (res != CURLE_OK) {
+                eprintf("Failed: %s", curl_easy_strerror(res));
+            }
+        } while (res != CURLE_OK && retries < CURL_MAX_RETRIES);
     }
 }
 
