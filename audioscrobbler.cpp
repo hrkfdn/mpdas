@@ -55,7 +55,15 @@ void CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char*
 	curl_easy_setopt(_handle, CURLOPT_ERRORBUFFER, errbuf);
 
     curl_easy_setopt(_handle, CURLOPT_URL, url.c_str());
-    curl_easy_perform(_handle);
+    CURLcode res = curl_easy_perform(_handle);
+
+    // Sometimes last.fm likes to just timeout for no reason, leaving us hanging. If this happens, completely refresh the curl handle.
+    if (res == CURLE_OPERATION_TIMEDOUT) {
+        eprintf("libcurl: (%d)", res);
+        eprintf("%s", curl_easy_strerror(res));
+        curl_easy_cleanup(_handle);
+        _handle = curl_easy_init();
+    }
 }
 
 
