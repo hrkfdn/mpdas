@@ -44,6 +44,7 @@ void CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char*
     curl_easy_setopt(_handle, CURLOPT_DNS_CACHE_TIMEOUT, 0);
     curl_easy_setopt(_handle, CURLOPT_NOPROGRESS, 1);
     curl_easy_setopt(_handle, CURLOPT_WRITEFUNCTION, writecb);
+    curl_easy_setopt(_handle, CURLOPT_TIMEOUT, 10);
 
     if(postfields) {
 	curl_easy_setopt(_handle, CURLOPT_POST, 1);
