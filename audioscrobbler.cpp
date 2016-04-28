@@ -2,6 +2,8 @@
 
 #define APIKEY		"a0ed2629d3d28606f67d7214c916788d"
 #define	SECRET		"295f31c5d28215215b1503fb0327cc01"
+#define CURL_MAX_RETRIES 3
+#define CURL_RETRY_DELAY 3 // Seconds
 
 CAudioScrobbler* AudioScrobbler = 0;
 
@@ -58,12 +60,22 @@ void CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char*
     curl_easy_setopt(_handle, CURLOPT_URL, url.c_str());
     CURLcode res = curl_easy_perform(_handle);
 
-    // Sometimes last.fm likes to just timeout for no reason, leaving us hanging. If this happens, completely refresh the curl handle.
-    if (res == CURLE_OPERATION_TIMEDOUT) {
+    // Sometimes last.fm likes to just timeout for no reason, leaving us hanging.
+    // If this happens, retry a few times with a small delay.
+    if (res != CURLE_OK) {
         eprintf("libcurl: (%d)", res);
         eprintf("%s", curl_easy_strerror(res));
-        curl_easy_cleanup(_handle);
-        _handle = curl_easy_init();
+        eprintf("Will retry %d times with a %d second delay.", CURL_MAX_RETRIES, CURL_RETRY_DELAY);
+
+        int retries = 0;
+        do {
+            sleep(CURL_RETRY_DELAY);
+            retries++;
+            eprintf("Retry %d/%d", retries, CURL_MAX_RETRIES);
+            res = curl_easy_perform(_handle);
+        } while (retries < CURL_MAX_RETRIES);
+
+        eprintf("Failed after %d retries, try again later.", CURL_MAX_RETRIES);
     }
 }
 
