@@ -63,8 +63,7 @@ void CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char*
     // Sometimes last.fm likes to just timeout for no reason, leaving us hanging.
     // If this happens, retry a few times with a small delay.
     if (res != CURLE_OK) {
-        eprintf("libcurl: (%d)", res);
-        eprintf("%s", curl_easy_strerror(res));
+        eprintf("libcurl error (%d): %s", res, curl_easy_strerror(res));
         eprintf("Will retry %d times with a %d second delay.", CURL_MAX_RETRIES, CURL_RETRY_DELAY);
 
         int retries = 0;
