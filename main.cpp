@@ -45,7 +45,7 @@ void setid(const char* username)
 
 void printversion()
 {
-    fprintf(stdout, "mpdas-"VERSION", (C) 2010 Henrik Friedrichsen.\n");
+    fprintf(stdout, "mpdas-"VERSION", (C) 2016 Henrik Friedrichsen.\n");
     fprintf(stdout, "Global config path is set to \"%s\"\n", CONFDIR);
 }
 

@@ -1,4 +1,4 @@
-VERSION = 0.4.1
+VERSION = 0.4.2
 
 CXX	?= g++
 OBJ	= main.o md5.o utils.o mpd.o audioscrobbler.o cache.o config.o
