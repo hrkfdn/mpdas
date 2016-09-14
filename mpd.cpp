@@ -96,18 +96,26 @@ void CMPD::Update()
         int newsongpos = mpd_status_get_elapsed_time(status);
         int curplaytime = mpd_stats_get_play_time(stats);
 
+        mpd_song *song = mpd_run_current_song(_conn);
+        Song *song_ = song ? new Song(song) : NULL;
+
         // new song
-        if(newsongid != _songid) {
+        if(newsongid != _songid or (song_ and _song != *song_)) {
             _songid = newsongid;
             _songpos = newsongpos;
             _start = curplaytime;
 
-            mpd_song *song = mpd_run_current_song(_conn);
             if(song) {
                 GotNewSong(song);
                 mpd_song_free(song);
+                song = NULL;
             }
         }
+
+        if (song)
+            mpd_song_free(song);
+        if (song_)
+            delete song_;
 
         // song playing
         if(newsongpos != _songpos) {

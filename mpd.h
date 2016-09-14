@@ -16,6 +16,12 @@ class Song {
         std::string getTitle() const { return title; }
         std::string getAlbum() const { return album; }
         int getDuration() const { return duration; }
+
+        bool operator != (const Song &other) const {
+            return this->getArtist() != other.getArtist() or
+                this->getAlbum() != other.getAlbum() or
+                this->getTitle() != other.getTitle();
+        }
     private:
         std::string artist, title, album;
         int duration;
