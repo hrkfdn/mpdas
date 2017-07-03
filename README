@@ -19,7 +19,7 @@ libcurl to post it to Last.fm
 NOTE: There is a manpage available as well:
 man mpdas
 
-To configure mpdas, simply create a file called 
+To configure mpdas, simply create a file called
 .mpdasrc in your home directory or in
 $PREFIX/mpdasrc. To change $PREFIX, modify the
 Makefile.
@@ -27,15 +27,18 @@ Makefile.
 Syntax is easy. Example:
 
 username = lastfmuser
-password = 5f4dcc3b5aa765d61d8327deb882cf99
+password = password
 
-Whereas password is your Last.FM password hashed
-with MD5.
+NOTE: In the past the password had to be an MD5
+hash. As of v0.4.3 this has changed due to
+Last.fm deprecating the previous authentication
+method. Please supply the password in plain-text
+from now on.
 
 Configuration options:
 
 username:		Last.FM username
-password:		Last.FM password (MD5 hashed)
+password:		Last.FM password (plain-text)
 host:			MPD Host
 mpdpassword:		MPD Password
 port:			MPD Port

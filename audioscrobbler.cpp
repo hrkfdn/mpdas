@@ -90,7 +90,7 @@ std::string CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& 
 {
     const Song& song = entry.getSong();
     std::ostringstream msg, sigmsg ;
-    std::string artist, title, album, array = "=";
+    std::string artist, title, album;
 
     char* temp = 0;
     temp = curl_easy_escape(_handle, song.getArtist().c_str(), song.getArtist().length());
@@ -103,25 +103,23 @@ std::string CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& 
     album = temp;
     curl_free(temp);
 
-    msg << "&album" << array << album;
+    msg << "&album=" << album;
     msg << "&api_key=" << APIKEY;
-    msg << "&artist" << array << artist;
-    msg << "&duration" << array << song.getDuration();
+    msg << "&artist=" << artist;
+    msg << "&duration=" << song.getDuration();
     msg << "&method=track.Scrobble";
-    msg << "&timestamp" << array << entry.getStartTime();
-    msg << "&track" << array << title;
+    msg << "&timestamp=" << entry.getStartTime();
+    msg << "&track=" << title;
     msg << "&sk=" << _sessionid;
 
-    array = "";
-
-    sigmsg << "album" << array << song.getAlbum();
+    sigmsg << "album" << song.getAlbum();
     sigmsg << "api_key" << APIKEY;
-    sigmsg << "artist" << array << song.getArtist();
-    sigmsg << "duration" << array << song.getDuration();
+    sigmsg << "artist" << song.getArtist();
+    sigmsg << "duration" << song.getDuration();
     sigmsg << "methodtrack.Scrobble";
     sigmsg << "sk" << _sessionid;
-    sigmsg << "timestamp" << array << entry.getStartTime();
-    sigmsg << "track" << array << song.getTitle();
+    sigmsg << "timestamp" << entry.getStartTime();
+    sigmsg << "track" << song.getTitle();
     sigmsg << SECRET;
 
     std::string sighash(md5sum((char*)"%s", sigmsg.str().c_str()));
@@ -167,6 +165,9 @@ bool CAudioScrobbler::CheckFailure(std::string response)
 	    break;
 	case 10:
 	    eprintf("Invalid API-Key. Let's bugger off.");
+	    exit(EXIT_FAILURE);
+	case 13:
+	    eprintf("Invalid method signature.");
 	    exit(EXIT_FAILURE);
 	case 16:
 	    eprintf("The service is temporarily unavailable, we will try again later..");
@@ -309,9 +310,9 @@ void CAudioScrobbler::Handshake()
     std::string authtoken(md5sum((char*)"%s%s", username.c_str(), Config->getLPassword().c_str()));
 
     std::ostringstream query, sig;
-    query << "method=auth.getMobileSession&username=" << username << "&authToken=" << authtoken << "&api_key=" << APIKEY;
+    query << "method=auth.getMobileSession&username=" << username << "&password=" << Config->getLPassword().c_str() << "&api_key=" << APIKEY;
 
-    sig << "api_key" << APIKEY << "authToken" << authtoken << "methodauth.getMobileSessionusername" << username << SECRET;
+    sig << "api_key" << APIKEY << "methodauth.getMobileSession" << "password" << Config->getLPassword().c_str() << "username" << username << SECRET;
     std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
 
     query << "&api_sig=" << sighash;
