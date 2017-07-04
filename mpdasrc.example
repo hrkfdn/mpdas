@@ -1,4 +1,4 @@
 username = fhen
-password = md5_hash_here
+password = password
 runas = mpd
 debug = 1
