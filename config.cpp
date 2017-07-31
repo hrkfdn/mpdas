@@ -10,10 +10,10 @@ void CConfig::ParseLine(std::string line)
 
 	strncpy(szline, line.c_str(), line.size()+1);
 
-	pstr = strtok(szline, " :=\t");
+	pstr = strtok(szline, " =\t");
 	while(pstr) {
 		tokens.push_back(pstr);
-		pstr = strtok(NULL, " :=\t");
+		pstr = strtok(NULL, " =\t");
 	}
 	delete[] szline;
 
