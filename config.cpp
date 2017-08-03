@@ -30,6 +30,8 @@ void CConfig::ParseLine(std::string line)
 			_service = LibreFm;
 		else if(tokens[0] == "port")
 			_mport = atoi(tokens[1].c_str());
+		else if(tokens[0] == "composerfolder")
+			_composerfolder = tokens[1];
 		else if(tokens[0] == "runas")
 			_runninguser = tokens[1];
 		else if(tokens[0] == "debug") {
@@ -65,6 +67,7 @@ CConfig::CConfig(char* cfg)
 	_service = LastFm;
 	_mport = 6600;
 	_debug = false;
+    _composerfolder = "";
 
 	std::string path = "";
 

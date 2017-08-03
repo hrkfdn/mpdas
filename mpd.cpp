@@ -145,9 +145,20 @@ void CMPD::Update()
 Song::Song(struct mpd_song *song)
 {
     const char* temp;
+    const char* composer = mpd_song_get_tag(song, MPD_TAG_COMPOSER, 0);
+    std::string _filename = mpd_song_get_uri(song);
 
-    temp = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
-    artist = temp ? temp : "";
+    if (!Config->getMComposerFolder().empty()) {
+        if (composer && _filename.find(Config->getMComposerFolder()) != std::string::npos) {
+            artist = composer;
+        } else {
+            temp = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
+            artist = temp ? temp : "";
+        }
+    } else {
+        temp = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
+        artist = temp ? temp : "";
+    }
 
     temp = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
     title = temp ? temp : "";
