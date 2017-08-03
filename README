@@ -37,16 +37,16 @@ from now on.
 
 Configuration options:
 
-username:		Last.FM username
-password:		Last.FM password (plain-text)
-host:			MPD Host
-mpdpassword:		MPD Password
-port:			MPD Port
-composerfolder:	Folder holding files that must
+username:       Last.FM username
+password:       Last.FM password (plain-text)
+host:           MPD Host
+mpdpassword:    MPD Password
+port:           MPD Port
+composerfolder: Folder holding files that must
                 submit composer tags instead of
                 artist tags
-runas:			Change the user mpdas runs as
-debug:			Print debug information
+runas:          Change the user mpdas runs as
+debug:          Print debug information
 service:        Will scrobble to Libre.fm if set
                 to "librefm"
 
