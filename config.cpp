@@ -1,21 +1,44 @@
 #include "mpdas.h"
+#include <regex>
 
 CConfig* Config = 0;
+
+std::vector<std::string> split_first(const std::string line, const std::regex re)
+{
+	std::vector<std::string> result{
+		std::sregex_token_iterator{line.begin(), line.end(), re, {-1, 0}}, {}
+	};
+
+	if (result.size() > 3) {
+		std::string first = result[0];
+		std::string rest;
+
+		// merge rest of the splitted parts into one string
+		for (std::vector<std::string>::const_iterator i = result.begin() + 2;
+				i != result.end();
+				++i) {
+			rest += *i;
+		}
+
+		return {first, rest};
+	} else if (result.size() == 3) {
+		return {result[0], result[2]};
+	} else if (result.size()) {
+		return {result[0]};
+	} else {
+		return {};
+	}
+}
 
 void CConfig::ParseLine(std::string line)
 {
 	std::vector<std::string> tokens;
-	char* pstr = 0;
-	char* szline = new char[line.size()+1];
 
-	strncpy(szline, line.c_str(), line.size()+1);
+	std::regex delimiter_re("([=|:]|[[:blank:]])+");
 
-	pstr = strtok(szline, " =\t");
-	while(pstr) {
-		tokens.push_back(pstr);
-		pstr = strtok(NULL, " =\t");
+	if(line.size() > 1) {
+		tokens = split_first(line, delimiter_re);
 	}
-	delete[] szline;
 
 	if(tokens.size() > 1) {
 		if(tokens[0] == "username")
