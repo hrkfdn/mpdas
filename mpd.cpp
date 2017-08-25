@@ -5,7 +5,11 @@ CMPD* MPD = 0;
 void CMPD::SetSong(const Song *song)
 {
     _cached = false;
-    if(song && !song->getArtist().empty() && !song->getTitle().empty()) {
+    iprintf("song->getArtist().empty(): %d", song->getArtist().empty());
+    iprintf("song->getTitle().empty(): %d", song->getTitle().empty());
+    // Proceed only if the song title can potentially parsed
+    if (song && !((song->getArtist().empty() && song->getTitle().find(" - ") == std::string::npos) ||
+                  (song->getTitle().empty()))) {
         _song = *song;
         _gotsong = true;
         iprintf("New song: %s - %s", _song.getArtist().c_str(), _song.getTitle().c_str());
@@ -19,11 +23,18 @@ void CMPD::SetSong(const Song *song)
 
 void CMPD::CheckSubmit(int curplaytime)
 {
-    if(!_gotsong || _cached || (_song.getArtist().empty() || _song.getTitle().empty())) return;
-    if(curplaytime - _start >= 240 || curplaytime - _start >= _song.getDuration()/2) {
+    // Proceed only if the song can potentially be parsed.
+	if(!_gotsong || _cached ||
+       (_song.getArtist().empty() && _song.getTitle().find(" - ") == std::string::npos) ||
+       (_song.getTitle().empty())) return;
+    // If the song has a duration of 0, scrobble after 30 s. Otherwise, scrobble
+    // after 240 s or half the duration of the song, whichever comes first.
+	if(curplaytime - _start >= 240 ||
+       (_song.getDuration() > 0 ? (curplaytime - _start >= _song.getDuration() / 2) :
+        (curplaytime - _start >= 30))) {
         Cache->AddToCache(_song, _starttime);
         _cached = true;
-    }
+	}
 }
 
 CMPD::CMPD()
@@ -35,10 +46,12 @@ CMPD::CMPD()
     _songid = -1;
     _songpos = -1;
 
-    if(Connect())
-        iprintf("%s", "Connected to MPD.");
-    else
-        eprintf("%s", "Could not connect to MPD.");
+    _previousSongTitle = "";
+
+	if(Connect())
+		iprintf("%s", "Connected to MPD.");
+	else
+		eprintf("%s", "Could not connect to MPD.");
 }
 
 CMPD::~CMPD()
@@ -95,14 +108,24 @@ void CMPD::Update()
         int newsongid = mpd_status_get_song_id(status);
         int newsongpos = mpd_status_get_elapsed_time(status);
         int curplaytime = mpd_stats_get_play_time(stats);
+        mpd_song *song = mpd_run_current_song(_conn);
 
-        // new song
-        if(newsongid != _songid) {
+        std::string currentSongTitle = "";
+        if (song) {
+            const char *tmpTitle = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
+            currentSongTitle = tmpTitle ? tmpTitle : "";
+        }
+
+
+        // new song: Update if the new song ID is different or the title of the
+        // song has changed.
+        if(newsongid != _songid || _previousSongTitle != currentSongTitle) {
             _songid = newsongid;
             _songpos = newsongpos;
             _start = curplaytime;
 
-            mpd_song *song = mpd_run_current_song(_conn);
+            _previousSongTitle = currentSongTitle;
+
             if(song) {
                 GotNewSong(song);
                 mpd_song_free(song);

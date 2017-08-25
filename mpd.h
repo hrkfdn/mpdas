@@ -40,12 +40,14 @@ class CMPD
         mpd_connection *_conn;
         int _songid;
         int _songpos;
-        Song _song;
-        bool _gotsong;
-        int _start;
-        time_t _starttime;
-        bool _connected;
-        bool _cached;
+		Song _song;
+		bool _gotsong;
+		int _start;
+		time_t _starttime;
+		bool _connected;
+		bool _cached;
+
+        std::string _previousSongTitle;
 };
 
 extern CMPD* MPD;

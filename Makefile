@@ -2,7 +2,11 @@ VERSION = 0.4.3
 
 CXX	?= g++
 OBJ	= main.o md5.o utils.o mpd.o audioscrobbler.o cache.o config.o
+MAIN_OBJ = main.o
+TESTS_DIR = tests
+TESTS_OBJ = tests.o
 OUT	= mpdas
+TESTS_OUT = mpdas_tests
 PREFIX ?= /usr/local
 MANPREFIX ?= ${PREFIX}/man/man1
 CONFIG ?= $(PREFIX)/etc
@@ -13,7 +17,7 @@ LIBS		= `pkg-config --libs libmpdclient libcurl`
 CXXFLAGS	+= -DCONFDIR="\"$(CONFIG)\"" -DVERSION="\"$(VERSION)\""
 
 
-all: $(OUT)
+all: $(OUT) $(TESTS_OUT)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
@@ -21,8 +25,12 @@ all: $(OUT)
 $(OUT): $(OBJ)
 	$(CXX) $(LDFLAGS) $(OBJ) $(LIBS) -o $(OUT)
 
+$(TESTS_OUT): $(OBJ) $(TESTS_DIR)/$(TESTS_OBJ)
+	@echo [LD] $@
+	@$(CXX) $(LDFLAGS) $(filter-out $(MAIN_OBJ), $(OBJ)) $(TESTS_DIR)/$(TESTS_OBJ) $(LIBS) -o $(TESTS_DIR)/$(TESTS_OUT)
+
 clean:
-	rm -rf $(OBJ) $(OUT)
+	rm -rf $(OBJ) $(OUT) $(TESTS_DIR)/$(TESTS_OBJ) $(TESTS_DIR)/$(TESTS_OUT)
 
 install: all
 	install -d ${DESTDIR}${PREFIX}/bin
