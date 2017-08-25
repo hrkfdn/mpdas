@@ -2,3 +2,4 @@ username = fhen
 password = password
 runas = mpd
 debug = 1
+composerfolder = classical-music/
