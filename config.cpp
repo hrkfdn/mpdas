@@ -4,7 +4,7 @@ CConfig* Config = 0;
 
 int IniHandler(void* param, const char* section, const char* name, const char* value)
 {
-    CConfig *config = (CConfig*)param;
+    CConfig* config = (CConfig*)param;
     config->Set(name, value);
     return 1;
 }

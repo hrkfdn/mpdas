@@ -6,7 +6,8 @@ mpdas \- Music Player Daemon AudioScrobbler
 .B mpdas
 [options]
 .SH "DESCRIPTION"
-mpdas is a MPD AudioScrobbler client using libmpd to retrieve the song data from MPD and libcurl to post it to Last.fm.
+mpdas is a MPD AudioScrobbler client using libmpd to retrieve the song data
+from MPD and libcurl to post it to Last.fm.
 .SH "OPTIONS"
 .TP
 .B \-c CONFIGFILE
@@ -21,7 +22,8 @@ Display help.
 .B \-v
 Display version.
 .SH "CONFIGURATION"
-When mpdas starts it tries to read the configuration file $SYSCONFIGDIR/mpdasrc first, then the user configuration file ~/.mpdasrc.
+When mpdas starts it tries to read the configuration file $SYSCONFIGDIR/mpdasrc first, then the user configuration file at ~/.config/mpdas (taken from $XDG_CONFIG_HOME if set) or ~/.mpdasrc.
+.TP
 An example configuration file (mpdasrc.example) is usually provided with mpdas.
 .TP
 .B username = LASTFM USERNAME

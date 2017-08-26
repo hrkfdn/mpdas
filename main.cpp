@@ -101,8 +101,17 @@ int main(int argc, char* argv[])
 
     // Load config in home dir as well (if possible)
     if(config == 0) {
-	std::string path = getenv("HOME");
-	path.append("/.mpdasrc");
+	std::string home = getenv("HOME");
+	std::string xdgconfig = home + "/.config";
+
+	if(getenv("XDG_CONFIG_HOME")) {
+	    xdgconfig = std::string(getenv("XDG_CONFIG_HOME"));
+	}
+
+	std::string path = home + "/.mpdasrc";
+	std::string xdgpath = xdgconfig + "/mpdas";
+
+	Config->LoadConfig(xdgpath);
 	Config->LoadConfig(path);
     }
 
