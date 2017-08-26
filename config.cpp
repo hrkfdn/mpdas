@@ -5,7 +5,16 @@ CConfig* Config = 0;
 int IniHandler(void* param, const char* section, const char* name, const char* value)
 {
     CConfig* config = (CConfig*)param;
-    config->Set(name, value);
+    std::string val = std::string(value);
+
+    // strip quotes if they exist to allow passwords to begin with a whitespace
+    if(val.length() >= 2 && val.front() == '\"' && val.back() == '\"') {
+	val.erase(0, 1);
+	val.erase(val.length() - 1);
+    }
+
+    config->Set(name, val);
+
     return 1;
 }
 
