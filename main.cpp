@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 	}
 
 	std::string path = home + "/.mpdasrc";
-	std::string xdgpath = xdgconfig + "/mpdas";
+	std::string xdgpath = xdgconfig + "/mpdasrc";
 
 	Config->LoadConfig(xdgpath);
 	Config->LoadConfig(path);
