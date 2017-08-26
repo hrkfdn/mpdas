@@ -303,16 +303,22 @@ bool CAudioScrobbler::SendNowPlaying(const Song& song)
 
 void CAudioScrobbler::Handshake()
 {
-    std::string username="";
+    std::string username = "";
     for(unsigned int i = 0; i < Config->Get("username").length(); i++) {
 	username.append(1, tolower(Config->Get("username").c_str()[i]));
     }
-    std::string authtoken(md5sum((char*)"%s%s", username.c_str(), Config->Get("password").c_str()));
+    std::string password = Config->Get("password");
+
+    char* username_escaped = curl_easy_escape(_handle, username.c_str(), username.length());
+    char* password_escaped = curl_easy_escape(_handle, password.c_str(), password.length());
 
     std::ostringstream query, sig;
-    query << "method=auth.getMobileSession&username=" << username << "&password=" << Config->Get("password").c_str() << "&api_key=" << APIKEY;
+    query << "method=auth.getMobileSession&username=" << username_escaped << "&password=" << password_escaped << "&api_key=" << APIKEY;
 
-    sig << "api_key" << APIKEY << "methodauth.getMobileSession" << "password" << Config->Get("password").c_str() << "username" << username << SECRET;
+    curl_free(username_escaped);
+    curl_free(password_escaped);
+
+    sig << "api_key" << APIKEY << "methodauth.getMobileSession" << "password" << password << "username" << username << SECRET;
     std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
 
     query << "&api_sig=" << sighash;
