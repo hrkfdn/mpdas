@@ -63,20 +63,20 @@ void CAudioScrobbler::OpenURL(std::string url, const char* postfields = 0, char*
     // Sometimes last.fm likes to just timeout for no reason, leaving us hanging.
     // If this happens, retry a few times with a small delay.
     if (res != CURLE_OK) {
-        eprintf("libcurl error (%d): %s", res, curl_easy_strerror(res));
-        eprintf("Will retry %d times with a %d second delay.", CURL_MAX_RETRIES, CURL_RETRY_DELAY);
+	eprintf("libcurl error (%d): %s", res, curl_easy_strerror(res));
+	eprintf("Will retry %d times with a %d second delay.", CURL_MAX_RETRIES, CURL_RETRY_DELAY);
 
-        int retries = 0;
-        do {
-            sleep(CURL_RETRY_DELAY);
-            retries++;
-            eprintf("Retry %d/%d", retries, CURL_MAX_RETRIES);
+	int retries = 0;
+	do {
+	    sleep(CURL_RETRY_DELAY);
+	    retries++;
+	    eprintf("Retry %d/%d", retries, CURL_MAX_RETRIES);
 
-            res = curl_easy_perform(_handle);
-            if (res != CURLE_OK) {
-                eprintf("Failed: %s", curl_easy_strerror(res));
-            }
-        } while (res != CURLE_OK && retries < CURL_MAX_RETRIES);
+	    res = curl_easy_perform(_handle);
+	    if (res != CURLE_OK) {
+		eprintf("Failed: %s", curl_easy_strerror(res));
+	    }
+	} while (res != CURLE_OK && retries < CURL_MAX_RETRIES);
     }
 }
 
@@ -304,15 +304,15 @@ bool CAudioScrobbler::SendNowPlaying(const Song& song)
 void CAudioScrobbler::Handshake()
 {
     std::string username="";
-    for(unsigned int i = 0; i < Config->getLUsername().length(); i++) {
-	username.append(1, tolower(Config->getLUsername().c_str()[i]));
+    for(unsigned int i = 0; i < Config->Get("username").length(); i++) {
+	username.append(1, tolower(Config->Get("username").c_str()[i]));
     }
-    std::string authtoken(md5sum((char*)"%s%s", username.c_str(), Config->getLPassword().c_str()));
+    std::string authtoken(md5sum((char*)"%s%s", username.c_str(), Config->Get("password").c_str()));
 
     std::ostringstream query, sig;
-    query << "method=auth.getMobileSession&username=" << username << "&password=" << Config->getLPassword().c_str() << "&api_key=" << APIKEY;
+    query << "method=auth.getMobileSession&username=" << username << "&password=" << Config->Get("password").c_str() << "&api_key=" << APIKEY;
 
-    sig << "api_key" << APIKEY << "methodauth.getMobileSession" << "password" << Config->getLPassword().c_str() << "username" << username << SECRET;
+    sig << "api_key" << APIKEY << "methodauth.getMobileSession" << "password" << Config->Get("password").c_str() << "username" << username << SECRET;
     std::string sighash(md5sum((char*)"%s", sig.str().c_str()));
 
     query << "&api_sig=" << sighash;

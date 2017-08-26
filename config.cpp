@@ -2,79 +2,62 @@
 
 CConfig* Config = 0;
 
-void CConfig::ParseLine(std::string line)
+int IniHandler(void* param, const char* section, const char* name, const char* value)
 {
-	std::vector<std::string> tokens;
-	char* pstr = 0;
-	char* szline = new char[line.size()+1];
-
-	strncpy(szline, line.c_str(), line.size()+1);
-
-	pstr = strtok(szline, " =\t");
-	while(pstr) {
-		tokens.push_back(pstr);
-		pstr = strtok(NULL, " =\t");
-	}
-	delete[] szline;
-
-	if(tokens.size() > 1) {
-		if(tokens[0] == "username")
-			_lusername = tokens[1];
-		else if(tokens[0] == "password")
-			_lpassword = tokens[1];
-		else if(tokens[0] == "host")
-			_mhost = tokens[1];
-		else if(tokens[0] == "mpdpassword")
-			_mpassword = tokens[1];
-		else if(tokens[0] == "service" && tokens[1] == "librefm")
-			_service = LibreFm;
-		else if(tokens[0] == "port")
-			_mport = atoi(tokens[1].c_str());
-		else if(tokens[0] == "runas")
-			_runninguser = tokens[1];
-		else if(tokens[0] == "debug") {
-			if(tokens[1] == "1" || tokens[1] == "true")
-				_debug = true;
-		}
-
-	}
+    CConfig *config = (CConfig*)param;
+    config->Set(name, value);
+    return 1;
 }
 
 void CConfig::LoadConfig(std::string path)
 {
-	std::string line = "";
+    if(ini_parse(path.c_str(), &IniHandler, this) < 0) {
+	iprintf("Cannot parse config file (%s).", path.c_str());
+	return;
+    }
+}
+std::string CConfig::Get(std::string name)
+{
+    if(_configuration.find(name) == _configuration.end()) {
+	return "";
+    }
 
-	std::ifstream ifs(path.c_str(), std::ios::in);
+    return _configuration.find(name)->second;
+}
 
-	if(!ifs.good()) {
-		iprintf("Config file (%s) does not exist or is not readable.", path.c_str());
-		return;
-	}
+bool CConfig::GetBool(std::string name)
+{
+    std::string value = Get(name);
+    return value == "1" || value == "true";
+}
 
-	while(ifs.good()) {
-		getline(ifs, line);
-		ParseLine(line);
-	}
+int CConfig::GetInt(std::string name)
+{
+    return atoi(Get(name).c_str());
+}
 
+ScrobblingService CConfig::getService()
+{
+    return Get("service") == "librefm" ? LibreFm : LastFm;
 }
 
 CConfig::CConfig(char* cfg)
 {
-	/* Set optional settings to default */
-	_mhost = "localhost";
-	_service = LastFm;
-	_mport = 6600;
-	_debug = false;
+    /* Set optional settings to default */
+    Set("host", "localhost");
+    Set("port", "6600");
+    Set("debug", "false");
+    Set("service", "lastfm");
 
-	std::string path = "";
+    std::string path = "";
 
-	if(!cfg) {
-		path = CONFDIR;
-		path.append("/mpdasrc");
-	}
-	else {
-		path = cfg;
-	}
+    if(!cfg) {
+	path = CONFDIR;
+	path.append("/mpdasrc");
+    }
+    else {
+	path = cfg;
+    }
 
-	LoadConfig(path);
+    LoadConfig(path);
 }

@@ -45,7 +45,7 @@ void setid(const char* username)
 
 void printversion()
 {
-    fprintf(stdout, "mpdas-"VERSION", (C) 2010-2017 Henrik Friedrichsen.\n");
+    fprintf(stdout, "mpdas-" VERSION", (C) 2010-2017 Henrik Friedrichsen.\n");
     fprintf(stdout, "Global config path is set to \"%s\"\n", CONFDIR);
 }
 
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 
     Config = new CConfig(config);
 
-    setid(Config->getRUser().c_str());
+    setid(Config->Get("runas").c_str());
 
     // Load config in home dir as well (if possible)
     if(config == 0) {

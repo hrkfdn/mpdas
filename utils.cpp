@@ -85,7 +85,7 @@ void eprintf(const char* fmt, ...)
 
 void iprintf(const char* fmt, ...)
 {
-	if(Config && Config->getDebug() == false)
+	if(Config && Config->GetBool("debug") == false)
 		return;
 
 	char* abuf;

@@ -19,12 +19,15 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <map>
 
 #include <curl/curl.h>
 
 #include <mpd/client.h>
 #include <curl/curl.h>
 #include "md5.h"
+
+#include "ini.h"
 
 #include "config.h"
 #include "utils.h"
