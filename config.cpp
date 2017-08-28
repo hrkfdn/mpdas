@@ -8,7 +8,7 @@ int IniHandler(void* param, const char* section, const char* name, const char* v
     std::string val = std::string(value);
 
     // strip quotes if they exist to allow passwords to begin with a whitespace
-    if(val.length() >= 2 && val.front() == '\"' && val.back() == '\"') {
+    if(val.length() >= 2 && val[0] == '\"' && val[val.length()-1] == '\"') {
 	val.erase(0, 1);
 	val.erase(val.length() - 1);
     }
