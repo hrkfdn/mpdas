@@ -155,5 +155,8 @@ Song::Song(struct mpd_song *song)
     temp = mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
     album = temp ? temp : "";
 
+    temp = mpd_song_get_tag(song, MPD_TAG_ALBUM_ARTIST, 0);
+    albumartist = temp ? temp : "";
+
     duration = mpd_song_get_duration(song);
 }

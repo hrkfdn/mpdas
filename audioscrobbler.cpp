@@ -90,7 +90,7 @@ std::string CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& 
 {
     const Song& song = entry.getSong();
     std::ostringstream msg, sigmsg ;
-    std::string artist, title, album;
+    std::string artist, title, album, albumartist;
 
     char* temp = 0;
     temp = curl_easy_escape(_handle, song.getArtist().c_str(), song.getArtist().length());
@@ -102,8 +102,14 @@ std::string CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& 
     temp = curl_easy_escape(_handle, song.getAlbum().c_str(), song.getAlbum().length());
     album = temp;
     curl_free(temp);
+    temp = curl_easy_escape(_handle, song.getAlbumArtist().c_str(), song.getAlbumArtist().length());
+    albumartist = temp;
+    curl_free(temp);
 
     msg << "&album=" << album;
+    if(!albumartist.empty()) {
+      msg << "&albumArtist=" << albumartist;
+    }
     msg << "&api_key=" << APIKEY;
     msg << "&artist=" << artist;
     msg << "&duration=" << song.getDuration();
@@ -113,6 +119,9 @@ std::string CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& 
     msg << "&sk=" << _sessionid;
 
     sigmsg << "album" << song.getAlbum();
+    if(!albumartist.empty()) {
+      sigmsg << "albumArtist" << song.getAlbumArtist();
+    }
     sigmsg << "api_key" << APIKEY;
     sigmsg << "artist" << song.getArtist();
     sigmsg << "duration" << song.getDuration();
@@ -257,21 +266,27 @@ bool CAudioScrobbler::SendNowPlaying(const Song& song)
     char* artist = curl_easy_escape(_handle, song.getArtist().c_str(), 0);
     char* title = curl_easy_escape(_handle, song.getTitle().c_str(), 0);
     char* album = song.getAlbum().empty() ? 0 : curl_easy_escape(_handle, song.getAlbum().c_str(), 0);
+    char* albumartist = song.getAlbumArtist().empty() ? 0 : curl_easy_escape(_handle, song.getAlbumArtist().c_str(), 0);
 
     std::ostringstream query, sig;
     query << "method=track.updateNowPlaying&track=" << title
-	<< "&artist=" << artist
-	<< "&duration=" << song.getDuration()
-	<< "&api_key=" << APIKEY
-	<< "&sk=" << _sessionid;
+	  << "&artist=" << artist
+	  << "&duration=" << song.getDuration()
+	  << "&api_key=" << APIKEY
+	  << "&sk=" << _sessionid;
     if(album) {
-	query << "&album=" << album;
-	sig << "album" << song.getAlbum();
+      query << "&album=" << album;
+      sig << "album" << song.getAlbum();
+    }
+    if(albumartist) {
+      query << "&albumArtist=" << albumartist;
+      sig << "albumArtist" << song.getAlbumArtist();
     }
 
     curl_free(artist);
     curl_free(title);
     curl_free(album);
+    curl_free(albumartist);
 
     sig << "api_key" << APIKEY
 	<< "artist" << song.getArtist()

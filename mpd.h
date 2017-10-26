@@ -15,9 +15,10 @@ class Song {
         std::string getArtist() const { return artist; }
         std::string getTitle() const { return title; }
         std::string getAlbum() const { return album; }
+	std::string getAlbumArtist() const { return albumartist; }
         int getDuration() const { return duration; }
     private:
-        std::string artist, title, album;
+        std::string albumartist, artist, title, album;
         int duration;
 };
 
