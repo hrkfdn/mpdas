@@ -262,8 +262,8 @@ void CAudioScrobbler::Handshake()
     CLastFMMessage msg(_handle);
 
     msg.AddField("method", "auth.getMobileSession");
-    msg.AddField("username", username.c_str());
-    msg.AddField("password", password.c_str());
+    msg.AddField("username", username);
+    msg.AddField("password", password);
     msg.AddField("api_key", APIKEY);
 
     OpenURL(GetServiceURL(), msg.GetMessage().c_str());
