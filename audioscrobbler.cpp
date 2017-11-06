@@ -264,7 +264,16 @@ void CAudioScrobbler::Handshake()
 
 	msg.AddField("method", "auth.getMobileSession");
 	msg.AddField("username", username);
-	msg.AddField("password", password);
+
+	if(_cfg->getService() == LastFm) {
+		msg.AddField("password", password);
+	}
+	else {
+		std::string password_hashed(md5sum((char*)"%s", password.c_str()));
+		std::string authtoken(md5sum((char*)"%s%s", username.c_str(), password_hashed.c_str()));
+		msg.AddField("authToken", authtoken);
+		msg.AddField("password", password_hashed);
+	}
 	msg.AddField("api_key", APIKEY);
 
 	OpenURL(GetServiceURL(), msg.GetMessage().c_str());
