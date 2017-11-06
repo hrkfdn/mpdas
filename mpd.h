@@ -25,7 +25,7 @@ class Song {
 class CMPD
 {
     public:
-        CMPD();
+        CMPD(CConfig *cfg);
         ~CMPD();
 
         bool Connect();
@@ -38,6 +38,7 @@ class CMPD
     private:
         void GotNewSong(struct mpd_song *song);
 
+	CConfig *_cfg;
         mpd_connection *_conn;
         int _songid;
         int _songpos;

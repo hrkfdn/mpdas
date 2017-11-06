@@ -26,8 +26,9 @@ void CMPD::CheckSubmit(int curplaytime)
     }
 }
 
-CMPD::CMPD()
+CMPD::CMPD(CConfig *cfg)
 {
+    _cfg = cfg;
     _conn = NULL;
     _gotsong = false;
     _connected = false;
@@ -52,11 +53,11 @@ bool CMPD::Connect()
     if(_conn)
         mpd_connection_free(_conn);
 
-    _conn = mpd_connection_new(Config->Get("host").c_str(), Config->GetInt("port"), 0);
+    _conn = mpd_connection_new(_cfg->Get("host").c_str(), _cfg->GetInt("port"), 0);
     _connected = _conn && mpd_connection_get_error(_conn) == MPD_ERROR_SUCCESS;
 
-    if(_connected && Config->Get("mpdpassword").size() > 0) {
-        _connected &= mpd_run_password(_conn, Config->Get("mpdpassword").c_str());
+    if(_connected && _cfg->Get("mpdpassword").size() > 0) {
+        _connected &= mpd_run_password(_conn, _cfg->Get("mpdpassword").c_str());
     }
     else if(!_connected) {
         eprintf("MPD connection error: %s", mpd_connection_get_error_message(_conn));

@@ -85,9 +85,6 @@ void eprintf(const char* fmt, ...)
 
 void iprintf(const char* fmt, ...)
 {
-	if(Config && Config->GetBool("debug") == false)
-		return;
-
 	char* abuf;
 	va_list ap;
 	va_start(ap, fmt);

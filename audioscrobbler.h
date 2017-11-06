@@ -5,7 +5,7 @@
 class CAudioScrobbler
 {
  public:
-  CAudioScrobbler();
+  CAudioScrobbler(CConfig *cfg);
   ~CAudioScrobbler();
 
   void Handshake();
@@ -20,6 +20,7 @@ class CAudioScrobbler
   void OpenURL(std::string url, const char* postfields, char* errbuf);
   bool CheckFailure(std::string response);
 
+  CConfig *_cfg;
   CURL* _handle;
 
   std::string _password;

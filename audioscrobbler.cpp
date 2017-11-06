@@ -15,8 +15,9 @@ size_t writecb(void* ptr, size_t size, size_t nmemb, void *stream)
     return size*nmemb;
 }
 
-CAudioScrobbler::CAudioScrobbler()
+CAudioScrobbler::CAudioScrobbler(CConfig *cfg)
 {
+    _cfg = cfg;
     _failcount = 0;
     _authed = false;
     _response = "";
@@ -35,7 +36,7 @@ CAudioScrobbler::~CAudioScrobbler()
 
 std::string CAudioScrobbler::GetServiceURL()
 {
-    if(Config->getService() == LibreFm) {
+    if(_cfg->getService() == LibreFm) {
 	return "https://libre.fm/2.0/";
     }
     return "https://ws.audioscrobbler.com/2.0/";
@@ -254,10 +255,10 @@ bool CAudioScrobbler::SendNowPlaying(const Song& song)
 void CAudioScrobbler::Handshake()
 {
     std::string username = "";
-    for(unsigned int i = 0; i < Config->Get("username").length(); i++) {
-	username.append(1, tolower(Config->Get("username").c_str()[i]));
+    for(unsigned int i = 0; i < _cfg->Get("username").length(); i++) {
+	username.append(1, tolower(_cfg->Get("username").c_str()[i]));
     }
-    std::string password = Config->Get("password");
+    std::string password = _cfg->Get("password");
 
     CLastFMMessage msg(_handle);
 
