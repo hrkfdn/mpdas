@@ -7,8 +7,8 @@ int IniHandler(void* param, const char* section, const char* name, const char* v
 
     // strip quotes if they exist to allow passwords to begin with a whitespace
     if(val.length() >= 2 && val[0] == '\"' && val[val.length()-1] == '\"') {
-	val.erase(0, 1);
-	val.erase(val.length() - 1);
+		val.erase(0, 1);
+		val.erase(val.length() - 1);
     }
 
     config->Set(name, val);
@@ -19,14 +19,14 @@ int IniHandler(void* param, const char* section, const char* name, const char* v
 void CConfig::LoadConfig(std::string path)
 {
     if(ini_parse(path.c_str(), &IniHandler, this) < 0) {
-	iprintf("Cannot parse config file (%s).", path.c_str());
-	return;
+		iprintf("Cannot parse config file (%s).", path.c_str());
+		return;
     }
 }
 std::string CConfig::Get(std::string name)
 {
     if(_configuration.find(name) == _configuration.end()) {
-	return "";
+		return "";
     }
 
     return _configuration.find(name)->second;
@@ -59,11 +59,11 @@ CConfig::CConfig(char* cfg)
     std::string path = "";
 
     if(!cfg) {
-	path = CONFDIR;
-	path.append("/mpdasrc");
+		path = CONFDIR;
+		path.append("/mpdasrc");
     }
     else {
-	path = cfg;
+		path = cfg;
     }
 
     LoadConfig(path);
