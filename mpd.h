@@ -19,7 +19,7 @@ public:
 	int getDuration() const { return duration; }
 private:
 	std::string albumartist, artist, title, album;
-	int duration;
+	int duration = -1;
 };
 
 class CMPD

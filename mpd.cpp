@@ -96,9 +96,8 @@ void CMPD::Update()
         int newsongid = mpd_status_get_song_id(status);
         int newsongpos = mpd_status_get_elapsed_time(status);
         int curplaytime = mpd_stats_get_play_time(stats);
-
-        // new song
-        if(newsongid != _songid) {
+        // new song (or the same song but from the beginning after it has been played long enough before)
+        if(newsongid != _songid || (_song.getDuration() != -1 && _songpos > (_song.getDuration()/2) && newsongpos < _songpos && newsongpos < 10)) {
             _songid = newsongid;
             _songpos = newsongpos;
             _start = curplaytime;
@@ -107,6 +106,8 @@ void CMPD::Update()
             if(song) {
                 GotNewSong(song);
                 mpd_song_free(song);
+            } else {
+                _song = Song();
             }
         }
 
