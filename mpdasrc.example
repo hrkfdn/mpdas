@@ -1,4 +1,31 @@
-username = fhen
+# Set your Last.fm/Libre.fm username
+
+username = login
+
+# Set your Last.fm/Libre.fm password
+
 password = password
+
+# Set the hostname used by MPD
+
+host = localhost
+
+# Set the password used by MPD
+
+mpdpassword = MPD_password
+
+# Set the port used by MPD
+
+port = 6600
+
+# Changes the user mpdas runs as
+
 runas = mpd
+
+# Print out debug information
+
 debug = 1
+
+# Will scrobble to Libre.fm if set to "librefm". Otherwise Last.fm is used (default)
+
+service = librefm
