@@ -112,7 +112,7 @@ std::string CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& 
 		msg.AddField("mbid", song.getMusicBrainzId());
 	}
 
-	if(!song.getTrack() == -1) {
+	if(!song.getTrack().empty()) {
 		msg.AddField("trackNumber", song.getTrack());
 	}
 
@@ -248,7 +248,7 @@ bool CAudioScrobbler::SendNowPlaying(const Song& song)
 		msg.AddField("mbid", song.getMusicBrainzId());
 	}
 
-	if(!song.getTrack() == -1) {
+	if(!song.getTrack().empty()) {
 		msg.AddField("trackNumber", song.getTrack());
 	}
 
