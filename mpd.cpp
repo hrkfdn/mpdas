@@ -160,5 +160,11 @@ Song::Song(struct mpd_song *song)
     temp = mpd_song_get_tag(song, MPD_TAG_ALBUM_ARTIST, 0);
     albumartist = temp ? temp : "";
 
+    temp = mpd_song_get_tag(song, MPD_TAG_TRACK, 0);
+    track = temp ? temp : -1;
+
+    temp = mpd_song_get_tag(song, MPD_TAG_MUSICBRAINZ_TRACKID , 0);
+    mbid = temp ? temp : "";
+
     duration = mpd_song_get_duration(song);
 }
