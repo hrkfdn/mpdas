@@ -5,7 +5,7 @@ class Song {
 public:
 	Song() {};
 	Song(struct mpd_song *song);
-        Song(std::string artist, std::string title, std::string album, int duration, int track, std::string mbid) {
+  Song(std::string artist, std::string title, std::string album, int duration, std::string track, std::string mbid) {
 		this->artist = artist;
 		this->title = title;
 		this->album = album;
@@ -22,9 +22,8 @@ public:
      	int getTrack() const { return track; }
 	std::string getMusicBrainzId() const { return mbid; }
 private:
-        std::string albumartist, artist, title, album,  mbid;
+        std::string albumartist, artist, title, album, track,mbid;
 	int duration = -1;
-        int track = -1;
 };
 
 class CMPD
