@@ -5,13 +5,13 @@ class Song {
 public:
 	Song() {};
 	Song(struct mpd_song *song);
-        Song(std::string artist, std::string title, std::string album, int duration, int track, std::string mpid) {
+        Song(std::string artist, std::string title, std::string album, int duration, int track, std::string mbid) {
 		this->artist = artist;
 		this->title = title;
 		this->album = album;
 		this->duration = duration;
 		this->track = track;
-		this->mpid = mpid;
+		this->mbid = mbid;
 	}
 
 	std::string getArtist() const { return artist; }
