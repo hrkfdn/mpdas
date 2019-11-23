@@ -19,7 +19,7 @@ public:
 	std::string getAlbum() const { return album; }
 	std::string getAlbumArtist() const { return albumartist; }
 	int getDuration() const { return duration; }
-        std:string getTrack() const { return track; }
+        std::string getTrack() const { return track; }
 	std::string getMusicBrainzId() const { return mbid; }
 private:
         std::string albumartist, artist, title, album, track,mbid;
