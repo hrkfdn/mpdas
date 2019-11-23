@@ -97,7 +97,7 @@ std::ofstream& operator <<(std::ofstream& outstream, const CacheEntry& inobj)
 
 std::ifstream& operator >>(std::ifstream& instream, CacheEntry& outobj)
 {
-	std::string artist, title, album;
+        std::string artist, title, album, albumartist, track, mbid;
 	int duration;
 	time_t starttime;
 
