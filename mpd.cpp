@@ -112,8 +112,6 @@ void CMPD::Update()
 		  return;
 		}
 		
-		//iprintf("DEBUG: %i - %i - %i", curplaytime, newsongpos, newsongid);
-		iprintf("DEBUG (duration): %i", song_->getDuration());
 
 		// new song (or the same song but from the beginning after it has been played long enough before)
         if(newsongid != _songid ||
