@@ -35,6 +35,7 @@ CMPD::CMPD(CConfig *cfg)
     _connected = false;
     _cached = false;
     _songid = -1;
+	_song = Song();
     _songpos = -1;
 
     if(Connect())
