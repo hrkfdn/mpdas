@@ -5,7 +5,7 @@ CMPD* MPD = 0;
 void CMPD::SetSong(const Song *song)
 {
     _cached = false;
-    if(song && !song->getArtist().empty() && !song->getTitle().empty() && (_song && (song->getArtist() != _song.getArtist() || song->getTitle() != _song.getTitle()))) {
+    if(song && !song->getArtist().empty() && !song->getTitle().empty() && (_song != NULL && (song->getArtist() != _song.getArtist() || song->getTitle() != _song.getTitle()))) {
         _song = *song;
         _gotsong = true;
         iprintf("New song: %s - %s", _song.getArtist().c_str(), _song.getTitle().c_str());
@@ -33,6 +33,7 @@ CMPD::CMPD(CConfig *cfg)
     _gotsong = false;
     _connected = false;
     _cached = false;
+	_song = NULL;
     _songid = -1;
     _songpos = -1;
 
