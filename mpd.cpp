@@ -100,7 +100,7 @@ void CMPD::Update()
         int curplaytime = mpd_stats_get_play_time(stats);
 		int duration = mpd_status_get_total_time(status);
 		mpd_song *song = mpd_run_current_song(_conn);
-		Song *song_ = song ? new Song(song) : NULL;
+		Song *song_ = song ? new Song(song, duration) : NULL;
 
 		//iprintf("DEBUG: %i - %i - %i", curplaytime, newsongpos, newsongid);
 		iprintf("DEBUG (duration): %i", song_->getDuration());
