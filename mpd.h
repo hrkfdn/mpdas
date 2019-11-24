@@ -4,7 +4,7 @@
 class Song {
 public:
 	Song() {};
-	Song(struct mpd_song *song);
+    Song(struct mpd_song *song, int duration);
     Song(std::string artist, std::string title, std::string album, std::string albumartist, int duration, std::string track, std::string mbid) {
 		this->artist = artist;
 		this->title = title;
@@ -46,7 +46,7 @@ public:
 
 	inline bool isConnected() { return _connected; }
 private:
-	void GotNewSong(struct mpd_song *song);
+    void GotNewSong(struct mpd_song *song, int duration);
 
 	CConfig *_cfg;
 	mpd_connection *_conn;
