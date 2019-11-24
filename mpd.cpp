@@ -98,19 +98,21 @@ void CMPD::Update()
         int newsongid = mpd_status_get_song_id(status);
         int newsongpos = mpd_status_get_elapsed_time(status);
         int curplaytime = mpd_stats_get_play_time(stats);
+		mpd_song *song = mpd_run_current_song(_conn);
+		Song *song_ = song ? new Song(song) : NULL;
 
-		iprintf("DEBUG: %i - %i - %i", curplaytime, newsongpos, newsongid);
+		//iprintf("DEBUG: %i - %i - %i", curplaytime, newsongpos, newsongid);
+		iprintf("DEBUG (duration): %i", song_->getDuration());
 
 		// new song (or the same song but from the beginning after it has been played long enough before)
-        if(newsongid != _songid || (_song.getDuration() != -1 && _songpos > (_song.getDuration()/2) && newsongpos < _songpos && newsongpos < 10)) {
+        if(newsongid != _songid || (song_ and _song != *song_) || (_song.getDuration() != -1 && _songpos > (_song.getDuration()/2) && newsongpos < _songpos && newsongpos < 10)) {
             _songid = newsongid;
             _songpos = newsongpos;
             _start = curplaytime;
-
-            mpd_song *song = mpd_run_current_song(_conn);
+			//_start = 0;
+            
             if(song) {
                 GotNewSong(song);
-                mpd_song_free(song);
             } else {
                 _song = Song();
             }
@@ -121,6 +123,11 @@ void CMPD::Update()
             _songpos = newsongpos;
             CheckSubmit(curplaytime);
         }
+
+		if (song)
+            mpd_song_free(song);
+        if (song_)
+            delete song_;
 
         // check for client-to-client messages
         if(mpd_send_read_messages(_conn)) {
