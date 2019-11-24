@@ -178,5 +178,8 @@ Song::Song(struct mpd_song *song)
     temp = mpd_song_get_tag(song, MPD_TAG_MUSICBRAINZ_TRACKID , 0);
     mbid = temp ? temp : "";
 
-    duration = mpd_song_get_duration(song);
+	mpd_status *status = mpd_run_status(_conn);
+    //duration = mpd_song_get_duration(song);
+	duration = mpd_status_get_total_time(status);
+	mpd_status_free(status);
 }
