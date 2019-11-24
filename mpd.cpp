@@ -71,9 +71,9 @@ bool CMPD::Connect()
     return _connected;
 }
 
-void CMPD::GotNewSong(struct mpd_song *song)
+void CMPD::GotNewSong(struct mpd_song *song, int duration)
 {
-    Song *s = new Song(song);
+    Song *s = new Song(song, duration);
     SetSong(s);
     delete s;
 }
@@ -98,6 +98,7 @@ void CMPD::Update()
         int newsongid = mpd_status_get_song_id(status);
         int newsongpos = mpd_status_get_elapsed_time(status);
         int curplaytime = mpd_stats_get_play_time(stats);
+		int duration = mpd_status_get_total_time(status);
 		mpd_song *song = mpd_run_current_song(_conn);
 		Song *song_ = song ? new Song(song) : NULL;
 
@@ -112,7 +113,7 @@ void CMPD::Update()
 			//_start = 0;
             
             if(song) {
-                GotNewSong(song);
+			  GotNewSong(song, duration);
             } else {
                 _song = Song();
             }
@@ -156,7 +157,7 @@ void CMPD::Update()
     }
 }
 
-Song::Song(struct mpd_song *song)
+Song::Song(struct mpd_song *song, int duration)
 {
     const char* temp;
 
@@ -178,8 +179,6 @@ Song::Song(struct mpd_song *song)
     temp = mpd_song_get_tag(song, MPD_TAG_MUSICBRAINZ_TRACKID , 0);
     mbid = temp ? temp : "";
 
-	mpd_status *status = mpd_run_status(_conn);
     //duration = mpd_song_get_duration(song);
-	duration = mpd_status_get_total_time(status);
-	mpd_status_free(status);
+	this->duration = duration;
 }
