@@ -22,6 +22,11 @@ public:
 	int getDuration() const { return duration; }
     std::string getTrack() const { return track; }
 	std::string getMusicBrainzId() const { return mbid; }
+    bool operator != (const Song &other) const {
+	  return this->getArtist() != other.getArtist() or
+		this->getAlbum() != other.getAlbum() or
+		this->getTitle() != other.getTitle();
+	}
 private:
     std::string albumartist, artist, title, album, track, mbid;
 	int duration = -1;
