@@ -86,10 +86,10 @@ std::ofstream& operator <<(std::ofstream& outstream, const CacheEntry& inobj)
 	outstream << song.getArtist() << std::endl
 			  << song.getTitle() << std::endl
 			  << song.getAlbum() << std::endl
-		          << song.getAlbumArtist() << std::endl
-                          << song.getTrack() << std::endl
-	                  << song.getMusicBrainzId() << std::endl
-         		  << song.getDuration() << std::endl
+	          << song.getAlbumArtist() << std::endl
+			  << song.getTrack() << std::endl
+			  << song.getMusicBrainzId() << std::endl
+			  << song.getDuration() << std::endl
 			  << inobj.getStartTime();
 
 	return outstream;
@@ -97,7 +97,7 @@ std::ofstream& operator <<(std::ofstream& outstream, const CacheEntry& inobj)
 
 std::ifstream& operator >>(std::ifstream& instream, CacheEntry& outobj)
 {
-        std::string artist, title, album, albumartist, track, mbid;
+    std::string artist, title, album, albumartist, track, mbid;
 	int duration;
 	time_t starttime;
 
@@ -105,8 +105,8 @@ std::ifstream& operator >>(std::ifstream& instream, CacheEntry& outobj)
 	getline(instream, title);
 	getline(instream, album);
 	getline(instream, albumartist);
-        getline(instream, track);
-        getline(instream, mbid);
+    getline(instream, track);
+    getline(instream, mbid);
 
 	instream >> duration;
 	instream.ignore(1);

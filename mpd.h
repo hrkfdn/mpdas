@@ -5,7 +5,7 @@ class Song {
 public:
 	Song() {};
 	Song(struct mpd_song *song);
-  Song(std::string artist, std::string title, std::string album, std::string albumartist, int duration, std::string track, std::string mbid) {
+    Song(std::string artist, std::string title, std::string album, std::string albumartist, int duration, std::string track, std::string mbid) {
 		this->artist = artist;
 		this->title = title;
 		this->album = album;
@@ -20,10 +20,10 @@ public:
 	std::string getAlbum() const { return album; }
 	std::string getAlbumArtist() const { return albumartist; }
 	int getDuration() const { return duration; }
-        std::string getTrack() const { return track; }
+    std::string getTrack() const { return track; }
 	std::string getMusicBrainzId() const { return mbid; }
 private:
-        std::string albumartist, artist, title, album, track, mbid;
+    std::string albumartist, artist, title, album, track, mbid;
 	int duration = -1;
 };
 
