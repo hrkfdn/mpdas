@@ -5,7 +5,7 @@ CMPD* MPD = 0;
 void CMPD::SetSong(const Song *song)
 {
     _cached = false;
-    if(song && !song->getArtist().empty() && !song->getTitle().empty()) {
+	if(song && !song->getArtist().empty() && !song->getTitle().empty()) {
         _song = *song;
         _gotsong = true;
         iprintf("New song: %s - %s", _song.getArtist().c_str(), _song.getTitle().c_str());
@@ -34,6 +34,7 @@ CMPD::CMPD(CConfig *cfg)
     _connected = false;
     _cached = false;
     _songid = -1;
+	_song = Song();
     _songpos = -1;
 
     if(Connect())
@@ -69,9 +70,9 @@ bool CMPD::Connect()
     return _connected;
 }
 
-void CMPD::GotNewSong(struct mpd_song *song)
+void CMPD::GotNewSong(struct mpd_song *song, int duration)
 {
-    Song *s = new Song(song);
+    Song *s = new Song(song, duration);
     SetSong(s);
     delete s;
 }
@@ -96,26 +97,47 @@ void CMPD::Update()
         int newsongid = mpd_status_get_song_id(status);
         int newsongpos = mpd_status_get_elapsed_time(status);
         int curplaytime = mpd_stats_get_play_time(stats);
-        // new song (or the same song but from the beginning after it has been played long enough before)
-        if(newsongid != _songid || (_song.getDuration() != -1 && _songpos > (_song.getDuration()/2) && newsongpos < _songpos && newsongpos < 10)) {
+		int duration = mpd_status_get_total_time(status);
+		mpd_song *song = mpd_run_current_song(_conn);
+		Song *song_ = song ? new Song(song, duration) : NULL;
+
+		if(duration == 0){
+		  if (song)
+            mpd_song_free(song);
+		  if (song_)
+            delete song_;
+		  mpd_status_free(status);
+		  mpd_stats_free(stats);
+		  return;
+		}
+		
+
+		// new song (or the same song but from the beginning after it has been played long enough before)
+        if(newsongid != _songid ||
+		   (song_ and _song != *song_) ||
+		   (_song.getDuration() != -1 && _songpos > (_song.getDuration()/2) && newsongpos < _songpos && newsongpos < 10)) {
             _songid = newsongid;
             _songpos = newsongpos;
             _start = curplaytime;
-
-            mpd_song *song = mpd_run_current_song(_conn);
+			//_start = 0;
+            
             if(song) {
-                GotNewSong(song);
-                mpd_song_free(song);
+			  GotNewSong(song, duration);
             } else {
                 _song = Song();
             }
         }
 
         // song playing
-        if(newsongpos != _songpos) {
+        if(newsongpos != _songpos) {  
             _songpos = newsongpos;
             CheckSubmit(curplaytime);
         }
+
+		if (song)
+            mpd_song_free(song);
+        if (song_)
+            delete song_;
 
         // check for client-to-client messages
         if(mpd_send_read_messages(_conn)) {
@@ -144,7 +166,7 @@ void CMPD::Update()
     }
 }
 
-Song::Song(struct mpd_song *song)
+Song::Song(struct mpd_song *song, int duration)
 {
     const char* temp;
 
@@ -160,5 +182,12 @@ Song::Song(struct mpd_song *song)
     temp = mpd_song_get_tag(song, MPD_TAG_ALBUM_ARTIST, 0);
     albumartist = temp ? temp : "";
 
-    duration = mpd_song_get_duration(song);
+    temp = mpd_song_get_tag(song, MPD_TAG_TRACK, 0);
+    track = temp ? temp : "";
+
+    temp = mpd_song_get_tag(song, MPD_TAG_MUSICBRAINZ_TRACKID , 0);
+    mbid = temp ? temp : "";
+
+    //duration = mpd_song_get_duration(song);
+	this->duration = duration;
 }

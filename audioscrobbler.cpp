@@ -108,6 +108,14 @@ std::string CAudioScrobbler::CreateScrobbleMessage(int index, const CacheEntry& 
 		msg.AddField("albumArtist", song.getAlbumArtist());
 	}
 
+	if(!song.getMusicBrainzId().empty()) {
+		msg.AddField("mbid", song.getMusicBrainzId());
+	}
+
+	if(!song.getTrack().empty()) {
+		msg.AddField("trackNumber", song.getTrack());
+	}
+
 	return msg.GetMessage();
 }
 
@@ -234,6 +242,14 @@ bool CAudioScrobbler::SendNowPlaying(const Song& song)
 
 	if(!song.getAlbumArtist().empty()) {
 		msg.AddField("albumArtist", song.getAlbumArtist());
+	}
+
+	if(!song.getMusicBrainzId().empty()) {
+		msg.AddField("mbid", song.getMusicBrainzId());
+	}
+
+	if(!song.getTrack().empty()) {
+		msg.AddField("trackNumber", song.getTrack());
 	}
 
 	OpenURL(GetServiceURL(), msg.GetMessage().c_str());
