@@ -102,11 +102,23 @@ void CMPD::Update()
 		mpd_song *song = mpd_run_current_song(_conn);
 		Song *song_ = song ? new Song(song, duration) : NULL;
 
+		if(duration == 0){
+		  if (song)
+            mpd_song_free(song);
+		  if (song_)
+            delete song_;
+		  mpd_status_free(status);
+		  mpd_stats_free(stats);
+		  return;
+		}
+		
 		//iprintf("DEBUG: %i - %i - %i", curplaytime, newsongpos, newsongid);
 		iprintf("DEBUG (duration): %i", song_->getDuration());
 
 		// new song (or the same song but from the beginning after it has been played long enough before)
-        if(newsongid != _songid || (song_ and _song != *song_) || (_song.getDuration() != -1 && _songpos > (_song.getDuration()/2) && newsongpos < _songpos && newsongpos < 10)) {
+        if(newsongid != _songid ||
+		   (song_ and _song != *song_) ||
+		   (_song.getDuration() != -1 && _songpos > (_song.getDuration()/2) && newsongpos < _songpos && newsongpos < 10)) {
             _songid = newsongid;
             _songpos = newsongpos;
             _start = curplaytime;
