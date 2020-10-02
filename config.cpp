@@ -48,11 +48,21 @@ ScrobblingService CConfig::getService()
     return Get("service") == "librefm" ? LibreFm : LastFm;
 }
 
+
 CConfig::CConfig(char* cfg)
 {
+    std::string host = "localhost";
+	std::string port = "6600";
+
     /* Set optional settings to default */
-    Set("host", "localhost");
-    Set("port", "6600");
+    if(const char* env_host = std::getenv("MPD_HOST"))
+    	host = env_host;
+
+	if (const char* env_port = std::getenv("MPD_PORT") )
+		port = env_port;
+
+    Set("host", host);
+    Set("port", port);
     Set("debug", "false");
     Set("service", "lastfm");
 

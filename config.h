@@ -1,7 +1,8 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-enum ScrobblingService {
+enum ScrobblingService
+{
 	LastFm,
 	LibreFm
 };
@@ -9,7 +10,7 @@ enum ScrobblingService {
 class CConfig
 {
 public:
-	CConfig(char* cfg);
+	CConfig(char *cfg);
 
 	ScrobblingService getService();
 
@@ -18,18 +19,20 @@ public:
 	int GetInt(std::string name);
 	void Set(std::string name, std::string value) { _configuration[name] = value; };
 
-	bool gotNecessaryData() {
-		if(!Get("username").size() || !Get("password").size())
+	bool gotNecessaryData()
+	{
+		if (!Get("username").size() || !Get("password").size())
 			return false;
 		return true;
 	}
 
 	void LoadConfig(std::string path);
+
 private:
 	void ParseLine(std::string line);
 	std::map<std::string, std::string> _configuration;
 };
 
-extern CConfig* Config;
+extern CConfig *Config;
 
 #endif
